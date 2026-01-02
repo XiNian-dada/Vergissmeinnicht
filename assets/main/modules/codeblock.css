@@ -1,0 +1,97 @@
+/* =========================================
+   Codeblock.css . Mac 风格代码块 (Prism 适配版)
+   ========================================= */
+
+/* 1. 代码块的主容器 (Mac 窗口) */
+.mac-window {
+    position: relative;
+    background: #282c34; /* 这是底色，确保它和 prism-dark.css 的背景色一致 */
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    margin: 24px 0;
+    overflow: hidden; 
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 2. 顶部栏 (Header) */
+.mac-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: #21252b; 
+    border-bottom: 1px solid rgba(0,0,0,0.3);
+}
+
+/* 3. 红黄绿按钮 */
+.mac-dots { display: flex; gap: 8px; }
+.mac-dot { width: 12px; height: 12px; border-radius: 50%; }
+.mac-dot.red { background: #ff5f56; }
+.mac-dot.yellow { background: #ffbd2e; }
+.mac-dot.green { background: #27c93f; }
+
+/* 4. 语言标签 */
+.mac-lang {
+    font-size: 13px;
+    color: #abb2bf;
+    font-family: sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    user-select: none;
+}
+
+/* 5. 复制按钮 */
+.mac-copy-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #abb2bf;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.mac-copy-btn:hover { background: rgba(255, 255, 255, 0.2); color: #fff; }
+.mac-copy-btn.copied { background: #27c93f; color: #fff; }
+
+/* =========================================
+   6. 核心修复：Prism 代码区域样式覆盖
+   ========================================= */
+
+/* 强制覆盖 pre 的默认样式 */
+.mac-window pre[class*="language-"],
+.mac-window pre {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important; /* 关键：去掉 Prism 自带的背景 */
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important; /* 去掉可能的阴影 */
+    text-shadow: none !important; /* 关键：去掉文字重影 */
+}
+
+/* 强制覆盖 code 的样式 */
+.mac-window code[class*="language-"],
+.mac-window code {
+    display: block;
+    padding: 20px !important;
+    overflow-x: auto !important;
+    white-space: pre !important;
+    font-family: "JetBrains Mono", "Fira Code", Consolas, monospace !important;
+    font-size: 14px;
+    line-height: 1.6;
+    background: transparent !important; /* 关键：去掉背景 */
+    text-shadow: none !important; /* 关键：防止重影 */
+    color: inherit; /* 继承 Prism 的高亮颜色 */
+}
+
+/* 7. 滚动条美化 */
+.mac-window code::-webkit-scrollbar { height: 8px; }
+.mac-window code::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+.mac-window code::-webkit-scrollbar-track { background: transparent; }

@@ -1,0 +1,323 @@
+
+
+/* =========================================
+   6. 左侧 Dock 栏 (悬浮胶囊版)
+   ========================================= */
+
+/* 仅在电脑端应用悬浮样式 */
+@media (min-width: 993px) {
+    .sidebar-dock {
+        /* 1. 定位：改为固定定位，脱离文档流 */
+        position: fixed;
+        left: 30px;    /* 距离左边 30px */
+        bottom: 30px;  /* 距离底部 30px (这就是你要的左下角) */
+        top: auto;     /* 清除之前的 top 设置 */
+        z-index: 1010; /* 保证浮在最上面 */
+        
+        /* 2. 外观：胶囊形状 */
+        width: 56px;   /* 固定宽度，精致一点 */
+        padding: 15px 0;
+        border-radius: 28px; /* 半径=宽度的一半，形成完美圆角 */
+        
+        /* 3. 布局：内部元素垂直排列 */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        
+        /* 4. 毛玻璃效果保持不变 */
+        background: var(--glass-bg);
+        backdrop-filter: var(--glass-blur);
+        -webkit-backdrop-filter: var(--glass-blur);
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); /* 加重阴影，增加悬浮感 */
+        
+        /* 增加一个小动画，加载时滑入 */
+        animation: floatIn 0.5s ease-out;
+    }
+    
+    /* 胶囊内的图标微调 */
+    .dock-item {
+        width: 40px;
+        height: 40px;
+        font-size: 18px; /* 图标稍微调小一点，更精致 */
+        color: var(--text-secondary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); /* 有弹性的过渡 */
+    }
+
+    .dock-item:hover {
+        background: var(--accent-color);
+        color: white;
+        transform: scale(1.15) rotate(-5deg); /* 悬停时稍微放大并歪一点，很灵动 */
+        box-shadow: 0 5px 15px rgba(0, 113, 227, 0.3);
+    }
+    
+    .dock-divider {
+        width: 24px; /* 分割线短一点 */
+    }
+}
+
+/* 入场动画定义 */
+@keyframes floatIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* =========================================
+   8. 右侧栏 (Right Sidebar)
+   ========================================= */
+.sidebar-right {
+    position: relative;
+}
+
+.sticky-sidebar {
+    position: sticky;
+    top: 90px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sidebar-section {
+    border-radius: var(--radius-l);
+    padding: 20px;
+}
+
+.section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sidebar-list li {
+    margin-bottom: 10px;
+    border-bottom: 1px dashed rgba(0,0,0,0.05);
+    padding-bottom: 10px;
+}
+
+.sidebar-list li:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.sidebar-list a {
+    font-size: 14px;
+    color: var(--text-main);
+    display: block;
+}
+
+.sidebar-list a:hover {
+    color: var(--accent-color);
+    transform: translateX(4px); /* 悬停右移小动画 */
+    transition: transform 0.2s;
+}
+
+.comment-link .author {
+    font-weight: 600;
+}
+.comment-link .summary {
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+/* 标签云胶囊样式 */
+.tags-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag-item {
+    font-size: 12px;
+    padding: 4px 10px;
+    background: rgba(0,0,0,0.05);
+    border-radius: 12px;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+}
+
+.tag-item:hover {
+    background: var(--accent-color);
+    color: white;
+}
+/* =========================================
+   Mobile Sidebar (竖向胶囊 + 自动伸缩)
+   ========================================= */
+@media (max-width: 992px) {
+    .sidebar-dock {
+        /* 1. 强制固定在左下角 */
+        position: fixed !important;
+        left: 15px !important;
+        bottom: 30px !important;
+        z-index: 1010;
+        
+        /* 2. 尺寸锁定：完美的竖向胶囊 */
+        width: 48px !important;   /* 固定宽度，防止忽宽忽窄 */
+        height: auto !important;  /* 高度自适应 */
+        padding: 12px 0 !important; /* 上下留白 */
+        
+        /* 3. 布局核心：强制垂直单列 */
+        display: flex !important;
+        flex-direction: column !important; /* 核心：竖向 */
+        flex-wrap: nowrap !important;      /* 核心：禁止换行 */
+        align-items: center !important;    /* 核心：居中对齐 */
+        gap: 12px !important;              /* 图标间距 */
+        
+        /* 4. 外观美化 */
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: 50px !important; /* 大圆角 */
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        
+        /* 5. 交互动画关键配置 */
+        /* 使用 transform 进行位移，性能最好，不会卡顿 */
+        transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1), opacity 0.3s ease;
+        transform: translateX(0); /* 默认状态：在屏幕内 */
+        opacity: 1;
+    }
+
+    /* === 核心：当页面滚动时，JS 会添加这个类 === */
+    .sidebar-dock.dock-hidden {
+        transform: translateX(-150%); /* 向左移出屏幕 */
+        opacity: 0; /* 同时变透明 */
+        pointer-events: none; /* 隐藏时禁止点击 */
+    }
+
+    /* 内部图标样式锁定 */
+    .dock-item {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 18px !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        margin: 0 !important; /* 清楚多余边距 */
+        flex-shrink: 0 !important; /* 禁止被压缩 */
+    }
+
+    /* 再次确保文字和搜索框隐藏 */
+    .dock-item span, .mobile-search-box {
+        display: none !important; 
+    }
+}
+
+/* 按钮图标样式 */
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-size: 20px;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.2s;
+}
+.icon-btn:hover {
+    background: rgba(0,0,0,0.05);
+    color: var(--accent-color);
+}
+/* 个人资料卡片 */
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+    border-radius: var(--radius-l);
+}
+
+.profile-avatar img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border: 2px solid rgba(255,255,255,0.5);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.profile-name {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-main);
+}
+
+.profile-bio {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.profile-social {
+    display: flex;
+    gap: 15px;
+}
+
+.profile-social a {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.05);
+    color: var(--text-secondary);
+    font-size: 18px;
+    transition: all 0.2s ease;
+}
+
+.profile-social a:hover {
+    background: var(--accent-color);
+    color: #fff;
+    transform: translateY(-3px);
+}
+/* =========================================
+   侧边栏间距调整
+   ========================================= */
+
+/* 2. 给动态内容里的每一个栏目（热门文章、标签、评论等）增加底部间距 */
+#sidebar-dynamic-content > * {
+    margin-bottom: 24px !important; /* 保持和上面一致，看起来更整齐 */
+}
+
+/* 3. (可选) 去掉最后一个栏目的底部间距，让侧边栏底部对齐更完美 */
+#sidebar-dynamic-content > *:last-child {
+    margin-bottom: 0 !important;
+}
+/* =========================================
+   第三方插件夜间模式适配 (精准靶向版)
+   ========================================= */
+
+/* 强制覆盖天气插件的所有文字颜色 */
+[data-bs-theme="dark"] .weather-section * {
+    color: rgba(255, 255, 255, 0.9) !important; /* 强制变白 */
+    border-color: rgba(255, 255, 255, 0.1) !important; /* 如果有边框，也变淡 */
+}
+
+/* 尝试修复可能存在的 SVG 图标颜色 */
+[data-bs-theme="dark"] .weather-section svg path {
+    fill: currentColor; /* 让图标跟随文字颜色变白 */
+}
+
+/* 2. 精准打击：只修改“附加信息栏”(.ww_additional) 里的图标 */
+/* 我们不碰上面的主图标，只动下面这一排 */
+[data-bs-theme="dark"] .weather-section .ww_additional svg path,
+[data-bs-theme="dark"] .weather-section .ww_additional svg circle,
+[data-bs-theme="dark"] .weather-section .ww_additional svg line {
+    fill: #ffffff !important;   /* 填充变白 */
+    stroke: #ffffff !important; /* 线条变白 (针对气压图标里的线) */
+}

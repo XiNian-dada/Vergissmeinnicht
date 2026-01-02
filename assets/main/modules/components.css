@@ -1,0 +1,25 @@
+
+/* =========================================
+   4. 组件：毛玻璃通用类 (The Glass Effect)
+   ========================================= */
+.glass-panel, .glass-card, .glass-header {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur); /* Safari 兼容 */
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+}
+
+/* 卡片悬停浮动效果 */
+.glass-card:hover, .glass-panel:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); /* 加深阴影 */
+    border-color: var(--accent-color); /* 边框微亮 */
+}
+/* =========================================
+   11. 实用工具类
+   ========================================= */
+.d-none { display: none !important; }
+.fw-bold { font-weight: 700; }
+.mb-4 { margin-bottom: 1.5rem; }

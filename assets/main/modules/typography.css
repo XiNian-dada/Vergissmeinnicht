@@ -1,0 +1,133 @@
+/* =========================================
+   10. 排版与文章正文 (Typography) - 紧凑规整版
+   ========================================= */
+
+/* --- 基础设置 --- */
+.typo {
+    font-size: 16px;
+    line-height: 1.75; /* 稍微收紧行高 (原1.8) */
+    color: var(--bs-body-color);
+    text-align: justify; /* 两端对齐 */
+    word-wrap: break-word; /* 强制长单词换行 */
+    overflow-wrap: break-word;
+}
+
+/* --- 段落控制 (核心：收紧与清理) --- */
+.typo p {
+    margin-bottom: 1.2em; /* 收紧段落间距 (原1.5em) */
+    margin-top: 0;
+}
+
+/* ★ 杀手锏：隐藏编辑器产生的空段落、空行 ★ */
+.typo p:empty,
+.typo p:blank {
+    display: none !important;
+}
+
+/* --- 标题特效 (荧光笔划重点风格) --- */
+.typo h1, .typo h2, .typo h3, .typo h4 {
+    margin-top: 1.4em; /* 标题上方间距 */
+    margin-bottom: 0.6em; /* 标题下方收紧 */
+    font-weight: 700;
+    line-height: 1.3;
+    position: relative;
+    display: inline-block;
+    width: auto;
+    max-width: 100%;
+}
+
+/* 文章开头第一个元素不需要顶部间距 */
+.typo > *:first-child {
+    margin-top: 0 !important;
+}
+
+/* 半透明下划线效果 */
+.typo h1, .typo h2, .typo h3 {
+    background: linear-gradient(to bottom, transparent 65%, rgba(66, 165, 245, 0.3) 65%);
+    padding: 0 4px;
+    border-radius: 4px;
+}
+
+.typo h1 { font-size: 1.75em; }
+.typo h2 { font-size: 1.5em; }
+.typo h3 { font-size: 1.25em; }
+
+/* 黑夜模式标题适配 */
+html[data-bs-theme="dark"] .typo h1, 
+html[data-bs-theme="dark"] .typo h2, 
+html[data-bs-theme="dark"] .typo h3 {
+    background: linear-gradient(to bottom, transparent 65%, rgba(66, 165, 245, 0.4) 65%);
+}
+
+/* --- 引用块 (规整化) --- */
+.typo blockquote {
+    margin: 1.5em 0;
+    padding: 1em 1.2em;
+    background: rgba(128, 128, 128, 0.05);
+    border-left: 4px solid #2196F3;
+    border-radius: 4px;
+    color: var(--bs-secondary-color);
+    font-style: italic;
+}
+
+/* 移除引用块内首尾段落的多余边距，防止撑大 */
+.typo blockquote p:first-child { margin-top: 0; }
+.typo blockquote p:last-child { margin-bottom: 0; }
+
+/* --- 列表对齐 (修复编辑器缩进问题) --- */
+.typo ul, .typo ol {
+    padding-left: 1.8em; /* 统一缩进 */
+    margin-bottom: 1.2em;
+}
+
+/* 针对编辑器的特定类名进行强制归位 */
+.typo .list-paddingleft-2 {
+    padding-left: 2em; 
+}
+
+.typo li {
+    margin-bottom: 0.3em; /* 列表项紧凑一点 */
+    line-height: 1.6;
+}
+
+.typo li p {
+    margin-bottom: 0.3em; /* 列表里的段落也要紧凑 */
+}
+
+/* 列表圆点颜色 */
+.typo ul li::marker {
+    color: #2196F3;
+    font-weight: bold;
+}
+
+/* --- 代码块微调 --- */
+.typo code {
+    background: rgba(128, 128, 128, 0.12);
+    color: #d63384;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: Consolas, Monaco, monospace;
+    font-size: 0.9em;
+    margin: 0 2px;
+    vertical-align: middle; /* 对齐文字中线 */
+}
+
+html[data-bs-theme="dark"] .typo code {
+    color: #ff79c6;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* --- 图片强制规整 (防止忽左忽右) --- */
+.typo img {
+    display: block; /* 强制块级显示，独占一行 */
+    max-width: 100%;
+    height: auto;
+    margin: 1.2em auto; /* 上下留白，左右居中 */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* 如果图片被包在 p 标签里，消除 p 的下边距，避免双倍间距 */
+.typo p:has(> img) {
+    margin-bottom: 0;
+}

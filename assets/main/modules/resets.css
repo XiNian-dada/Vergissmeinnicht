@@ -1,0 +1,55 @@
+/* =========================================
+   Module: Reset (全局重置 - 暴力去下划线版)
+   ========================================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: var(--font-stack);
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* === 核弹级修复：针对所有状态移除下划线 === */
+a, 
+a:link, 
+a:visited, 
+a:hover, 
+a:active, 
+a:focus {
+    text-decoration: none !important; /* 强制去掉下划线 */
+    border-bottom: none !important;   /* 强制去掉底部边框 */
+    color: inherit;                   /* 颜色跟随父元素，防止出现奇怪的蓝色/紫色 */
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+/* 只有悬停时改变颜色，绝不加下划线 */
+a:hover {
+    color: var(--accent-color);
+    text-decoration: none !important;
+}
+
+ul, ol { list-style: none; }
+
+img {
+    max-width: 100%;
+    display: block;
+    border-radius: var(--radius-m);
+}
+
+.app-background {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1;
+    background: radial-gradient(circle at 50% 0%, rgba(0, 113, 227, 0.05), transparent 60%),
+                radial-gradient(circle at 80% 50%, rgba(255, 0, 128, 0.03), transparent 50%);
+    pointer-events: none;
+}

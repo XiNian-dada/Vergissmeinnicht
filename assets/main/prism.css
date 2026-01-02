@@ -1,0 +1,106 @@
+/**
+ * One Dark Theme (适配 Mac 风格)
+ * 替换掉原来的 Default 主题
+ */
+
+/* 1. 基础文字颜色和字体 */
+code[class*="language-"],
+pre[class*="language-"] {
+    color: #abb2bf; /* 柔和的灰白文字 */
+    font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.6;
+    
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+    
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+
+    /* 关键：去掉默认主题的文字阴影，消除重影 */
+    text-shadow: none !important; 
+}
+
+/* 2. 关键：强制背景透明 (背景色由 .mac-window 控制) */
+pre[class*="language-"],
+:not(pre) > code[class*="language-"] {
+    background: transparent !important;
+    margin: 0;
+    padding: 0;
+    box-shadow: none !important;
+}
+
+/* 3. 语法高亮配色 (One Dark 风格) */
+
+/* 注释 */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: #5c6370;
+    font-style: italic;
+}
+
+/* 标点 */
+.token.punctuation {
+    color: #abb2bf;
+}
+
+/* 属性、数字、常量 - 橙/黄 */
+.token.selector,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.attr-name,
+.token.deleted {
+    color: #d19a66;
+}
+
+/* 字符串、正则 - 绿 */
+.token.string,
+.token.char,
+.token.attr-value,
+.token.builtin,
+.token.inserted,
+.token.regex {
+    color: #98c379;
+}
+
+/* 关键字、变量 - 紫 */
+.token.keyword,
+.token.variable,
+.token.important {
+    color: #c678dd;
+}
+
+/* 运算符 - 青 (并强制去掉背景) */
+.token.operator,
+.token.entity,
+.token.url {
+    color: #56b6c2;
+    background: transparent !important;
+}
+
+/* 函数、类名 - 蓝 */
+.token.function,
+.token.class-name {
+    color: #61afef;
+}
+
+/* 粗体/斜体 */
+.token.bold { font-weight: bold; }
+.token.italic { font-style: italic; }
+
+/* 4. 修复：防止某些插件加背景 */
+.token {
+    background: transparent !important;
+}

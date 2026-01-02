@@ -1,0 +1,90 @@
+/* =========================================
+   Module: Pagination (最终修复版)
+   ========================================= */
+
+/* 1. 容器：同时兼容 .pagination 和 .page-navigator */
+.page-navigator,
+.pagination {
+    display: flex !important;        /* 强制 Flex 布局 */
+    flex-direction: row !important;  /* 强制横向排列！ */
+    justify-content: center;
+    align-items: center;
+    gap: 10px;                       /* 按钮之间的间距 */
+    margin: 40px 0;
+    padding: 0;
+    list-style: none !important;     /* 去掉列表前面的点 */
+    width: 100%;                     /* 占满宽度 */
+}
+
+/* 2. 列表项重置 */
+.page-navigator li,
+.pagination li {
+    display: block !important;       /* 防止 li 变成 100% 宽度的块 */
+    margin: 0;
+    padding: 0;
+    flex: 0 0 auto;                  /* 禁止缩放 */
+}
+
+/* 3. 按钮样式：玻璃卡片风格 */
+/* 针对所有链接 (a) 和当前页 (span/active) */
+.page-navigator li a,
+.page-navigator li span,
+.pagination li a,
+.pagination li span,
+.pagination .page-item .page-link {  /* 兼容 Bootstrap 结构 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;                 /* 方块大小 */
+    height: 40px;
+    padding: 0 12px;
+    
+    /* === 核心：玻璃卡片效果 === */
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+    border-radius: 12px;             /* 圆角 */
+    
+    color: var(--text-main);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none !important; /* 再次确保无下划线 */
+    transition: all 0.2s ease;
+    
+    /* 覆盖 Bootstrap 默认样式 */
+    margin-left: 0 !important;
+    float: none !important;
+}
+
+/* 4. 悬停状态 */
+.page-navigator li a:hover,
+.pagination li a:hover,
+.pagination .page-item .page-link:hover {
+    background: rgba(255, 255, 255, 0.5);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    transform: translateY(-2px);     /* 悬停上浮效果 */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    z-index: 2;
+}
+
+/* 5. 当前页状态 (Active) */
+.page-navigator li.current a,
+.page-navigator li.current span,
+.pagination li.active a,             /* Bootstrap 常用的 active 类 */
+.pagination li.active span,
+.pagination .page-item.active .page-link {
+    background: var(--accent-color) !important;
+    color: #fff !important;
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 4px 10px rgba(0, 113, 227, 0.3);
+}
+
+/* 6. 禁用深色模式下的背景干扰 */
+[data-bs-theme="dark"] .page-navigator li a,
+[data-bs-theme="dark"] .pagination li a {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}

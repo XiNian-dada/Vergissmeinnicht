@@ -1,0 +1,583 @@
+/* =========================================
+   1. 首页文章列表卡片 (Post List Cards)
+   ========================================= */
+.glass-card {
+    border-radius: var(--radius-l);
+    padding: 30px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    
+    /* 确保列表卡片也有毛玻璃背景 */
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    border-color: var(--accent-color);
+}
+
+/* 隐形链接覆盖层 */
+.card-link-mask {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 10;
+}
+
+.post-header {
+    margin-bottom: 15px;
+}
+
+.post-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 8px;
+    line-height: 1.3;
+}
+
+.post-meta {
+    font-size: 13px;
+    color: var(--text-secondary);
+    display: flex;
+    gap: 10px;
+}
+
+.post-excerpt {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* 置顶文章特殊样式 */
+.featured-card {
+    background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(var(--accent-color), 0.1) 100%);
+    border: 1px solid var(--accent-color);
+}
+
+.featured-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--accent-color);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* =========================================
+   2. 文章详情页卡片 (Post Detail) - 新增修改
+   这里修复了“它是方的”和“没有空隙”的问题
+   ========================================= */
+
+.post-detail-card {
+    /* 核心外观：继承毛玻璃变量 */
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    
+    /* 核心修复 1：圆角 */
+    border-radius: var(--radius-l); 
+    
+    /* 核心修复 2：内边距 (让文字离边缘远一点) */
+    padding: 40px; 
+    
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden; /* 防止内容溢出圆角 */
+}
+
+/* 手机端内边距稍微改小，节省空间 */
+@media (max-width: 768px) {
+    .post-detail-card {
+        padding: 20px;
+    }
+}
+
+/* 详情页的标题区域美化 */
+.post-title-box {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed var(--glass-border); /* 标题和正文之间的虚线 */
+}
+
+.post-title-box h1 {
+    font-size: 32px; /* 详情页标题大一点 */
+    font-weight: 700;
+    margin-bottom: 15px;
+    line-height: 1.4;
+    color: var(--text-main);
+}
+
+.post-title-box a {
+    text-decoration: none !important;
+    color: inherit;
+}
+
+/* 详情页的元数据 (作者、时间等) */
+.post-meta-data {
+    font-size: 14px;
+    color: var(--text-secondary);
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.post-meta-data li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.post-meta-data i {
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+/* 文章底部标签区 */
+.post-footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--glass-border);
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+/* =========================================
+   3. 评论区样式 (Modern Comments)
+   ========================================= */
+
+/* 1. 评论区大卡片 */
+.comments-section {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+    
+    /* 核心修复：圆角和大内边距 */
+    border-radius: var(--radius-l);
+    padding: 40px;
+    margin-top: 30px;
+}
+
+/* 标题样式 */
+.section-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.section-title .count {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+/* 2. 表单布局优化 */
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* 三列布局 */
+    gap: 15px;
+}
+
+/* 手机端变单列 */
+@media (max-width: 768px) {
+    .comments-section { padding: 20px; }
+    .form-row { grid-template-columns: 1fr; }
+}
+
+/* 3. 现代化输入框 (告别古老风格) */
+.glass-input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.04); /* 浅灰背景 */
+    border: 1px solid transparent;    /* 无边框 */
+    border-radius: 12px;              /* 圆角矩形 */
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--text-main);
+    transition: all 0.2s;
+    font-family: inherit;
+    appearance: none;                 /* 去除浏览器默认样式 */
+    outline: none;
+}
+
+/* 4. 评论文本域 (做大做强) */
+.textarea-large {
+    min-height: 160px; /* 增加高度 */
+    resize: vertical;  /* 允许用户上下拉动 */
+    line-height: 1.6;
+}
+
+/* 聚焦状态 */
+.glass-input:focus {
+    background: var(--bg-color);
+    border-color: var(--accent-color); /* 聚焦变蓝 */
+    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+}
+
+/* 5. 验证码容器 */
+.turnstile-box {
+    margin: 5px 0;
+}
+
+/* 6. 提交按钮 */
+.btn-glass {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 10px 32px;
+    border-radius: 20px; /* 胶囊按钮 */
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-glass:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 113, 227, 0.3);
+}
+
+/* 深色模式适配 */
+[data-bs-theme="dark"] .glass-input {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+/* =========================================
+   4. 评论列表美化 & 验证码适配
+   ========================================= */
+
+/* 1. 评论卡片样式 */
+.comment-card {
+    /* 继承毛玻璃，但稍微调低一点透明度，区分层级 */
+    background: rgba(255, 255, 255, 0.4); 
+    border-radius: var(--radius-m); /* 12px 圆角 */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.2s;
+}
+
+/* 评论头像圆角 */
+.comment-avatar img {
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.5);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* 2. 评论缩进 (层次感) */
+.comment-children {
+    margin-top: 15px;
+    margin-left: 20px; /* 左侧缩进 */
+    border-left: 2px solid rgba(0,0,0,0.05); /* 左侧加一条淡淡的线，引导视线 */
+    padding-left: 15px;
+}
+
+/* 3. 解决重合问题的辅助线 */
+.comment-separator {
+    margin-top: 40px;
+    border-top: 1px dashed var(--glass-border);
+}
+/* 修复提交按钮周围的间距 */
+.form-footer {
+    margin-top: 15px;    /* 离上面的验证码/输入框远一点 */
+    margin-bottom: 40px; /* 核心修复：离下面的评论列表远一点 */
+}
+
+/* 手机端稍微紧凑一点 */
+@media (max-width: 768px) {
+    .form-footer {
+        margin-bottom: 25px;
+    }
+}
+/* =========================================
+   5. 评论区布局专项修复 (暴力修正版)
+   ========================================= */
+
+/* 1. 解除所有可能导致“截断”的父级限制 */
+.comment-list, 
+.comment-body, 
+.comment-content,
+.comment-card,
+.comment-meta,
+.d-flex { /* 加上这个 bootstrap 的 flex 容器 */
+    overflow: visible !important; /* 核心：禁止隐藏溢出的内容 */
+    contain: none !important;     /* 防止浏览器做激进的渲染优化 */
+}
+
+/* 2. 评论卡片布局基础 */
+.comment-card {
+    padding: 24px !important;
+    position: relative; /* 必须保留，作为定位基准 */
+}
+
+/* 3. 强制头部信息一行显示 */
+.comment-meta, 
+.comment-author {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.comment-meta {
+    margin-left: 10px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    opacity: 0.7;
+    margin-top: 0 !important;
+}
+
+.comment-author img {
+    float: left;
+    margin-right: 15px;
+    width: 40px; 
+    height: 40px;
+    border-radius: 50%; /* 确保头像圆角 */
+}
+
+/* 4. 回复按钮 (重写：不设固定高度，靠 padding 撑开) */
+.comment-reply {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    z-index: 999; /* 层级拉满，防止被任何内容盖住 */
+    height: auto !important; /* 禁止继承父级高度 */
+    width: auto !important;
+}
+
+.comment-reply a {
+    /* 使用 flex 保证内部文字垂直居中 */
+    display: flex !important;             
+    align-items: center;
+    justify-content: center;
+    
+    /* ❌ 删掉固定高度 height: 28px */
+    /* ✅ 改用 padding 撑开：上下 4px，左右 12px */
+    padding: 4px 12px !important;         
+    
+    background: transparent;
+    border: 1px solid var(--accent-color) !important; /* 强制边框显示 */
+    color: var(--accent-color);
+    border-radius: 100px;      /* 纯圆角 */
+    font-size: 12px;
+    text-decoration: none;
+    
+    /* 强制盒子模型，把边框算在尺寸内 */
+    box-sizing: border-box !important; 
+    line-height: 1.5 !important; /* 给一点行高呼吸空间 */
+    
+    transition: all 0.2s ease;
+}
+
+/* 鼠标悬停 */
+.comment-reply a:hover {
+    background: var(--accent-color);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(var(--accent-color-rgb), 0.3);
+    transform: translateY(-1px);
+}
+
+/* 5. 评论内容 (避让头像) */
+.comment-content {
+    margin-top: 8px;
+    padding-left: 55px; 
+    position: relative; 
+    z-index: 1; /* 确保内容层级低于按钮 */
+}
+
+/* 手机端适配 */
+@media (max-width: 768px) {
+    .comment-card { padding: 15px !important; }
+    .comment-reply { top: 15px; right: 15px; }
+    .comment-content { padding-left: 0; }
+}
+/* 4. Turnstile 验证码夜间模式适配 (黑科技) */
+/* Cloudflare 验证码是 iframe，CSS 很难直接改内部颜色。
+   我们用滤镜反转颜色：白变黑，黑变白。
+*/
+[data-bs-theme="dark"] .turnstile-box {
+    filter: invert(1) hue-rotate(180deg); 
+    /* hue-rotate 是为了防止把绿色的对勾变成紫色，尝试还原颜色 */
+    opacity: 0.8;
+}
+
+/* 深色模式下评论卡片微调 */
+[data-bs-theme="dark"] .comment-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="dark"] .comment-children {
+    border-left-color: rgba(255,255,255,0.1);
+}
+/* =========================================
+   6. 文章表格美化 (高对比度修正版)
+   ========================================= */
+
+/* 1. 表格容器与外观 */
+.article-content table {
+    width: 100%;
+    max-width: 100%;
+    margin: 24px 0;
+    border-collapse: separate; 
+    border-spacing: 0;         
+    
+    /* 背景稍微加白，提升文字对比度 */
+    background: rgba(255, 255, 255, 0.5);
+    
+    /* 🔴 核心修改：加深外边框颜色 */
+    border: 1px solid rgba(0, 0, 0, 0.15); 
+    
+    border-radius: 12px;       
+    overflow: hidden;          
+    font-size: 14px;
+    
+    /* 加重阴影，让表格更有立体感 */
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+/* 2. 表头 (Header) */
+.article-content th {
+    /* 表头背景颜色加深 */
+    background: rgba(var(--accent-color-rgb), 0.15);
+    color: var(--accent-color);
+    font-weight: 700;
+    text-align: left;
+    padding: 16px;
+    
+    /* 🔴 核心修改：表头下方的分割线加深 */
+    border-bottom: 2px solid rgba(var(--accent-color-rgb), 0.2); 
+}
+
+/* 3. 单元格 (Cells) */
+.article-content td {
+    padding: 14px 16px;
+    color: var(--text-main);
+    
+    /* 🔴 核心修改：行与行之间的分割线加深 (从 0.05 -> 0.12) */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12); 
+    
+    line-height: 1.6;
+}
+
+/* 4. 竖向分割线 (新增：如果你希望列之间也有线条，请保留这一段) */
+/* 默认我不加竖线是为了保持干净，如果你想要，把下面注释解开即可 */
+/*
+.article-content td, 
+.article-content th {
+    border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
+.article-content td:last-child, 
+.article-content th:last-child {
+    border-right: none;
+}
+*/
+
+/* 5. 斑马纹 & 悬停效果 */
+.article-content tr:nth-child(even) {
+    background: rgba(0, 0, 0, 0.02); /* 用纯黑透明度，比白色兼容性好 */
+}
+
+.article-content tr:hover td {
+    background: rgba(var(--accent-color-rgb), 0.05); /* 悬停变为淡淡的主题色 */
+    transition: background 0.2s;
+}
+
+/* 6. 去掉最后一行的底边框 */
+.article-content tr:last-child td {
+    border-bottom: none;
+}
+
+/* 7. 手机端适配 */
+@media (max-width: 768px) {
+    .article-content table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap; 
+    }
+}
+@media (max-width: 768px) {
+    .post-detail-card {
+        padding: 15px; /* 进一步缩小内边距 */
+        border-radius: 12px; /* 圆角也稍微改小一点，视觉更协调 */
+    }
+    
+    /* 修复文章标题太大换行难看的问题 */
+    .post-title-box h1 {
+        font-size: 22px; /* 原来是 32px，手机上太大了 */
+    }
+}
+/* 添加在 comments.css 底部 */
+
+@media (max-width: 768px) {
+    /* 1. 减少子评论的缩进 */
+    .comment-children {
+        margin-left: 10px; /* 从 20px 改为 10px */
+        padding-left: 10px;
+    }
+
+    /* 2. 强制评论头像变小，腾出空间 */
+    .comment-author img {
+        width: 32px; 
+        height: 32px;
+        margin-right: 10px;
+    }
+    
+    /* 3. 调整评论内容左边距 */
+    .comment-content {
+        padding-left: 42px; /* 原来是 55px，根据头像大小调整 */
+    }
+    
+    /* 4. 回复按钮改为相对定位，避免遮挡文字 */
+    .comment-reply {
+        position: static; /* 取消绝对定位 */
+        display: inline-block;
+        margin-top: 5px;
+        float: right;
+    }
+}
+/* 8. 深色模式适配 (高对比度) */
+[data-bs-theme="dark"] .article-content table {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2); /* 深色模式边框也要明显 */
+}
+[data-bs-theme="dark"] .article-content th {
+    background: rgba(var(--accent-color-rgb), 0.3);
+    border-bottom-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+[data-bs-theme="dark"] .article-content td {
+    color: #ddd;
+    border-bottom-color: rgba(255, 255, 255, 0.15); /* 深色模式下的行分割线 */
+}
+[data-bs-theme="dark"] .article-content tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.03);
+}
+[data-bs-theme="dark"] .article-content tr:hover td {
+    background: rgba(255, 255, 255, 0.1);
+}

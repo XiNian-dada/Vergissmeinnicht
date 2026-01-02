@@ -1,0 +1,30 @@
+
+/* =========================================
+   9. Footer (页脚)
+   ========================================= */
+.glass-footer {
+    margin-top: 60px;
+    padding: 40px 0;
+    border-top: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    text-align: center;
+}
+
+.footer-grid {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.footer-col h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.footer-col p, .footer-col a {
+    font-size: 13px;
+    color: var(--text-secondary);
+}

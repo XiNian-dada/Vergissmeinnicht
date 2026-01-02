@@ -1,0 +1,67 @@
+/* 修改 modules/layout.css */
+
+.app-container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 20px;
+    display: grid;
+    
+    /* 默认电脑端布局：中间内容 + 右边栏 */
+    grid-template-columns: 1fr 300px;
+    
+    gap: 30px;
+    align-items: start;
+}
+
+/* =========================================
+   响应式布局核心修复 (1200px 为界限)
+   ========================================= */
+
+/* 1. 针对中等屏幕 (992px - 1200px) 
+   场景：笔记本电脑、iPad Pro 横屏
+   策略：隐藏右边栏，给左侧胶囊让位置 */
+@media (max-width: 1200px) {
+    .app-container {
+        grid-template-columns: 1fr; /* 变为单栏布局 */
+        
+        /* ★ 核心修复：增加左侧内边距 */
+        /* 因为此时左侧 Dock 依然悬浮在左边 (Fixed)，不占格子 */
+        /* 我们给内容加 90px 左边距，防止被 Dock 挡住 */
+        padding-left: 100px; 
+        padding-right: 40px;
+    }
+    
+    .sidebar-right {
+        display: none; /* 提前隐藏右边栏 */
+    }
+}
+
+/* 2. 针对竖屏平板/大屏手机 (768px - 992px)
+   场景：侧边栏变到底部/抽屉，不需要左边距了 */
+@media (max-width: 992px) {
+    .app-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        
+        /* 恢复正常的内边距 (因为左侧 Dock 此时变到底部胶囊了) */
+        padding: 20px; 
+    }
+    
+    .sidebar-right {
+        display: none; 
+    }
+}
+
+/* 3. 针对手机竖屏 (小于 768px)
+   场景：完全紧凑模式 */
+@media (max-width: 768px) {
+    .app-container {
+        display: block; /* 改为 Block 布局 */
+        padding: 10px;  /* 极简边距 */
+        gap: 0;
+    }
+    
+    .sidebar-right {
+        display: none;
+    }
+}
