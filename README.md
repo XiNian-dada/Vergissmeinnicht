@@ -1,4 +1,4 @@
-```markdown
+
 # Vergissmeinnicht - Typecho Theme
 
 [![Typecho](https://img.shields.io/badge/Typecho-1.2+-467fcf.svg)](http://typecho.org)
@@ -112,5 +112,6 @@ A: 请确保使用了最新版的 `main.js`。我们引入了 `.dragging` 类，
 **Made with ❤️ by XiNian_dada**
 
 ```
+
 
 ```
