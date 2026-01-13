@@ -31,7 +31,33 @@
 <script src="<?php $this->options->themeUrl('assets/main/weather.js'); ?>"></script>
 <script src="<?php $this->options->themeUrl('assets/main/prism.js'); ?>"></script>
 <script src="<?php $this->options->themeUrl('assets/main/main.js'); ?>"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" 
+        onload="
+        window.initKaTeX = function() {
+            // 1. 核心渲染
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                ],
+                // 忽略这些标签内部的内容
+                ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'option'],
+                // 出错时不报错，直接显示源码，方便调试
+                throwOnError: false,
+                // 关键：允许容错
+                errorColor: '#cc0000'
+            });
+        }; 
+        // 2. 立即执行一次
+        window.initKaTeX();
+        ">
+    </script>
 <script>
 // 检查 jQuery 是否正常加载
 if (typeof jQuery === 'undefined') {
@@ -100,7 +126,10 @@ $(document).ready(function() {
         if (typeof window.reloadThemeComponents === 'function') {
             window.reloadThemeComponents();
         }
-        
+        // 重载 KaTeX 公式
+        if (typeof window.initKaTeX === 'function') {
+            window.initKaTeX();
+        }
         // 4. 统计代码
         if (typeof _hmt !== 'undefined') {
             _hmt.push(['_trackPageview', location.pathname + location.search]);

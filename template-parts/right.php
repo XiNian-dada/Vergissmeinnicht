@@ -15,12 +15,40 @@
         <h3 class="profile-name">
             <?php $this->options->profileName ? $this->options->profileName() : $this->options->title(); ?>
         </h3>
-        <div class="profile-bio">
-            <?php if ($this->options->profileBio): ?>
-                <?php $this->options->profileBio(); ?>
-            <?php else: ?>
-                Typecho 开发者 / 唯心主义者 / ISTP-T
-            <?php endif; ?>
+        <div class="profile-bio" style="min-height: 1.5em;">
+            <span id="hitokoto_text" style="display: block; font-size: 14px; color: #777; line-height: 1.6;">
+                <?php if ($this->options->profileBio): ?>
+                    <?php $this->options->profileBio(); ?>
+                <?php else: ?>
+                    Typecho Developer
+                <?php endif; ?>
+            </span>
+            
+            <span id="hitokoto_from" style="display: block; font-size: 12px; transform: scale(0.9); opacity: 0.8; margin-top: 5px;"></span>
+
+            <script>
+            (function(){
+                // c=d 代表文学，c=k 代表哲学
+                fetch('https://v1.hitokoto.cn/?c=d&c=k')
+                    .then(function(res){ return res.json(); })
+                    .then(function(data) {
+                        var hitokotoText = document.getElementById('hitokoto_text');
+                        var hitokotoFrom = document.getElementById('hitokoto_from');
+                        
+                        // 更新正文
+                        hitokotoText.innerText = data.hitokoto;
+                        
+                        // 更新来源 (例如：—— 《理想国》)
+                        // 如果不需要来源，把下面这行删掉即可
+                        if(hitokotoFrom && data.from) {
+                            hitokotoFrom.innerText = "—— " + data.from;
+                        }
+                    })
+                    .catch(function(err) {
+                        console.error('一言加载失败，已回退到默认签名');
+                    });
+            })();
+            </script>
         </div>
         <div class="profile-social">
             <!-- ... 社交链接代码保持不变 ... -->

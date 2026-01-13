@@ -19,6 +19,7 @@ if (isset($_COOKIE['theme']) && in_array($_COOKIE['theme'], ['light', 'dark'])) 
     <link href="<?php $this->options->themeUrl('assets/main/main.css'); ?>" rel="stylesheet">
     <link href="<?php $this->options->themeUrl('assets/main/prism.css'); ?>" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 
     <?php if ($themeMode === 'dark'): ?>
     <style id="dark-mode-critical-css">

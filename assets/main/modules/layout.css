@@ -1,4 +1,6 @@
-/* 修改 modules/layout.css */
+/* =========================================
+   Layout.css - 视觉修正 & 物理左移版
+   ========================================= */
 
 .app-container {
     max-width: var(--container-width);
@@ -6,62 +8,134 @@
     padding: 20px;
     display: grid;
     
-    /* 默认电脑端布局：中间内容 + 右边栏 */
+    /* 默认电脑端布局 */
     grid-template-columns: 1fr 300px;
-    
     gap: 30px;
     align-items: start;
+    transition: all 0.3s ease;
+}
+
+/* 默认隐藏目录栏 */
+.toc-grid-item {
+    display: none;
 }
 
 /* =========================================
-   响应式布局核心修复 (1200px 为界限)
+   ★ 超宽屏三栏布局 (1400px 以上)
    ========================================= */
-
-/* 1. 针对中等屏幕 (992px - 1200px) 
-   场景：笔记本电脑、iPad Pro 横屏
-   策略：隐藏右边栏，给左侧胶囊让位置 */
-@media (max-width: 1200px) {
-    .app-container {
-        grid-template-columns: 1fr; /* 变为单栏布局 */
-        
-        /* ★ 核心修复：增加左侧内边距 */
-        /* 因为此时左侧 Dock 依然悬浮在左边 (Fixed)，不占格子 */
-        /* 我们给内容加 90px 左边距，防止被 Dock 挡住 */
-        padding-left: 100px; 
-        padding-right: 40px;
-    }
+@media (min-width: 1400px) {
     
-    .sidebar-right {
-        display: none; /* 提前隐藏右边栏 */
+    .app-container.has-toc {
+        /* Grid 策略调整：
+           左栏：320px (够放目录+避让区)
+           右栏：300px (标准侧边栏)
+           
+           这看起来左边比右边宽 20px，但下面我们用 padding 来修正重心
+        */
+        grid-template-columns: 320px 1fr 300px;
+        
+        max-width: 1800px; 
+        
+        /* ★ 核心修正：物理左移
+           左边距保持 20px
+           右边距加到 100px！
+           原理：右边塞了棉花，就把内容往左挤了。
+        */
+        padding-left: 20px;
+        padding-right: 100px; 
+    }
+
+    /* 目录栏容器 */
+    .app-container.has-toc .toc-grid-item {
+        display: block; 
+        position: -webkit-sticky;
+        position: sticky;
+        top: 100px;      
+        margin-top: 40px; 
+        z-index: 10;
+        
+        /* 避让左侧胶囊 */
+        padding-left: 80px; 
+        
+        max-height: calc(100vh - 140px);
+    }
+
+    /* 目录内部面板 */
+    .toc-container {
+        background: rgba(20, 21, 22, 0.6);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 20px;
+        
+        /* 稍微加宽一点目录，让它更有分量 */
+        width: 100%; 
+        
+        max-height: 70vh;
+        overflow-y: auto;
+        scrollbar-width: none;
+    }
+    .toc-container::-webkit-scrollbar { display: none; }
+
+    /* 链接样式 */
+    .toc-list a {
+        display: block;
+        color: #999;
+        text-decoration: none;
+        line-height: 1.6;
+        padding: 8px 12px;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        border-left: 3px solid transparent;
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+
+    .toc-list a:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* 激活状态 */
+    .toc-list a.active {
+        color: #fff;
+        font-weight: bold;
+        background: rgba(255, 255, 255, 0.1); 
+        border-left-color: #4a90e2; 
+        padding-left: 16px; 
     }
 }
 
-/* 2. 针对竖屏平板/大屏手机 (768px - 992px)
-   场景：侧边栏变到底部/抽屉，不需要左边距了 */
+/* =========================================
+   响应式布局 (保持不变)
+   ========================================= */
+@media (max-width: 1399px) {
+    .toc-grid-item { display: none !important; }
+}
+
+@media (max-width: 1200px) {
+    .app-container {
+        grid-template-columns: 1fr;
+        padding-left: 100px; 
+        padding-right: 40px;
+    }
+    .sidebar-right { display: none; }
+}
+
 @media (max-width: 992px) {
     .app-container {
         grid-template-columns: 1fr;
         gap: 20px;
-        
-        /* 恢复正常的内边距 (因为左侧 Dock 此时变到底部胶囊了) */
         padding: 20px; 
     }
-    
-    .sidebar-right {
-        display: none; 
-    }
+    .sidebar-right { display: none; }
 }
 
-/* 3. 针对手机竖屏 (小于 768px)
-   场景：完全紧凑模式 */
 @media (max-width: 768px) {
     .app-container {
-        display: block; /* 改为 Block 布局 */
-        padding: 10px;  /* 极简边距 */
+        display: block; 
+        padding: 10px; 
         gap: 0;
     }
-    
-    .sidebar-right {
-        display: none;
-    }
+    .sidebar-right { display: none; }
 }

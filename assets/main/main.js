@@ -111,6 +111,9 @@ window.reloadThemeComponents = function() {
 
     // 4. 初始化侧边栏滚动隐藏 (新增)
     window.initScrollDock();
+    
+    // 5. [新增] 初始化目录功能 (加在这里！)
+    initTOC();
 
     // 5. 检查天气插件状态
     checkWeatherWidget();
@@ -394,7 +397,135 @@ function initLightbox() {
     window.addEventListener('touchmove', onDrag);
     window.addEventListener('touchend', stopDrag);
 }
+function initTOC() {
+    // ===============================================
+    // ★ 步骤0：暴力清理 (修复换页残留问题)
+    // ===============================================
+    const appContainer = document.querySelector('.app-container');
+    if (!appContainer) return;
 
+    // 1. 移除可能存在的旧目录
+    const oldToc = document.getElementById('left-sidebar-toc');
+    if (oldToc) {
+        oldToc.remove();
+    }
+
+    // 2. 移除容器上的布局类名 (恢复默认布局)
+    appContainer.classList.remove('has-toc');
+    
+    // 3. 移除旧的滚动监听器 (防止报错)
+    if (window.tocScrollHandler) {
+        window.removeEventListener('scroll', window.tocScrollHandler);
+        window.tocScrollHandler = null;
+    }
+
+    // ===============================================
+    // ★ 步骤1：检查当前页面是否有新目录
+    // ===============================================
+    const content = document.querySelector('.article-body'); 
+    const sourceToc = document.getElementById('toc-grid-source');
+
+    // 如果当前页面没有目录源 (比如首页、归档页)，直接结束，保持页面干干净净
+    if (!sourceToc) return;
+
+    // ===============================================
+    // ★ 步骤2：搬运目录
+    // ===============================================
+    sourceToc.style.display = 'block';
+    sourceToc.id = 'left-sidebar-toc';
+    sourceToc.className = 'toc-grid-item';
+    appContainer.insertBefore(sourceToc, appContainer.firstChild);
+
+    // ===============================================
+    // ★ 步骤3：生成内容 & 开启监听
+    // ===============================================
+    const tocContainer = document.getElementById('toc-content');
+    
+    if (content && tocContainer) {
+        const headers = content.querySelectorAll('h1, h2, h3, h4');
+        
+        if (headers.length > 0) {
+            // 只有真的有标题时，才开启三栏布局
+            appContainer.classList.add('has-toc');
+            
+            tocContainer.innerHTML = '';
+            const ul = document.createElement('ul');
+            const headerMap = [];
+
+            headers.forEach((header, index) => {
+                if (!header.id) header.id = 'toc-title-' + index;
+                
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = '#' + header.id;
+                a.textContent = header.innerText.replace('#', ''); 
+                a.setAttribute('data-target', header.id);
+                
+                const tagName = header.tagName.toLowerCase();
+                a.className = `toc-link toc-level-${tagName.replace('h','')}`;
+
+                a.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelectorAll('.toc-link').forEach(link => link.classList.remove('active'));
+                    a.classList.add('active');
+                    const offset = 100; 
+                    const elementPosition = header.getBoundingClientRect().top + window.pageYOffset;
+                    window.scrollTo({ top: elementPosition - offset, behavior: "smooth" });
+                });
+
+                li.appendChild(a);
+                ul.appendChild(li);
+                headerMap.push({ header: header, link: a });
+            });
+            tocContainer.appendChild(ul);
+
+            // ScrollSpy 逻辑
+            let isTicking = false;
+            const updateActiveToc = () => {
+                const scrollPosition = window.scrollY + 120; 
+                let currentHeaderId = null;
+
+                for (let i = 0; i < headerMap.length; i++) {
+                    const item = headerMap[i];
+                    // 必须重新获取位置，防止页面布局变化
+                    const offsetTop = item.header.getBoundingClientRect().top + window.pageYOffset;
+                    if (offsetTop <= scrollPosition) {
+                        currentHeaderId = item.header.id;
+                    } else {
+                        break; 
+                    }
+                }
+
+                if (currentHeaderId) {
+                    document.querySelectorAll('.toc-link').forEach(link => {
+                        if (link.getAttribute('data-target') === currentHeaderId) {
+                            link.classList.add('active');
+                        } else {
+                            link.classList.remove('active');
+                        }
+                    });
+                } else if (window.scrollY < 50) {
+                     document.querySelectorAll('.toc-link').forEach(link => link.classList.remove('active'));
+                     if(headerMap.length > 0) headerMap[0].link.classList.add('active');
+                }
+                isTicking = false;
+            };
+
+            // 把监听器挂载到 window 对象上，方便下次清理
+            window.tocScrollHandler = () => {
+                if (!isTicking) {
+                    window.requestAnimationFrame(updateActiveToc);
+                    isTicking = true;
+                }
+            };
+            window.addEventListener('scroll', window.tocScrollHandler, { passive: true });
+            updateActiveToc(); // 初始化执行
+
+        } else {
+            sourceToc.style.display = 'none';
+        }
+    }
+}
 function initMobileMenu() {
     const menuTrigger = document.querySelector('#menu-trigger');
     const mobileDrawer = document.querySelector('#mobile-drawer'); 

@@ -1,0 +1,59 @@
+/* =========================================
+   悬浮目录 (TOC) 样式 - 动态吸附版
+   ========================================= */
+
+/* 默认隐藏，由 JS 控制显示 */
+.toc-wrapper {
+    display: none; 
+    position: fixed;
+    top: 80px; /* 距离顶部距离 */
+    width: 250px; /* 目录宽度 */
+    z-index: 9999;
+    /* 注意：这里不再写 left: calc(...) 了，全部交给 JS 接管 */
+}
+
+/* 容器外观 (保持不变) */
+.toc-container {
+    background: rgba(20, 21, 22, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
+}
+
+/* 标题和列表样式 (保持不变) */
+.toc-container .section-title {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 10px;
+}
+
+.toc-list ul { list-style: none; padding: 0; margin: 0; }
+.toc-list li { margin-bottom: 2px; }
+
+.toc-list a {
+    display: block;
+    text-decoration: none;
+    line-height: 1.5;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: all 0.2s;
+    border-left: 2px solid transparent;
+}
+
+.toc-list a:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* 层级样式 */
+.toc-list a.toc-level-1 { font-size: 14px; font-weight: bold; color: #fff; padding-left: 10px; }
+.toc-list a.toc-level-2 { font-size: 13px; color: #ccc; padding-left: 20px; }
+.toc-list a.toc-level-3 { font-size: 12px; color: #999; padding-left: 32px; position: relative; }
+.toc-list a.toc-level-4 { font-size: 12px; color: #777; padding-left: 42px; }
