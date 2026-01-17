@@ -29,8 +29,10 @@
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery.pjax/2.0.1/jquery.pjax.min.js"></script>
 <script src="<?php $this->options->themeUrl('assets/main/weather.js'); ?>"></script>
-<script src="<?php $this->options->themeUrl('assets/main/prism.js'); ?>"></script>
 <script src="<?php $this->options->themeUrl('assets/main/main.js'); ?>"></script>
+<!-- ★★★ 核心修复：禁止 Prism 自动运行 ★★★ -->
+<script>window.Prism = { manual: true };</script>
+<script src="<?php $this->options->themeUrl('assets/main/prism.js'); ?>"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>

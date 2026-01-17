@@ -28,6 +28,11 @@ if (isset($_COOKIE['theme']) && in_array($_COOKIE['theme'], ['light', 'dark'])) 
             color: #f5f5f7 !important;
         }
         * { transition: none !important; }
+        /* 强制代码块保留空白符和换行 */
+        pre[class*="language-"], code[class*="language-"] {
+            white-space: pre-wrap !important; 
+            word-break: break-all;
+        }
     </style>
     <?php endif; ?>
 

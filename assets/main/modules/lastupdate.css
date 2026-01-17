@@ -1,0 +1,142 @@
+/* ===== Xi's Last Update Plugin CSS (Hardcoded Version) ===== */
+
+/* 基础容器样式 */
+.lastupdate-box {
+    display: flex;
+    align-items: center;
+    padding: 12px 18px; /* 稍微增加内边距 */
+    margin: 20px 0;    /* 上下间距 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+    gap: 12px;
+    font-size: 14px;   /* 基础字体大小 */
+    transition: all 0.3s ease;
+    border-radius: 8px; /* 【重点】圆角设置：8px */
+}
+
+/* 鼠标悬停效果 */
+.lastupdate-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* 图标样式 */
+.lastupdate-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+/* 文本区域 */
+.lastupdate-text {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    flex: 1;
+}
+
+.lastupdate-level {
+    font-weight: 600;
+}
+
+.lastupdate-separator {
+    opacity: 0.4;
+    margin: 0 2px;
+}
+
+.lastupdate-time {
+    opacity: 0.85;
+}
+
+/* 右侧详细日期 */
+.lastupdate-details {
+    margin-left: auto;
+    font-size: 12px;
+    opacity: 0.7;
+    white-space: nowrap;
+}
+
+.lastupdate-date {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.5); /* 半透明背景 */
+}
+
+/* ===== 完整背景模式 (Full BG) 核心样式 ===== */
+/* 这里使用了紫色系作为基调，并尝试调用你主题可能存在的 CSS 变量 */
+
+.lastupdate-auto.lastupdate-full-bg {
+    /* 背景渐变：优先使用主题色变量，如果不存在则使用默认紫色 */
+    background: linear-gradient(135deg,
+        var(--link-color, rgba(139, 92, 246, 0.08)),
+        var(--background-secondary, rgba(139, 92, 246, 0.12))
+    );
+    /* 边框颜色 */
+    border: 1px solid var(--border-color, rgba(139, 92, 246, 0.15));
+    /* 文字颜色 */
+    color: var(--text-color, #444);
+    position: relative;
+    overflow: hidden;
+}
+
+/* ===== 不同时效等级的微调 ===== */
+
+/* 1. 较新 (New) - 绿色调 */
+.lastupdate-level-new.lastupdate-full-bg {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(16, 185, 129, 0.15));
+    border-color: rgba(16, 185, 129, 0.2);
+}
+.lastupdate-level-new .lastupdate-level { color: #059669; }
+
+/* 2. 中等 (Medium) - 橙色调 */
+.lastupdate-level-medium.lastupdate-full-bg {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(245, 158, 11, 0.15));
+    border-color: rgba(245, 158, 11, 0.2);
+}
+.lastupdate-level-medium .lastupdate-level { color: #d97706; }
+
+/* 3. 过时 (Old) - 红色调 */
+.lastupdate-level-old.lastupdate-full-bg {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(239, 68, 68, 0.15));
+    border-color: rgba(239, 68, 68, 0.2);
+}
+.lastupdate-level-old .lastupdate-level { color: #dc2626; }
+
+/* 动画：过时文章的轻微脉冲提醒 */
+@keyframes pulse-soft {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    50% { box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1); }
+}
+.lastupdate-level-old:hover {
+    animation: pulse-soft 2s infinite;
+}
+
+/* ===== 移动端适配 ===== */
+@media (max-width: 600px) {
+    .lastupdate-box {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .lastupdate-details {
+        margin-left: 0;
+        width: 100%;
+        padding-top: 8px;
+        border-top: 1px dashed rgba(0,0,0,0.05);
+    }
+}
+
+/* ===== 暗色模式 (Dark Mode) 支持 ===== */
+/* 尝试匹配常见的暗黑模式类名 */
+.dark .lastupdate-auto,
+[data-theme="dark"] .lastupdate-auto,
+body.dark-mode .lastupdate-auto {
+    background: rgba(255, 255, 255, 0.05) !important; /* 强制深色背景 */
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #e0e0e0 !important;
+}
+
+.dark .lastupdate-date,
+[data-theme="dark"] .lastupdate-date {
+    background: rgba(0, 0, 0, 0.2);
+}
