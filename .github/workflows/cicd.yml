@@ -1,0 +1,80 @@
+name: Auto Release on Version Change
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'index.php'
+
+permissions:
+  contents: write
+
+jobs:
+  check-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 检出代码（需要完整历史以获取之前的 Tag 信息）
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+
+      # 2. 检测版本变化并提取 Commit Log
+      - name: Detect Version Change and Generate Log
+        id: version_check
+        run: |
+          # 提取当前 commit 的版本号
+          CUR_VER=$(grep -oP '@version\s+\K[0-9.]+' index.php)
+          # 提取上一个 commit 的版本号
+          PREV_VER=$(git show HEAD~1:index.php | grep -oP '@version\s+\K[0-9.]+' || echo "0.0.0")
+          
+          if [ "$CUR_VER" != "$PREV_VER" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "NEW_VERSION=$CUR_VER" >> $GITHUB_ENV
+            
+            # 获取上一个 Tag 的名称
+            LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+            
+            if [ -z "$LAST_TAG" ]; then
+              # 如果从来没有打过标签，获取所有提交
+              LOGS=$(git log --pretty=format:"* %s (%h)")
+            else
+              # 获取当前 HEAD 到上一个 Tag 之间的所有提交
+              LOGS=$(git log ${LAST_TAG}..HEAD --pretty=format:"* %s (%h)")
+            fi
+            
+            # 将日志写入临时文件，避免多行字符串导致的环境变量错误
+            echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+            echo "$LOGS" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      # 3. 准备打包
+      - name: Prepare and Zip
+        if: steps.version_check.outputs.changed == 'true'
+        run: |
+          mkdir Vergissmeinnicht
+          rsync -av --progress . Vergissmeinnicht/ --exclude Vergissmeinnicht --exclude .git --exclude .github --exclude .gitignore
+          zip -r Vergissmeinnicht.zip Vergissmeinnicht/
+
+      # 4. 发布 Release
+      - name: Update GitHub Release
+        if: steps.version_check.outputs.changed == 'true'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ env.NEW_VERSION }}
+          name: Vergissmeinnicht v${{ env.NEW_VERSION }}
+          body: |
+            ## 📝 更新日志 (Changelog)
+            ${{ env.CHANGELOG }}
+            
+            ---
+            *推送时间: ${{ github.event.head_commit.timestamp }}*
+          files: Vergissmeinnicht.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

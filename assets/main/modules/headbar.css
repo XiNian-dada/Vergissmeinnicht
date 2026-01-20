@@ -1,8 +1,8 @@
 /* =====================================================
-   通用信息框样式 (用于更新时间 & 阅读时间)
+   通用信息框样式 (修复版)
    ===================================================== */
 
-/* 基础容器样式 - 两个插件共用 */
+/* 1. 基础容器与布局 (两个插件共用) */
 .lastupdate-box,
 .reading-time-box {
     display: flex;
@@ -17,6 +17,12 @@
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    
+    /* 🔴 核心修复：浅色模式默认强制深色文字 */
+    color: #333; 
+    /* 默认浅色背景 (淡紫色调) */
+    background: rgba(139, 92, 246, 0.06); 
+    border: 1px solid rgba(139, 92, 246, 0.15);
 }
 
 /* 鼠标悬停效果 */
@@ -32,6 +38,7 @@
     font-size: 20px;
     flex-shrink: 0;
     transition: transform 0.3s ease;
+    color: #8b5cf6; /* 默认图标紫色 */
 }
 
 .lastupdate-box:hover .lastupdate-icon,
@@ -49,35 +56,38 @@
     flex: 1;
 }
 
+/* 强调文字 (分钟数/等级) */
 .lastupdate-level,
 .reading-time-minutes {
-    font-weight: 600;
+    font-weight: 700;
     font-size: 1.05em;
+    color: #333; /* 浅色模式深色字 */
+}
+
+.reading-time-minutes {
+    color: #7c3aed; /* 分钟数用深紫色 */
+    font-size: 18px;
 }
 
 .lastupdate-separator {
     opacity: 0.4;
     margin: 0 2px;
+    color: #000; /* 分割线深色 */
 }
 
 .lastupdate-time {
     opacity: 0.85;
 }
 
-/* 右侧详细信息 */
+/* 右侧详细信息 (Tag 样式) */
 .lastupdate-details,
 .reading-time-details {
     margin-left: auto;
     display: flex;
     gap: 8px;
     font-size: 12px;
-    opacity: 0.75;
+    opacity: 0.9;
     transition: opacity 0.3s ease;
-}
-
-.lastupdate-box:hover .lastupdate-details,
-.reading-time-box:hover .reading-time-details {
-    opacity: 0.95;
 }
 
 .lastupdate-date,
@@ -86,221 +96,144 @@
 .reading-time-speed {
     padding: 3px 10px;
     border-radius: 4px;
-    background: rgba(0, 0, 0, 0.05);
     white-space: nowrap;
     transition: all 0.3s ease;
+    
+    /* 🔴 浅色模式 Tag 背景 */
+    background: rgba(0, 0, 0, 0.06); 
+    color: #555;
 }
 
+/* 鼠标悬停 Tag 变深 */
 .lastupdate-box:hover .lastupdate-date,
 .reading-time-box:hover .reading-time-words,
 .reading-time-box:hover .reading-time-images,
 .reading-time-box:hover .reading-time-speed {
-    background: rgba(0, 0, 0, 0.08);
+    background: rgba(0, 0, 0, 0.1); 
+    color: #000;
     transform: translateY(-1px);
 }
 
-/* =====================================================
-   完整背景模式 (Full BG) - 自动适应主题色
-   ===================================================== */
-
-.lastupdate-auto.lastupdate-full-bg,
-.reading-time-auto.reading-time-full-bg {
-    background: linear-gradient(135deg,
-        var(--link-color, rgba(139, 92, 246, 0.08)),
-        var(--background-secondary, rgba(139, 92, 246, 0.12))
-    );
-    border: 1px solid var(--border-color, rgba(139, 92, 246, 0.18));
-    color: var(--text-color, #444);
-}
-
-/* 添加微妙的光效动画 */
+/* 光效动画 */
 .lastupdate-auto::before,
 .reading-time-auto::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, 
-        transparent, 
-        var(--link-color, rgba(139, 92, 246, 0.1)), 
-        transparent
-    );
+    top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
     transition: left 0.8s ease;
+    pointer-events: none;
 }
-
 .lastupdate-auto:hover::before,
 .reading-time-auto:hover::before {
     left: 100%;
 }
 
 /* =====================================================
-   阅读时间特殊样式
+   2. 更新时间特定颜色 (等级区分) - 浅色模式
    ===================================================== */
 
-/* 阅读时间的分钟数高亮 */
-.reading-time-minutes {
-    color: var(--link-color, #8b5cf6);
-    font-size: 18px;
-    font-weight: 700;
+/* 较新 (Green) */
+.lastupdate-level-new {
+    background: rgba(16, 185, 129, 0.08) !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
 }
+.lastupdate-level-new .lastupdate-icon { color: #059669 !important; }
+.lastupdate-level-new .lastupdate-level { color: #047857 !important; }
 
-/* 图片计数特殊标识 */
-.reading-time-images {
-    background: rgba(255, 193, 7, 0.12) !important;
-    border: 1px solid rgba(255, 193, 7, 0.2);
-    font-weight: 500;
+/* 中等 (Orange) */
+.lastupdate-level-medium {
+    background: rgba(245, 158, 11, 0.08) !important;
+    border-color: rgba(245, 158, 11, 0.3) !important;
 }
+.lastupdate-level-medium .lastupdate-icon { color: #d97706 !important; }
+.lastupdate-level-medium .lastupdate-level { color: #b45309 !important; }
 
-/* =====================================================
-   更新时间特殊样式 - 不同时效等级
-   ===================================================== */
-
-/* 1. 较新 (New) - 绿色调 */
-.lastupdate-level-new.lastupdate-full-bg {
-    background: linear-gradient(135deg, 
-        rgba(16, 185, 129, 0.08), 
-        rgba(16, 185, 129, 0.12)
-    );
-    border-color: rgba(16, 185, 129, 0.2);
+/* 过时 (Red) */
+.lastupdate-level-old {
+    background: rgba(239, 68, 68, 0.08) !important;
+    border-color: rgba(239, 68, 68, 0.3) !important;
 }
+.lastupdate-level-old .lastupdate-icon { color: #dc2626 !important; }
+.lastupdate-level-old .lastupdate-level { color: #b91c1c !important; }
 
-.lastupdate-level-new .lastupdate-icon {
-    color: #10b981;
-    filter: drop-shadow(0 0 3px rgba(16, 185, 129, 0.4));
-}
-
-.lastupdate-level-new .lastupdate-level {
-    color: #059669;
-}
-
-/* 2. 中等 (Medium) - 橙色调 */
-.lastupdate-level-medium.lastupdate-full-bg {
-    background: linear-gradient(135deg, 
-        rgba(245, 158, 11, 0.08), 
-        rgba(245, 158, 11, 0.12)
-    );
-    border-color: rgba(245, 158, 11, 0.2);
-}
-
-.lastupdate-level-medium .lastupdate-icon {
-    color: #f59e0b;
-    filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.4));
-}
-
-.lastupdate-level-medium .lastupdate-level {
-    color: #d97706;
-}
-
-/* 3. 过时 (Old) - 红色调 */
-.lastupdate-level-old.lastupdate-full-bg {
-    background: linear-gradient(135deg, 
-        rgba(239, 68, 68, 0.08), 
-        rgba(239, 68, 68, 0.12)
-    );
-    border-color: rgba(239, 68, 68, 0.2);
-}
-
-.lastupdate-level-old .lastupdate-icon {
-    color: #ef4444;
-    filter: drop-shadow(0 0 3px rgba(239, 68, 68, 0.4));
-}
-
-.lastupdate-level-old .lastupdate-level {
-    color: #dc2626;
-}
-
-/* 过时文章的脉冲提醒动画 */
+/* 脉冲动画 */
 @keyframes pulse-soft {
-    0%, 100% { 
-        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); 
-    }
-    50% { 
-        box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.12); 
-    }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    50% { box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1); }
 }
-
-.lastupdate-level-old:hover {
-    animation: pulse-soft 2s infinite;
-}
+.lastupdate-level-old:hover { animation: pulse-soft 2s infinite; }
 
 /* =====================================================
-   移动端适配
+   3. 移动端适配
    ===================================================== */
-
 @media (max-width: 768px) {
-    .lastupdate-box,
-    .reading-time-box {
+    .lastupdate-box, .reading-time-box {
         flex-wrap: wrap;
         padding: 10px 15px;
-        gap: 8px;
     }
-    
-    .lastupdate-details,
-    .reading-time-details {
-        margin-left: 0;
-        width: 100%;
+    .lastupdate-details, .reading-time-details {
+        margin-left: 0; width: 100%;
         justify-content: flex-end;
         padding-top: 6px;
-        border-top: 1px dashed rgba(0, 0, 0, 0.08);
+        border-top: 1px dashed rgba(0, 0, 0, 0.1);
     }
 }
 
 /* =====================================================
-   暗色模式支持
+   4. 深色模式适配 (Dark Mode) - 核心修复
+   适配 data-bs-theme="dark"
    ===================================================== */
 
-@media (prefers-color-scheme: dark) {
-    .lastupdate-auto,
-    .reading-time-auto {
-        background: linear-gradient(135deg, 
-            rgba(168, 85, 247, 0.08), 
-            rgba(168, 85, 247, 0.12)
-        ) !important;
-        border-color: rgba(168, 85, 247, 0.2) !important;
-        color: #e0e0e0 !important;
-    }
-    
-    .lastupdate-date,
-    .reading-time-words,
-    .reading-time-images,
-    .reading-time-speed {
-        background: rgba(255, 255, 255, 0.08) !important;
-    }
-    
-    .reading-time-minutes {
-        color: #a855f7 !important;
-    }
-}
-
-/* 通过 class 检测暗色模式 */
-.dark .lastupdate-auto,
-.dark .reading-time-auto,
-[data-theme="dark"] .lastupdate-auto,
-[data-theme="dark"] .reading-time-auto,
-body.dark-mode .lastupdate-auto,
-body.dark-mode .reading-time-auto {
-    background: linear-gradient(135deg, 
-        rgba(168, 85, 247, 0.08), 
-        rgba(168, 85, 247, 0.12)
-    ) !important;
-    border-color: rgba(168, 85, 247, 0.2) !important;
+[data-bs-theme="dark"] .lastupdate-box,
+[data-bs-theme="dark"] .reading-time-box {
+    /* 🔴 深色模式：深色背景 + 亮色文字 */
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
     color: #e0e0e0 !important;
 }
 
-.dark .lastupdate-date,
-.dark .reading-time-words,
-.dark .reading-time-images,
-.dark .reading-time-speed,
-[data-theme="dark"] .lastupdate-date,
-[data-theme="dark"] .reading-time-words,
-[data-theme="dark"] .reading-time-images,
-[data-theme="dark"] .reading-time-speed {
-    background: rgba(255, 255, 255, 0.08) !important;
+/* 图标变亮 */
+[data-bs-theme="dark"] .lastupdate-icon,
+[data-bs-theme="dark"] .reading-time-icon {
+    color: #a78bfa !important; /* 浅紫色 */
 }
 
-.dark .reading-time-minutes,
-[data-theme="dark"] .reading-time-minutes {
-    color: #a855f7 !important;
+/* 分割线变亮 */
+[data-bs-theme="dark"] .lastupdate-separator {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Tag 标签变亮 */
+[data-bs-theme="dark"] .lastupdate-date,
+[data-bs-theme="dark"] .reading-time-words,
+[data-bs-theme="dark"] .reading-time-images,
+[data-bs-theme="dark"] .reading-time-speed {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #ccc !important;
+}
+[data-bs-theme="dark"] .lastupdate-box:hover .lastupdate-date,
+[data-bs-theme="dark"] .reading-time-box:hover .reading-time-words {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+}
+
+/* 分钟数高亮 */
+[data-bs-theme="dark"] .reading-time-minutes {
+    color: #c084fc !important;
+}
+
+/* 深色模式下的等级颜色微调 (让字更亮) */
+[data-bs-theme="dark"] .lastupdate-level-new .lastupdate-icon { color: #34d399 !important; } /* 浅绿 */
+[data-bs-theme="dark"] .lastupdate-level-new .lastupdate-level { color: #6ee7b7 !important; }
+
+[data-bs-theme="dark"] .lastupdate-level-medium .lastupdate-icon { color: #fbbf24 !important; } /* 浅橙 */
+[data-bs-theme="dark"] .lastupdate-level-medium .lastupdate-level { color: #fcd34d !important; }
+
+[data-bs-theme="dark"] .lastupdate-level-old .lastupdate-icon { color: #f87171 !important; } /* 浅红 */
+[data-bs-theme="dark"] .lastupdate-level-old .lastupdate-level { color: #fca5a5 !important; }
+
+/* 移动端虚线变白 */
+[data-bs-theme="dark"] .lastupdate-details {
+    border-top-color: rgba(255, 255, 255, 0.1);
 }

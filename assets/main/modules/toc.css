@@ -1,40 +1,45 @@
 /* =========================================
-   悬浮目录 (TOC) 样式 - 动态吸附版
+   悬浮目录 (TOC) 样式 - 主题自适应版
    ========================================= */
 
-/* 默认隐藏，由 JS 控制显示 */
+/* 1. 外层包裹 (定位控制) */
 .toc-wrapper {
     display: none; 
     position: fixed;
-    top: 80px; /* 距离顶部距离 */
-    width: 250px; /* 目录宽度 */
+    top: 80px;
+    width: 250px;
     z-index: 9999;
-    /* 注意：这里不再写 left: calc(...) 了，全部交给 JS 接管 */
 }
 
-/* 容器外观 (保持不变) */
+/* 2. 容器外观 (默认 - 浅色模式) */
 .toc-container {
-    background: rgba(20, 21, 22, 0.85);
+    /* 浅色背景毛玻璃 */
+    background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    
+    /* 浅色边框和阴影 */
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    
     border-radius: 12px;
     padding: 18px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
     max-height: calc(100vh - 160px);
     overflow-y: auto;
+    transition: all 0.3s ease;
 }
 
-/* 标题和列表样式 (保持不变) */
+/* 标题样式 (浅色模式) */
 .toc-container .section-title {
     margin: 0 0 10px 0;
     font-size: 16px;
     font-weight: bold;
-    color: #fff;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #333; /* 浅色模式用深字 */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     padding-bottom: 10px;
 }
 
+/* 列表基础样式 */
 .toc-list ul { list-style: none; padding: 0; margin: 0; }
 .toc-list li { margin-bottom: 2px; }
 
@@ -48,12 +53,42 @@
     border-left: 2px solid transparent;
 }
 
+/* 悬停效果 (浅色模式) */
 .toc-list a:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.05); /* 浅灰色背景 */
+    color: var(--accent-color);       /* 悬停变主题色 */
 }
 
-/* 层级样式 */
-.toc-list a.toc-level-1 { font-size: 14px; font-weight: bold; color: #fff; padding-left: 10px; }
-.toc-list a.toc-level-2 { font-size: 13px; color: #ccc; padding-left: 20px; }
-.toc-list a.toc-level-3 { font-size: 12px; color: #999; padding-left: 32px; position: relative; }
-.toc-list a.toc-level-4 { font-size: 12px; color: #777; padding-left: 42px; }
+/* 层级颜色 (浅色模式 - 文字由深到浅) */
+.toc-list a.toc-level-1 { font-size: 14px; font-weight: bold; color: #333; padding-left: 10px; }
+.toc-list a.toc-level-2 { font-size: 13px; color: #555; padding-left: 20px; }
+.toc-list a.toc-level-3 { font-size: 12px; color: #888; padding-left: 32px; }
+.toc-list a.toc-level-4 { font-size: 12px; color: #aaa; padding-left: 42px; }
+
+/* =========================================
+   3. 深色模式适配 (Dark Mode Override)
+   当 body 有 data-bs-theme="dark" 时生效
+   ========================================= */
+
+[data-bs-theme="dark"] .toc-container {
+    /* 深色背景毛玻璃 */
+    background: rgba(20, 21, 22, 0.85);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+[data-bs-theme="dark"] .toc-container .section-title {
+    color: #fff; /* 深色模式标题变白 */
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="dark"] .toc-list a:hover {
+    background: rgba(255, 255, 255, 0.1); /* 悬停背景变白透明 */
+    color: #fff;
+}
+
+/* 层级颜色反转 (深色模式 - 文字由白到灰) */
+[data-bs-theme="dark"] .toc-list a.toc-level-1 { color: #fff; }
+[data-bs-theme="dark"] .toc-list a.toc-level-2 { color: #ccc; }
+[data-bs-theme="dark"] .toc-list a.toc-level-3 { color: #999; }
+[data-bs-theme="dark"] .toc-list a.toc-level-4 { color: #777; }

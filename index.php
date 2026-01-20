@@ -6,7 +6,7 @@
  *
  * @package Vergissmeinnicht
  * @author XiNina-dada
- * @version 1.0.0
+ * @version 1.1.0
  * @link https://leeinx.com
  */
 
