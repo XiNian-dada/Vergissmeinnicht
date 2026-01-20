@@ -1,4 +1,3 @@
-```markdown
 # Vergissmeinnicht - Typecho Theme
 
 [![Typecho](https://img.shields.io/badge/Typecho-1.2+-467fcf.svg)](http://typecho.org)
