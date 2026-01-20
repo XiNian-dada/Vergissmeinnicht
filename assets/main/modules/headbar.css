@@ -1,0 +1,306 @@
+/* =====================================================
+   通用信息框样式 (用于更新时间 & 阅读时间)
+   ===================================================== */
+
+/* 基础容器样式 - 两个插件共用 */
+.lastupdate-box,
+.reading-time-box {
+    display: flex;
+    align-items: center;
+    padding: 12px 18px;
+    margin: 15px 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+    gap: 12px;
+    font-size: 14px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 鼠标悬停效果 */
+.lastupdate-box:hover,
+.reading-time-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* 图标样式 */
+.lastupdate-icon,
+.reading-time-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.lastupdate-box:hover .lastupdate-icon,
+.reading-time-box:hover .reading-time-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* 文本区域 */
+.lastupdate-text,
+.reading-time-text {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    flex: 1;
+}
+
+.lastupdate-level,
+.reading-time-minutes {
+    font-weight: 600;
+    font-size: 1.05em;
+}
+
+.lastupdate-separator {
+    opacity: 0.4;
+    margin: 0 2px;
+}
+
+.lastupdate-time {
+    opacity: 0.85;
+}
+
+/* 右侧详细信息 */
+.lastupdate-details,
+.reading-time-details {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+    font-size: 12px;
+    opacity: 0.75;
+    transition: opacity 0.3s ease;
+}
+
+.lastupdate-box:hover .lastupdate-details,
+.reading-time-box:hover .reading-time-details {
+    opacity: 0.95;
+}
+
+.lastupdate-date,
+.reading-time-words,
+.reading-time-images,
+.reading-time-speed {
+    padding: 3px 10px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.05);
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+.lastupdate-box:hover .lastupdate-date,
+.reading-time-box:hover .reading-time-words,
+.reading-time-box:hover .reading-time-images,
+.reading-time-box:hover .reading-time-speed {
+    background: rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+/* =====================================================
+   完整背景模式 (Full BG) - 自动适应主题色
+   ===================================================== */
+
+.lastupdate-auto.lastupdate-full-bg,
+.reading-time-auto.reading-time-full-bg {
+    background: linear-gradient(135deg,
+        var(--link-color, rgba(139, 92, 246, 0.08)),
+        var(--background-secondary, rgba(139, 92, 246, 0.12))
+    );
+    border: 1px solid var(--border-color, rgba(139, 92, 246, 0.18));
+    color: var(--text-color, #444);
+}
+
+/* 添加微妙的光效动画 */
+.lastupdate-auto::before,
+.reading-time-auto::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        var(--link-color, rgba(139, 92, 246, 0.1)), 
+        transparent
+    );
+    transition: left 0.8s ease;
+}
+
+.lastupdate-auto:hover::before,
+.reading-time-auto:hover::before {
+    left: 100%;
+}
+
+/* =====================================================
+   阅读时间特殊样式
+   ===================================================== */
+
+/* 阅读时间的分钟数高亮 */
+.reading-time-minutes {
+    color: var(--link-color, #8b5cf6);
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* 图片计数特殊标识 */
+.reading-time-images {
+    background: rgba(255, 193, 7, 0.12) !important;
+    border: 1px solid rgba(255, 193, 7, 0.2);
+    font-weight: 500;
+}
+
+/* =====================================================
+   更新时间特殊样式 - 不同时效等级
+   ===================================================== */
+
+/* 1. 较新 (New) - 绿色调 */
+.lastupdate-level-new.lastupdate-full-bg {
+    background: linear-gradient(135deg, 
+        rgba(16, 185, 129, 0.08), 
+        rgba(16, 185, 129, 0.12)
+    );
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+.lastupdate-level-new .lastupdate-icon {
+    color: #10b981;
+    filter: drop-shadow(0 0 3px rgba(16, 185, 129, 0.4));
+}
+
+.lastupdate-level-new .lastupdate-level {
+    color: #059669;
+}
+
+/* 2. 中等 (Medium) - 橙色调 */
+.lastupdate-level-medium.lastupdate-full-bg {
+    background: linear-gradient(135deg, 
+        rgba(245, 158, 11, 0.08), 
+        rgba(245, 158, 11, 0.12)
+    );
+    border-color: rgba(245, 158, 11, 0.2);
+}
+
+.lastupdate-level-medium .lastupdate-icon {
+    color: #f59e0b;
+    filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.4));
+}
+
+.lastupdate-level-medium .lastupdate-level {
+    color: #d97706;
+}
+
+/* 3. 过时 (Old) - 红色调 */
+.lastupdate-level-old.lastupdate-full-bg {
+    background: linear-gradient(135deg, 
+        rgba(239, 68, 68, 0.08), 
+        rgba(239, 68, 68, 0.12)
+    );
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+.lastupdate-level-old .lastupdate-icon {
+    color: #ef4444;
+    filter: drop-shadow(0 0 3px rgba(239, 68, 68, 0.4));
+}
+
+.lastupdate-level-old .lastupdate-level {
+    color: #dc2626;
+}
+
+/* 过时文章的脉冲提醒动画 */
+@keyframes pulse-soft {
+    0%, 100% { 
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); 
+    }
+    50% { 
+        box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.12); 
+    }
+}
+
+.lastupdate-level-old:hover {
+    animation: pulse-soft 2s infinite;
+}
+
+/* =====================================================
+   移动端适配
+   ===================================================== */
+
+@media (max-width: 768px) {
+    .lastupdate-box,
+    .reading-time-box {
+        flex-wrap: wrap;
+        padding: 10px 15px;
+        gap: 8px;
+    }
+    
+    .lastupdate-details,
+    .reading-time-details {
+        margin-left: 0;
+        width: 100%;
+        justify-content: flex-end;
+        padding-top: 6px;
+        border-top: 1px dashed rgba(0, 0, 0, 0.08);
+    }
+}
+
+/* =====================================================
+   暗色模式支持
+   ===================================================== */
+
+@media (prefers-color-scheme: dark) {
+    .lastupdate-auto,
+    .reading-time-auto {
+        background: linear-gradient(135deg, 
+            rgba(168, 85, 247, 0.08), 
+            rgba(168, 85, 247, 0.12)
+        ) !important;
+        border-color: rgba(168, 85, 247, 0.2) !important;
+        color: #e0e0e0 !important;
+    }
+    
+    .lastupdate-date,
+    .reading-time-words,
+    .reading-time-images,
+    .reading-time-speed {
+        background: rgba(255, 255, 255, 0.08) !important;
+    }
+    
+    .reading-time-minutes {
+        color: #a855f7 !important;
+    }
+}
+
+/* 通过 class 检测暗色模式 */
+.dark .lastupdate-auto,
+.dark .reading-time-auto,
+[data-theme="dark"] .lastupdate-auto,
+[data-theme="dark"] .reading-time-auto,
+body.dark-mode .lastupdate-auto,
+body.dark-mode .reading-time-auto {
+    background: linear-gradient(135deg, 
+        rgba(168, 85, 247, 0.08), 
+        rgba(168, 85, 247, 0.12)
+    ) !important;
+    border-color: rgba(168, 85, 247, 0.2) !important;
+    color: #e0e0e0 !important;
+}
+
+.dark .lastupdate-date,
+.dark .reading-time-words,
+.dark .reading-time-images,
+.dark .reading-time-speed,
+[data-theme="dark"] .lastupdate-date,
+[data-theme="dark"] .reading-time-words,
+[data-theme="dark"] .reading-time-images,
+[data-theme="dark"] .reading-time-speed {
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.dark .reading-time-minutes,
+[data-theme="dark"] .reading-time-minutes {
+    color: #a855f7 !important;
+}

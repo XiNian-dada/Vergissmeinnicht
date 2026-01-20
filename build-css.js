@@ -26,8 +26,10 @@ const CONFIG = {
         'pagination.css',  // 10. 分页
         'codeblock.css',   // 11. 代码块
         'lightbox.css',    // 12. 灯箱
-        'weather.css',      // 13. 天气
-        'toc.css'          // 14. 文章导航
+        'weather.css',     // 13. 天气
+        'toc.css',         // 14. 文章导航
+        'headbar.css',      // 15. 文章顶部统计
+        'prism.css'      // 16. Prism高亮
     ]
 };
 
