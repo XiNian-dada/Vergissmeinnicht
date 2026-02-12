@@ -59,3 +59,21 @@
     content: none !important;
     display: none !important;
 }
+
+/* 针对文章正文里的标题，强制恢复间距 */
+.article-body h1,
+.article-body h2,
+.article-body h3 {
+    display: block !important; /* 确保它们一定是独占一行的块 */
+    width: fit-content !important; 
+    width: -moz-fit-content !important; /* 兼容火狐 */
+    margin-top: 1.2em !important;    /* 头部留出距离 */
+    margin-bottom: 0.6em !important; /* 尾部留出距离 */
+    line-height: 1.5 !important;     /* 行高撑开一点 */
+    clear: both !important;          /* 防止被旁边的浮动元素挤到一行去 */
+}
+
+/* 专门治愈“标题粘连”：如果 H2 紧跟在 H1 后面，额外加距 */
+.article-body h1 + h2 {
+    margin-top: 1em !important;
+}
