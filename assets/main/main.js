@@ -123,37 +123,67 @@ window.reloadThemeComponents = function() {
 };
 
 // =========================================
-// Mac 风格代码块初始化 (修复换行问题 - 调试版)
-// =========================================
-// =========================================
-// Mac 风格代码块初始化 (终极修复版 - 处理 HTML 污染)
+// Mac 风格代码块初始化 (终极逆向修复版)
 // =========================================
 function initMacCodeBlock() {
     const preElements = document.querySelectorAll('pre');
     
-    preElements.forEach((pre, index) => {
+    preElements.forEach((pre) => {
         // 防止重复处理
-        if (pre.parentElement.classList.contains('mac-window')) {
-            return;
-        }
+        if (pre.parentElement.classList.contains('mac-window')) return;
 
-        // 1. 寻找或创建 code 标签
+        // 1. 获取容器
         let code = pre.querySelector('code');
-        
-        // ============================================================
-        // ★★★ 核心修复：彻底清理 HTML 污染，提取纯文本 ★★★
-        // ============================================================
-        
         const sourceContainer = code || pre;
         
-        // 方案：使用 innerText 或 textContent 直接提取纯文本
-        // innerText 会自动处理 <br>、块级元素的换行
-        let cleanText = sourceContainer.innerText || sourceContainer.textContent || '';
+        // ============================================================
+        // ★★★ 核心修复逻辑 ★★★
+        // ============================================================
         
-        // 额外清理：移除 &nbsp; 等 HTML 实体遗留
-        cleanText = cleanText.replace(/\u00a0/g, ' ');
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = sourceContainer.innerHTML;
+
+        // 【逆向还原 1】检测 H1-H6，把 PHP 解析器吃掉的 # 吐出来
+        // 逻辑：遇到 <h1> 就还原成 "# "，遇到 <h2> 还原成 "## "
+        const headers = tempDiv.querySelectorAll('h1, h2, h3, h4, h5, h6');
+        headers.forEach(header => {
+            const level = parseInt(header.tagName.substring(1)); // 获取标题等级 (1-6)
+            let hashPrefix = '#'.repeat(level);
+            
+            // 智能补空格：如果标题文本本身没有空格，我们补一个，还原 Markdown 格式
+            // 这里的 replace 是为了去掉可能存在的 &nbsp; 干扰
+            if (!header.textContent.replace(/\u00a0/g, ' ').startsWith(' ')) {
+                hashPrefix += ' ';
+            }
+            
+            // 创建文本节点替代原本的 H 标签，并在末尾补一个换行
+            const textNode = document.createTextNode(hashPrefix + header.textContent + '\n');
+            header.replaceWith(textNode);
+        });
+
+        // 【逆向还原 2】处理被转义的换行 <br>
+        tempDiv.querySelectorAll('br').forEach(br => br.replaceWith('\n'));
+
+        // 【逆向还原 3】处理被包裹的段落 p/div
+        const blockTags = 'p,div,li';
+        tempDiv.querySelectorAll(blockTags).forEach(block => {
+            block.after('\n'); // 在块结束后加换行
+        });
+
+        // 【最终清洗】提取纯文本
+        let cleanText = tempDiv.textContent || '';
         
-        // 2. 重建 code 标签
+        // 1. 也是最关键的一步：把 &nbsp; 替换成真正的空格
+        // 这样 Prism 高亮器才能识别出 "# " 是注释，而不是标题
+        cleanText = cleanText.replace(/\u00a0/g, ' '); 
+        
+        // 2. 去除首尾空白
+        cleanText = cleanText.trim();
+
+        // ============================================================
+        // 下面是 UI 构建逻辑 (保持不变)
+        // ============================================================
+        
         if (!code) {
             code = document.createElement('code');
             pre.innerHTML = ''; 
@@ -162,67 +192,32 @@ function initMacCodeBlock() {
             code.innerHTML = '';
         }
         
-        // 3. 将纯文本内容填入 code 标签
         code.textContent = cleanText;
         
-        // ============================================================
-        // ★★★ 清理完成，以下是语言识别和 UI 逻辑 ★★★
-        // ============================================================
-
-        // 默认语言
+        // --- 语言识别 ---
         let lang = 'TEXT';
         let prismClass = 'language-text';
-
-        // 辅助函数：从类名中提取语言
         const extractLang = (cls) => {
             if (cls.startsWith('language-') || cls.startsWith('lang-')) {
-                return {
-                    lang: cls.replace(/^(language-|lang-)/, '').toUpperCase(),
-                    cls: cls
-                };
+                return { lang: cls.replace(/^(language-|lang-)/, '').toUpperCase(), cls: cls };
             }
             return null;
         };
-
-        // 4. 识别语言：检查 code 标签的类名
-        if (code.classList.length > 0) {
-            code.classList.forEach(cls => {
+        [code, pre].forEach(el => {
+            el.classList.forEach(cls => {
                 const res = extractLang(cls);
-                if (res) { 
-                    lang = res.lang; 
-                    prismClass = res.cls; 
-                }
+                if (res) { lang = res.lang; prismClass = res.cls; }
             });
-        }
-        
-        // 5. 识别语言：检查 pre 标签的类名
-        if (lang === 'TEXT') {
-            pre.classList.forEach(cls => {
-                const res = extractLang(cls);
-                if (res) { 
-                    lang = res.lang; 
-                    prismClass = res.cls; 
-                }
-            });
-        }
-
-        // 6. 识别语言：兼容 brush:xx 旧式写法
+        });
         if (lang === 'TEXT' && pre.className) {
             const match = pre.className.match(/brush\s*:\s*([a-zA-Z0-9]+)/);
-            if (match) {
-                const rawLang = match[1];
-                lang = rawLang.toUpperCase();
-                prismClass = 'language-' + rawLang;
-            }
+            if(match) { lang = match[1].toUpperCase(); prismClass = 'language-' + match[1]; }
         }
         
-        // 7. 确保 code 标签有正确的语言类名
         code.classList.remove('language-text');
-        if (!code.classList.contains(prismClass)) {
-            code.classList.add(prismClass);
-        }
+        if (!code.classList.contains(prismClass)) code.classList.add(prismClass);
 
-        // 8. 构建 Mac 窗口 UI
+        // --- 构建 Mac 窗口 ---
         const wrapper = document.createElement('div');
         wrapper.className = 'mac-window';
         wrapper.innerHTML = `
@@ -237,11 +232,10 @@ function initMacCodeBlock() {
             </div>
         `;
         
-        // 插入 wrapper 并移动 pre 进去
         pre.parentNode.insertBefore(wrapper, pre);
         wrapper.appendChild(pre);
 
-        // 9. 绑定复制按钮
+        // --- 复制功能 ---
         const copyBtn = wrapper.querySelector('.mac-copy-btn');
         copyBtn.addEventListener('click', () => {
             navigator.clipboard.writeText(code.textContent).then(() => {
@@ -256,10 +250,7 @@ function initMacCodeBlock() {
         });
     });
 
-    // 10. 触发 Prism 高亮
-    if (window.Prism) {
-        Prism.highlightAll();
-    }
+    if (window.Prism) Prism.highlightAll();
 }
 // =========================================
 // 图片灯箱逻辑 (包含缩放、拖拽、切换)

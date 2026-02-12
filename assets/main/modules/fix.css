@@ -1,0 +1,61 @@
+/* 强制覆盖代码块内所有标题的样式，让它们看起来像普通代码 */
+/* ==========================================================================
+   Code Block Heading Reset - 专治 Typecho 乱解析代码块里的标题
+   ========================================================================== */
+
+/* 1. 核打击：将 pre 里的所有 H 标签彻底“格式化”为普通文本 */
+.article-body pre h1,
+.article-body pre h2,
+.article-body pre h3,
+.article-body pre h4,
+.article-body pre h5,
+.article-body pre h6 {
+    /* 关键：取消块级特性，让它和前后文字排在同一行 */
+    display: inline !important; 
+    
+    /* 关键：继承代码块的字体大小、粗细、行高 */
+    font-size: 100% !important;
+    font-weight: normal !important;
+    line-height: inherit !important;
+    font-family: inherit !important;
+    color: inherit !important;
+    
+    /* 清除所有间距和边框 */
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: none !important;
+    width: auto !important;
+    float: none !important;
+}
+
+/* 2. 视觉欺骗：在 JS 修复之前，先用 CSS 把 # 号补给眼睛看 */
+/* 这样页面加载的一瞬间，用户看到的就是完美的 # 注释，而不是标题 */
+
+/* 针对 H1 (原 # ) */
+.article-body pre h1::before {
+    content: "# ";
+    font-weight: normal;
+    opacity: 0.7; /* 让井号稍微淡一点，更有注释感 */
+}
+
+/* 针对 H2 (原 ## ) */
+.article-body pre h2::before {
+    content: "## ";
+    font-weight: normal;
+    opacity: 0.7;
+}
+
+/* 针对 H3 (原 ### ) */
+.article-body pre h3::before {
+    content: "### ";
+    font-weight: normal;
+    opacity: 0.7;
+}
+
+/* 3. 防止某些主题对伪元素有特殊背景设置 */
+.article-body pre h1::after,
+.article-body pre h2::after {
+    content: none !important;
+    display: none !important;
+}

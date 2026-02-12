@@ -116,7 +116,7 @@
             </div>
         </div>
 
-        <?php $this->content(); ?>
+        <?php echo $this->content; ?>
     </div>
 
     <div class="article-footer post-footer">

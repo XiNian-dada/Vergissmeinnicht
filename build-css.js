@@ -29,7 +29,8 @@ const CONFIG = {
         'weather.css',     // 13. 天气
         'toc.css',         // 14. 文章导航
         'headbar.css',      // 15. 文章顶部统计
-        'prism.css'      // 16. Prism高亮
+        'prism.css',      // 16. Prism高亮
+        'fix.css'         // 17. 小补丁们
     ]
 };
 
