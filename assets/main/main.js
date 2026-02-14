@@ -125,65 +125,84 @@ window.reloadThemeComponents = function() {
 // =========================================
 // Mac 风格代码块初始化 (终极逆向修复版)
 // =========================================
+// =========================================
+// Mac 风格代码块初始化 (UEditor 终极适配版)
+// =========================================
 function initMacCodeBlock() {
     const preElements = document.querySelectorAll('pre');
     
+    // 辅助函数：安全的 HTML 实体解码
+    const decodeHTML = (str) => {
+        const txt = document.createElement('textarea');
+        txt.innerHTML = str;
+        return txt.value;
+    };
+
     preElements.forEach((pre) => {
-        // 防止重复处理
         if (pre.parentElement.classList.contains('mac-window')) return;
 
-        // 1. 获取容器
         let code = pre.querySelector('code');
         const sourceContainer = code || pre;
         
-        // ============================================================
-        // ★★★ 核心修复逻辑 ★★★
-        // ============================================================
+        // --- 核心修复开始 ---
         
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = sourceContainer.innerHTML;
 
-        // 【逆向还原 1】检测 H1-H6，把 PHP 解析器吃掉的 # 吐出来
-        // 逻辑：遇到 <h1> 就还原成 "# "，遇到 <h2> 还原成 "## "
+        // 1. 逆向还原 H 标签 (修复 # 被吃掉的问题)
         const headers = tempDiv.querySelectorAll('h1, h2, h3, h4, h5, h6');
         headers.forEach(header => {
-            const level = parseInt(header.tagName.substring(1)); // 获取标题等级 (1-6)
+            const level = parseInt(header.tagName.substring(1));
             let hashPrefix = '#'.repeat(level);
-            
-            // 智能补空格：如果标题文本本身没有空格，我们补一个，还原 Markdown 格式
-            // 这里的 replace 是为了去掉可能存在的 &nbsp; 干扰
+            // 智能补空格
             if (!header.textContent.replace(/\u00a0/g, ' ').startsWith(' ')) {
                 hashPrefix += ' ';
             }
-            
-            // 创建文本节点替代原本的 H 标签，并在末尾补一个换行
             const textNode = document.createTextNode(hashPrefix + header.textContent + '\n');
             header.replaceWith(textNode);
         });
 
-        // 【逆向还原 2】处理被转义的换行 <br>
-        tempDiv.querySelectorAll('br').forEach(br => br.replaceWith('\n'));
-
-        // 【逆向还原 3】处理被包裹的段落 p/div
-        const blockTags = 'p,div,li';
-        tempDiv.querySelectorAll(blockTags).forEach(block => {
-            block.after('\n'); // 在块结束后加换行
+        // 2. 处理常规换行 (把 br 变成换行符)
+        tempDiv.querySelectorAll('br').forEach(br => {
+            br.replaceWith(document.createTextNode('\n'));
+        });
+        
+        // 3. 处理段落包裹 (把 p/div 变成换行) - 核心修复
+        const blockTags = tempDiv.querySelectorAll('p, div, li');
+        blockTags.forEach(block => {
+            // 在块级元素后面添加换行
+            const nextNode = block.nextSibling;
+            if (!nextNode || nextNode.nodeType !== Node.TEXT_NODE || !nextNode.textContent.startsWith('\n')) {
+                block.after(document.createTextNode('\n'));
+            }
         });
 
-        // 【最终清洗】提取纯文本
+        // 4. 获取初步清洗的 HTML 文本
+        let htmlContent = tempDiv.innerHTML;
+        
+        // ★★★ 关键修复：处理被转义的换行符 ★★★
+        // UEditor 有时会把换行符转义成 "\n" 字符串显示在 HTML 里
+        // 如果你希望代码里的 \n 显示为字符，保留它；但如果它是排版用的，这里不乱动
+        // 我们重点依靠上面的 br/p 替换来保证物理换行
+
+        // 5. 提取纯文本 (利用 textContent 自动解码基础实体)
+        // 注意：这里我们用 tempDiv 的 textContent，因为它已经处理了 H 标签和 br
         let cleanText = tempDiv.textContent || '';
-        
-        // 1. 也是最关键的一步：把 &nbsp; 替换成真正的空格
-        // 这样 Prism 高亮器才能识别出 "# " 是注释，而不是标题
+
+        // ★★★ 关键修复：二次解码 &nbsp; 和其他残留实体 ★★★
+        // 专门处理那些被 textContent 漏掉或者被二次转义的字符
+        // 比如 &#39; (单引号) 在某些情况下 textContent 解码不彻底
+        cleanText = decodeHTML(cleanText);
+
+        // 6. 清理 &nbsp; (变成普通空格)
         cleanText = cleanText.replace(/\u00a0/g, ' '); 
-        
-        // 2. 去除首尾空白
+
+        // 7. 清理多余空行 (保留最多两个连续换行)
+        cleanText = cleanText.replace(/\n{3,}/g, '\n\n');
         cleanText = cleanText.trim();
 
-        // ============================================================
-        // 下面是 UI 构建逻辑 (保持不变)
-        // ============================================================
-        
+        // --- 核心修复结束 ---
+
         if (!code) {
             code = document.createElement('code');
             pre.innerHTML = ''; 
@@ -194,7 +213,7 @@ function initMacCodeBlock() {
         
         code.textContent = cleanText;
         
-        // --- 语言识别 ---
+        // --- 语言识别 & Mac 窗口构建 (保持不变) ---
         let lang = 'TEXT';
         let prismClass = 'language-text';
         const extractLang = (cls) => {
@@ -217,7 +236,6 @@ function initMacCodeBlock() {
         code.classList.remove('language-text');
         if (!code.classList.contains(prismClass)) code.classList.add(prismClass);
 
-        // --- 构建 Mac 窗口 ---
         const wrapper = document.createElement('div');
         wrapper.className = 'mac-window';
         wrapper.innerHTML = `
@@ -235,7 +253,6 @@ function initMacCodeBlock() {
         pre.parentNode.insertBefore(wrapper, pre);
         wrapper.appendChild(pre);
 
-        // --- 复制功能 ---
         const copyBtn = wrapper.querySelector('.mac-copy-btn');
         copyBtn.addEventListener('click', () => {
             navigator.clipboard.writeText(code.textContent).then(() => {
