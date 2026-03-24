@@ -36,7 +36,10 @@ a:hover {
     color: var(--accent-color);
     text-decoration: none !important;
 }
-
+.article-body a {
+    color: #1e80ff;
+    text-decoration: underline;
+}
 img {
     max-width: 100%;
     display: block;
