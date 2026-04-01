@@ -6,7 +6,7 @@
 /* 1. 基础文字颜色和字体 */
 code[class*="language-"],
 pre[class*="language-"] {
-    color: #abb2bf; /* 柔和的灰白文字 */
+    color: #abb2bf;
     font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
     text-align: left;
     white-space: pre;

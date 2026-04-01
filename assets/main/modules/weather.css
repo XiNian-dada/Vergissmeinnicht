@@ -43,7 +43,7 @@ html[data-bs-theme="light"].weather-overcast #weather-container::after {
 /* 3. Canvas 用于雨雪 */
 #weather-canvas {
     position: relative;
-    z-index: 1; /* 保证雨雪在遮罩层之上 */
+    z-index: 1;
     display: block;
     width: 100%;
     height: 100%;
@@ -123,7 +123,6 @@ html[data-bs-theme="dark"] .sun-spot.spot-3 {
 /* 1. 针对白天模式 (light) 下的所有玻璃卡片 */
 html[data-bs-theme="light"] .glass-card,
 html[data-bs-theme="light"] .glass-panel,
-html[data-bs-theme="light"] .glass-header,
 html[data-bs-theme="light"] .glass-footer {
     /* 增加不透明度：让卡片更白一点，防止背景的灰色透过来太多 */
     background: rgba(255, 255, 255, 0.85) !important;
@@ -142,7 +141,7 @@ html[data-bs-theme="light"] .glass-footer {
 /* 2. 特别处理：当进入“阴雨天模式”时，白天模式的卡片要稍微变暗以平衡视觉 */
 html[data-bs-theme="light"].weather-overcast .glass-card,
 html[data-bs-theme="light"].weather-overcast .glass-panel,
-html[data-bs-theme="light"].weather-overcast .glass-header {
+html[data-bs-theme="light"].weather-overcast .glass-footer {
     /* 核心修改：
        原先是 0.95 (极亮)，现在改为 0.75。
        原理：降低白色的不透明度，让底下那层“蓝灰色遮罩”透上来，
@@ -159,12 +158,12 @@ html[data-bs-theme="light"].weather-overcast .glass-header {
 
 /* 额外优化：阴雨天模式下，文字颜色稍微加深，确保在半透明卡片上依然清晰 */
 html[data-bs-theme="light"].weather-overcast body {
-    color: #2c3e50; /* 深蓝灰字体 */
+    color: #2c3e50;
 }
 
 /* 3. 导航栏和侧边栏文字颜色加深，防止对比度不足 */
 html[data-bs-theme="light"] .nav-link,
 html[data-bs-theme="light"] .dock-item {
     color: #333;
-    font-weight: 500; /* 稍微加粗一点 */
+    font-weight: 500;
 }

@@ -5,24 +5,24 @@
 /* 1. 容器：同时兼容 .pagination 和 .page-navigator */
 .page-navigator,
 .pagination {
-    display: flex !important;        /* 强制 Flex 布局 */
-    flex-direction: row !important;  /* 强制横向排列！ */
+    display: flex !important;
+    flex-direction: row !important;
     justify-content: center;
     align-items: center;
-    gap: 10px;                       /* 按钮之间的间距 */
+    gap: 10px;
     margin: 40px 0;
     padding: 0;
-    list-style: none !important;     /* 去掉列表前面的点 */
-    width: 100%;                     /* 占满宽度 */
+    list-style: none !important;
+    width: 100%;
 }
 
 /* 2. 列表项重置 */
 .page-navigator li,
 .pagination li {
-    display: block !important;       /* 防止 li 变成 100% 宽度的块 */
+    display: block !important;
     margin: 0;
     padding: 0;
-    flex: 0 0 auto;                  /* 禁止缩放 */
+    flex: 0 0 auto;
 }
 
 /* 3. 按钮样式：玻璃卡片风格 */
@@ -35,7 +35,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 40px;                 /* 方块大小 */
+    min-width: 40px;
     height: 40px;
     padding: 0 12px;
     
@@ -45,12 +45,12 @@
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     box-shadow: var(--glass-shadow);
-    border-radius: 12px;             /* 圆角 */
+    border-radius: 12px;
     
     color: var(--text-main);
     font-size: 14px;
     font-weight: 600;
-    text-decoration: none !important; /* 再次确保无下划线 */
+    text-decoration: none !important;
     transition: all 0.2s ease;
     
     /* 覆盖 Bootstrap 默认样式 */
@@ -65,7 +65,7 @@
     background: rgba(255, 255, 255, 0.5);
     border-color: var(--accent-color);
     color: var(--accent-color);
-    transform: translateY(-2px);     /* 悬停上浮效果 */
+    transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     z-index: 2;
 }

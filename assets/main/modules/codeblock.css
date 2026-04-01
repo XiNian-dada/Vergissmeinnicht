@@ -10,6 +10,11 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     margin: 24px 0;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 /* 2. 顶部栏 (Header) */
@@ -70,14 +75,18 @@
     border-radius: 0 !important;
     box-shadow: none !important;
     text-shadow: none !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
 }
 
 /* 强制覆盖 code 的样式 */
 .mac-window code[class*="language-"],
 .mac-window code {
     display: block !important;
+    width: 100% !important;
     padding: 20px !important;
     overflow-x: auto !important;
+    overflow-y: hidden !important;
     white-space: pre !important;
     font-family: "JetBrains Mono", "Fira Code", Consolas, monospace !important;
     font-size: 14px !important;
@@ -86,6 +95,7 @@
     text-shadow: none !important;
     color: inherit !important;
     box-sizing: border-box !important;
+    max-width: 100% !important;
 }
 
 /* 7. 滚动条美化 */
@@ -100,32 +110,6 @@
    8. 响应式设计：基于 CSS 变量动态计算宽度
    ========================================= */
 
-/* 小屏：占满容器 */
-.mac-window {
-    max-width: 100%;
-}
-
-/* 中等屏幕：使用默认文章宽度（减去边距） */
-@media (min-width: 768px) {
-    .mac-window {
-        /* 使用 Layout.css 中定义的变量动态计算 */
-        max-width: calc(var(--article-max-width) - 40px);
-    }
-}
-
-/* 超宽屏三栏布局：使用三栏时的文章宽度 */
-@media (min-width: 1400px) {
-    .has-toc .mac-window {
-        /* 使用三栏布局时的文章宽度 */
-        max-width: calc(var(--article-max-width-toc) - 40px);
-    }
-    
-    /* 如果没有目录，使用默认宽度 */
-    .app-container:not(.has-toc) .mac-window {
-        max-width: calc(var(--article-max-width) - 40px);
-    }
-}
-
 /* 中等屏幕：稍微优化 */
 @media (min-width: 768px) and (max-width: 991px) {
     .mac-window code {
@@ -136,7 +120,7 @@
 /* 小屏：全面优化 */
 @media (max-width: 767px) {
     .mac-window {
-        margin: 16px -10px;
+        margin: 16px 0;
         border-radius: 8px;
     }
     

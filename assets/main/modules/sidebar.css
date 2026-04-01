@@ -9,15 +9,15 @@
     .sidebar-dock {
         /* 1. 定位：改为固定定位，脱离文档流 */
         position: fixed;
-        left: 30px;    /* 距离左边 30px */
-        bottom: 30px;  /* 距离底部 30px (这就是你要的左下角) */
-        top: auto;     /* 清除之前的 top 设置 */
-        z-index: 1010; /* 保证浮在最上面 */
+        left: 30px;
+        bottom: 30px;
+        top: auto;
+        z-index: 1010;
         
         /* 2. 外观：胶囊形状 */
-        width: 56px;   /* 固定宽度，精致一点 */
+        width: 56px;
         padding: 15px 0;
-        border-radius: 28px; /* 半径=宽度的一半，形成完美圆角 */
+        border-radius: 28px;
         
         /* 3. 布局：内部元素垂直排列 */
         display: flex;
@@ -30,7 +30,7 @@
         backdrop-filter: var(--glass-blur);
         -webkit-backdrop-filter: var(--glass-blur);
         border: 1px solid var(--glass-border);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); /* 加重阴影，增加悬浮感 */
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
         
         /* 增加一个小动画，加载时滑入 */
         animation: floatIn 0.5s ease-out;
@@ -40,24 +40,24 @@
     .dock-item {
         width: 40px;
         height: 40px;
-        font-size: 18px; /* 图标稍微调小一点，更精致 */
+        font-size: 18px;
         color: var(--text-secondary);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); /* 有弹性的过渡 */
+        transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .dock-item:hover {
         background: var(--accent-color);
         color: white;
-        transform: scale(1.15) rotate(-5deg); /* 悬停时稍微放大并歪一点，很灵动 */
+        transform: scale(1.15) rotate(-5deg);
         box-shadow: 0 5px 15px rgba(0, 113, 227, 0.3);
     }
     
     .dock-divider {
-        width: 24px; /* 分割线短一点 */
+        width: 24px;
     }
 }
 
@@ -86,6 +86,14 @@
     padding: 20px;
 }
 
+.sidebar-section ul,
+.sidebar-section ol,
+.sidebar-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
 .section-title {
     font-size: 14px;
     font-weight: 600;
@@ -99,9 +107,10 @@
 }
 
 .sidebar-list li {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     border-bottom: 1px dashed rgba(0,0,0,0.05);
-    padding-bottom: 10px;
+    padding-bottom: 8px;
+    line-height: 1.5;
 }
 
 .sidebar-list li:last-child {
@@ -114,11 +123,12 @@
     font-size: 14px;
     color: var(--text-main);
     display: block;
+    line-height: 1.5;
 }
 
 .sidebar-list a:hover {
     color: var(--accent-color);
-    transform: translateX(4px); /* 悬停右移小动画 */
+    transform: translateX(4px);
     transition: transform 0.2s;
 }
 
@@ -128,6 +138,7 @@
 .comment-link .summary {
     color: var(--text-secondary);
     font-size: 13px;
+    line-height: 1.45;
 }
 
 /* 标签云胶囊样式 */
@@ -162,37 +173,37 @@
         z-index: 1010;
         
         /* 2. 尺寸锁定：完美的竖向胶囊 */
-        width: 48px !important;   /* 固定宽度，防止忽宽忽窄 */
-        height: auto !important;  /* 高度自适应 */
-        padding: 12px 0 !important; /* 上下留白 */
+        width: 48px !important;
+        height: auto !important;
+        padding: 12px 0 !important;
         
         /* 3. 布局核心：强制垂直单列 */
         display: flex !important;
-        flex-direction: column !important; /* 核心：竖向 */
-        flex-wrap: nowrap !important;      /* 核心：禁止换行 */
-        align-items: center !important;    /* 核心：居中对齐 */
-        gap: 12px !important;              /* 图标间距 */
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        gap: 12px !important;
         
         /* 4. 外观美化 */
         background: var(--glass-bg);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         border: 1px solid var(--glass-border);
-        border-radius: 50px !important; /* 大圆角 */
+        border-radius: 50px !important;
         box-shadow: 0 5px 20px rgba(0,0,0,0.08);
         
         /* 5. 交互动画关键配置 */
         /* 使用 transform 进行位移，性能最好，不会卡顿 */
         transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1), opacity 0.3s ease;
-        transform: translateX(0); /* 默认状态：在屏幕内 */
+        transform: translateX(0);
         opacity: 1;
     }
 
     /* === 核心：当页面滚动时，JS 会添加这个类 === */
     .sidebar-dock.dock-hidden {
-        transform: translateX(-150%); /* 向左移出屏幕 */
-        opacity: 0; /* 同时变透明 */
-        pointer-events: none; /* 隐藏时禁止点击 */
+        transform: translateX(-150%);
+        opacity: 0;
+        pointer-events: none;
     }
 
     /* 内部图标样式锁定 */
@@ -203,8 +214,8 @@
         display: flex !important;
         align-items: center;
         justify-content: center;
-        margin: 0 !important; /* 清楚多余边距 */
-        flex-shrink: 0 !important; /* 禁止被压缩 */
+        margin: 0 !important;
+        flex-shrink: 0 !important;
     }
 
     /* 再次确保文字和搜索框隐藏 */
@@ -291,7 +302,7 @@
 
 /* 2. 给动态内容里的每一个栏目（热门文章、标签、评论等）增加底部间距 */
 #sidebar-dynamic-content > * {
-    margin-bottom: 24px !important; /* 保持和上面一致，看起来更整齐 */
+    margin-bottom: 24px !important;
 }
 
 /* 3. (可选) 去掉最后一个栏目的底部间距，让侧边栏底部对齐更完美 */
@@ -304,13 +315,13 @@
 
 /* 强制覆盖天气插件的所有文字颜色 */
 [data-bs-theme="dark"] .weather-section * {
-    color: rgba(255, 255, 255, 0.9) !important; /* 强制变白 */
-    border-color: rgba(255, 255, 255, 0.1) !important; /* 如果有边框，也变淡 */
+    color: rgba(255, 255, 255, 0.9) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 /* 尝试修复可能存在的 SVG 图标颜色 */
 [data-bs-theme="dark"] .weather-section svg path {
-    fill: currentColor; /* 让图标跟随文字颜色变白 */
+    fill: currentColor;
 }
 
 /* 2. 精准打击：只修改“附加信息栏”(.ww_additional) 里的图标 */
@@ -318,6 +329,6 @@
 [data-bs-theme="dark"] .weather-section .ww_additional svg path,
 [data-bs-theme="dark"] .weather-section .ww_additional svg circle,
 [data-bs-theme="dark"] .weather-section .ww_additional svg line {
-    fill: #ffffff !important;   /* 填充变白 */
-    stroke: #ffffff !important; /* 线条变白 (针对气压图标里的线) */
+    fill: #ffffff !important;
+    stroke: #ffffff !important;
 }

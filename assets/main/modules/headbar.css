@@ -38,7 +38,7 @@
     font-size: 20px;
     flex-shrink: 0;
     transition: transform 0.3s ease;
-    color: #8b5cf6; /* 默认图标紫色 */
+    color: #8b5cf6;
 }
 
 .lastupdate-box:hover .lastupdate-icon,
@@ -61,18 +61,18 @@
 .reading-time-minutes {
     font-weight: 700;
     font-size: 1.05em;
-    color: #333; /* 浅色模式深色字 */
+    color: #333;
 }
 
 .reading-time-minutes {
-    color: #7c3aed; /* 分钟数用深紫色 */
+    color: #7c3aed;
     font-size: 18px;
 }
 
 .lastupdate-separator {
     opacity: 0.4;
     margin: 0 2px;
-    color: #000; /* 分割线深色 */
+    color: #000;
 }
 
 .lastupdate-time {
@@ -196,7 +196,7 @@
 /* 图标变亮 */
 [data-bs-theme="dark"] .lastupdate-icon,
 [data-bs-theme="dark"] .reading-time-icon {
-    color: #a78bfa !important; /* 浅紫色 */
+    color: #a78bfa !important;
 }
 
 /* 分割线变亮 */

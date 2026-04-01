@@ -1,38 +1,72 @@
-/* =========================================
-   Module: Header (完美修复版)
-   ========================================= */
-
-/* 1. 容器样式 */
 .glass-header {
     position: sticky;
-    top: 20px;
+    top: 18px;
     z-index: 1000;
     width: auto;
     max-width: var(--container-width);
     margin: 0 auto 30px auto;
-    
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
-    border-radius: var(--radius-l);
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: var(--liquid-header-radius);
+    border: 1px solid var(--liquid-header-border);
+    background: var(--liquid-header-surface);
+    backdrop-filter: blur(16px) saturate(165%) brightness(1.04);
+    -webkit-backdrop-filter: blur(16px) saturate(165%) brightness(1.04);
+    box-shadow:
+        var(--liquid-header-shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.52);
+}
+
+.glass-header::before,
+.glass-header::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.glass-header::before {
+    inset: -1px;
+    padding: 1.5px;
+    border-radius: inherit;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(255, 255, 255, 0.14)),
+        radial-gradient(96px 64px at 10% 12%, var(--liquid-header-tint-left), rgba(255, 255, 255, 0) 72%),
+        radial-gradient(128px 72px at 92% 14%, var(--liquid-header-tint-right), rgba(255, 255, 255, 0) 76%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    opacity: 0.96;
+}
+
+.glass-header::after {
+    top: 2px;
+    left: 24px;
+    right: 24px;
+    height: 48%;
+    border-radius: 999px 999px 28px 28px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0.1) 42%, rgba(255, 255, 255, 0) 100%);
+    opacity: 0.72;
 }
 
 .header-inner {
-    height: var(--header-height);
+    min-height: 78px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 24px;
+    gap: 14px;
+    padding: 12px 18px 12px 20px;
+    position: relative;
+    z-index: 1;
 }
 
-/* 2. 左侧 Logo */
 .header-left {
     display: flex;
     align-items: center;
-    gap: 15px;
-    flex-shrink: 0; /* 防止 Logo 被挤压 */
+    gap: 18px;
+    flex-shrink: 0;
+    min-width: 0;
 }
 
 .logo-link {
@@ -40,280 +74,490 @@
     align-items: center;
     text-decoration: none !important;
     color: var(--text-main);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .logo-text {
     font-size: 18px;
-    letter-spacing: -0.5px;
+    font-weight: 700;
+    letter-spacing: -0.6px;
 }
 
-/* 3. 中间导航 (禁止换行修复) */
 .desktop-nav {
+    flex: 1 1 auto;
+    min-width: 0;
     display: flex;
     align-items: center;
-    gap: 5px; 
-    /* 关键修复：允许横向滚动防止布局炸裂，或者隐藏溢出 */
-    overflow-x: auto; 
-    overflow-y: hidden;
-    /* 隐藏滚动条 */
-    scrollbar-width: none; 
+    justify-content: center;
+    gap: 6px;
+    margin: 0 12px;
+    padding: 9px 12px;
+    overflow-x: auto;
+    overflow-y: visible;
+    scrollbar-width: none;
     -ms-overflow-style: none;
-    margin: 0 20px; /* 给左右留点空隙 */
+    position: relative;
+    isolation: isolate;
 }
 
-.desktop-nav::-webkit-scrollbar { 
-    display: none; 
+.desktop-nav::-webkit-scrollbar {
+    display: none;
 }
 
 .nav-link {
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 18px;
     font-size: 15px;
     font-weight: 600;
-    color: var(--text-main);
-    padding: 8px 12px;
-    border-radius: var(--radius-s);
-    transition: all 0.2s ease;
-    
-    /* === 核心修复：禁止文字换行 === */
+    letter-spacing: -0.01em;
+    color: rgba(29, 29, 31, 0.88);
+    border-radius: 999px;
+    transition: color 0.25s ease;
+    position: relative;
+    isolation: isolate;
+    background: transparent;
+    border: 1px solid transparent !important;
     white-space: nowrap !important;
-    flex-shrink: 0; /* 禁止被压缩 */
-    
-    /* 再次确保无下划线 */
+    flex-shrink: 0;
     text-decoration: none !important;
-    border: none !important;
+    z-index: 1;
 }
 
-.nav-link:hover, .nav-link.active {
-    background: rgba(0, 0, 0, 0.05);
-    color: var(--accent-color);
+.nav-link::before,
+.nav-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
 }
 
-[data-bs-theme="dark"] .nav-link:hover {
-    background: rgba(255, 255, 255, 0.1);
+.nav-link::before {
+    background: var(--liquid-pill-bg);
+    border: 1px solid var(--liquid-pill-border);
+    box-shadow: var(--liquid-pill-shadow);
+    backdrop-filter: blur(8px) saturate(140%);
+    -webkit-backdrop-filter: blur(8px) saturate(140%);
+    transform: scale(0.94);
+    z-index: -2;
 }
 
-/* 4. 右侧搜索框 (去古老感修复) */
+.nav-link::after {
+    inset: 1px;
+    border-radius: 17px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.84) 0%, rgba(255, 255, 255, 0.2) 42%, rgba(255, 255, 255, 0.02) 100%);
+    z-index: -1;
+}
+
+.nav-link:hover {
+    color: rgba(17, 24, 39, 0.94);
+}
+
+.nav-link:hover::before {
+    opacity: 0.12;
+    transform: scale(1);
+}
+
+.nav-link:hover::after {
+    opacity: 0.18;
+}
+
+.nav-link.active {
+    color: rgba(17, 24, 39, 0.98);
+}
+
+.nav-link.active::before,
+.nav-link.active::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.nav-liquid-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+    border-radius: 999px;
+    background: var(--liquid-pill-bg);
+    border: 1px solid var(--liquid-pill-border);
+    box-shadow: var(--liquid-pill-shadow);
+    backdrop-filter: blur(2px) saturate(135%) brightness(1.06);
+    -webkit-backdrop-filter: blur(2px) saturate(135%) brightness(1.06);
+    transition:
+        transform 0.52s cubic-bezier(0.22, 1, 0.36, 1),
+        width 0.52s cubic-bezier(0.22, 1, 0.36, 1),
+        height 0.32s ease,
+        opacity 0.22s ease;
+    will-change: transform, width, height;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.nav-liquid-indicator::before,
+.nav-liquid-indicator::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+.nav-liquid-indicator::before {
+    inset: 1px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.18) 42%, rgba(255, 255, 255, 0.03) 100%),
+        radial-gradient(70% 90% at 14% 18%, rgba(255, 255, 255, 0.44), rgba(255, 255, 255, 0) 60%);
+}
+
+.nav-liquid-indicator::after {
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    opacity: 0.86;
+}
+
+.desktop-nav.nav-liquid-ready .nav-link::before,
+.desktop-nav.nav-liquid-ready .nav-link::after {
+    display: none;
+}
+
 .header-right {
     display: flex;
     align-items: center;
-    gap: 12px;
-    flex-shrink: 0; /* 防止搜索框被挤压 */
+    gap: 14px;
+    flex-shrink: 0;
 }
 
 .search-form {
     position: relative;
-    width: 200px;
+    width: min(208px, 18vw);
     display: flex;
     align-items: center;
+    flex-shrink: 0;
 }
 
-/* 针对 input 的强力美化 */
+.search-form::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.08));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    opacity: 0.86;
+    pointer-events: none;
+}
+
 .search-input {
     width: 100%;
-    height: 36px;
-    
-    /* === 核心修复：去除古老边框 === */
-    appearance: none !important;  /* 去除系统默认外观 */
+    height: 52px;
+    appearance: none !important;
     -webkit-appearance: none !important;
-    background: rgba(0, 0, 0, 0.06) !important; /* 强制背景色 */
-    border: 1px solid transparent !important;   /* 强制无边框 */
-    border-radius: 999px !important;            /* 强制圆角 */
-    outline: none !important;                   /* 去除聚焦黑框 */
-    
-    padding: 0 12px 0 34px; /*文字缩进，给图标留位置*/
-    font-size: 13px;
+    background: var(--liquid-search-bg) !important;
+    border: 1px solid var(--liquid-search-border) !important;
+    border-radius: 999px !important;
+    outline: none !important;
+    padding: 0 16px 0 44px;
+    font-size: 14px;
+    font-weight: 500;
     color: var(--text-main);
-    transition: all 0.2s ease;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(10px) saturate(145%);
+    -webkit-backdrop-filter: blur(10px) saturate(145%);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 
-/* 深色模式适配 */
-[data-bs-theme="dark"] .search-input {
-    background: rgba(255, 255, 255, 0.15) !important;
-    color: #fff;
+@media (max-width: 1400px) {
+    .logo-text {
+        font-size: 17px;
+    }
+
+    .desktop-nav {
+        margin: 0 8px;
+        padding: 8px 10px;
+    }
+
+    .nav-link {
+        padding: 0 16px;
+    }
+
+    .search-form {
+        width: min(188px, 16vw);
+    }
+}
+
+.search-input::placeholder {
+    color: rgba(107, 114, 128, 0.95);
 }
 
 .search-input:focus {
-    background: var(--bg-color) !important;
-    border-color: var(--accent-color) !important;
-    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+    border-color: rgba(var(--accent-color-rgb), 0.4) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.62),
+        0 0 0 3px rgba(var(--accent-color-rgb), 0.06);
 }
 
 .search-icon {
     position: absolute;
-    left: 10px;
+    left: 16px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 16px;
-    color: var(--text-secondary);
+    font-size: 18px;
+    color: rgba(107, 114, 128, 0.94);
     pointer-events: none;
-    z-index: 2; /* 确保图标浮在 input 上面 */
+    z-index: 2;
 }
 
-/* 移动端菜单按钮 */
 .mobile-menu-trigger {
     display: none;
+    width: 44px;
+    height: 44px;
     font-size: 20px;
     color: var(--text-main);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0.18));
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    padding: 0;
+}
+
+[data-bs-theme="dark"] .glass-header {
+    box-shadow:
+        var(--liquid-header-shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="dark"] .glass-header::after {
+    opacity: 0.34;
+}
+
+[data-bs-theme="dark"] .desktop-nav {
     background: none;
     border: none;
-    padding: 5px;
+    box-shadow: none;
+}
+
+[data-bs-theme="dark"] .nav-link {
+    color: rgba(245, 245, 247, 0.84);
+}
+
+[data-bs-theme="dark"] .nav-link:hover,
+[data-bs-theme="dark"] .nav-link.active {
+    color: rgba(255, 255, 255, 0.98);
+}
+
+[data-bs-theme="dark"] .nav-liquid-indicator::before {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.08) 44%, rgba(255, 255, 255, 0.02) 100%),
+        radial-gradient(70% 90% at 14% 18%, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0) 60%);
+}
+
+[data-bs-theme="dark"] .nav-liquid-indicator::after {
+    border-color: rgba(255, 255, 255, 0.18);
+    opacity: 0.9;
+}
+
+[data-bs-theme="dark"] .search-form::before {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.04));
+}
+
+[data-bs-theme="dark"] .search-input {
+    color: #fff;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.02);
+}
+
+[data-bs-theme="dark"] .search-input::placeholder,
+[data-bs-theme="dark"] .search-icon {
+    color: rgba(209, 213, 219, 0.88);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass-header {
+        background: rgba(255, 255, 255, 0.94);
+    }
+
+    [data-bs-theme="dark"] .glass-header {
+        background: rgba(24, 24, 28, 0.94);
+    }
 }
 /* =========================================
    Mobile Navigation Fix (手机端抽屉重构 - 修复Bug + 美化)
    ========================================= */
 @media (max-width: 768px) {
-    
-    /* 1. 修复：强制显示“三道杠”菜单按钮 */
+    .glass-header {
+        top: 12px;
+        border-radius: 24px;
+    }
+
+    .header-inner {
+        min-height: 64px;
+        gap: 12px;
+        padding: 10px 14px 10px 16px;
+    }
+
+    .glass-header::after {
+        left: 14px;
+        right: 14px;
+        height: 44%;
+    }
+
     .mobile-menu-trigger {
         display: flex !important;
         align-items: center;
         justify-content: center;
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         font-size: 22px;
         color: var(--text-main);
-        background: transparent;
-        border: none;
-        margin-right: 10px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.56), rgba(255, 255, 255, 0.24));
+        border: 1px solid rgba(255, 255, 255, 0.58);
+        margin-right: 0;
         z-index: 1002;
         cursor: pointer;
-        border-radius: 8px;
-        transition: background 0.2s;
-    }
-    .mobile-menu-trigger:active {
-        background: rgba(0,0,0,0.05);
+        border-radius: 16px;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78);
+        transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
     }
 
-    /* 2. 隐藏 Header 右侧原本的搜索框 */
+    .mobile-menu-trigger:active,
+    .mobile-menu-trigger.active {
+        transform: scale(0.97);
+    }
+
+    [data-bs-theme="dark"] .mobile-menu-trigger {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.05));
+        border-color: rgba(255, 255, 255, 0.14);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    }
+
     .header-right {
         display: none !important;
     }
 
-    /* 3. 将导航菜单改造为“侧滑抽屉” (风格化 + Bug修复) */
     .desktop-nav {
-        /* === 核心 Bug 修复 === */
         position: fixed;
         top: 0;
-        left: 0; 
-        transform: translateX(-100%); 
-        
-        /* ★★★ 关键修复：强制清除电脑端的左右边距 ★★★ */
-        margin: 0 !important; 
-        
-        /* === 尺寸设置 === */
-        width: 80vw; 
-        max-width: 300px; 
+        left: 0;
+        transform: translateX(-100%);
+        margin: 0 !important;
+        width: min(82vw, 320px);
+        max-width: 320px;
         height: 100vh;
-        
-        /* === 风格美化 === */
-        background: rgba(255, 255, 255, 0.95); /* 高浓度背景 */
-        border-radius: 0 30px 30px 0; /* 只圆润右边，左边贴墙 */
-        
-        backdrop-filter: blur(25px); 
-        -webkit-backdrop-filter: blur(25px);
-        border-right: 1px solid var(--glass-border); 
-        box-shadow: 10px 0 50px rgba(0,0,0,0.15); 
-        
-        /* === 布局 === */
+        background: var(--liquid-header-surface);
+        border-radius: 0 32px 32px 0;
+        backdrop-filter: blur(30px) saturate(200%);
+        -webkit-backdrop-filter: blur(30px) saturate(200%);
+        border-right: 1px solid var(--liquid-header-border);
+        box-shadow:
+            10px 0 26px rgba(15, 23, 42, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
         display: flex !important;
         flex-direction: column;
-        align-items: flex-start;
-        padding: 100px 30px 40px 30px; 
-        
-        /* === 动画 === */
-        transition: transform 0.35s cubic-bezier(0.33, 1, 0.68, 1); 
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 8px;
+        padding: 96px 22px 32px;
+        transition: transform 0.35s cubic-bezier(0.33, 1, 0.68, 1);
         z-index: 999;
         overflow-y: auto;
+        overflow-x: hidden;
     }
 
-    /* 深色模式适配 */
     [data-bs-theme="dark"] .desktop-nav {
-        background: rgba(20, 20, 23, 0.95); 
+        box-shadow:
+            10px 0 26px rgba(0, 0, 0, 0.26),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
 
-    /* 4. 激活状态：滑出来 */
     .desktop-nav.active {
-        transform: translateX(0); /* 因为 margin 清零了，现在会严丝合缝地贴在左边 */
+        transform: translateX(0);
     }
 
-    /* 5. 链接样式优化 */
     .nav-link {
         width: 100%;
-        font-size: 17px; /* 字体加大 */
-        font-weight: 600;
-        padding: 18px 0; /* 增加点击区域 */
-        border-bottom: 1px solid rgba(0,0,0,0.05); /* 极细分割线 */
-        text-align: left;
-        color: var(--text-main);
+        font-size: 17px;
+        min-height: 54px;
+        justify-content: flex-start;
+        padding: 0 18px;
         white-space: normal !important;
-        display: flex;
-        justify-content: space-between; /* 如果以后加箭头可以用 */
-        align-items: center;
     }
-    
-    /* 去掉最后一个链接的底边框 */
+
+    .nav-liquid-indicator {
+        display: none !important;
+    }
+
     .nav-link:last-of-type {
         border-bottom: none;
     }
 
-    /* 6. 手机端搜索框美化 (拒绝拉跨) */
     .mobile-only-search {
         display: block !important;
-        margin-top: 40px; /* 离上方链接远一点 */
+        margin-top: 28px;
         width: 100%;
     }
-    
+
     .mobile-only-search form {
         position: relative;
     }
-    
+
     .mobile-only-search input {
         width: 100%;
-        height: 46px; /* 加高 */
-        border-radius: 23px; /* 胶囊圆角 */
-        border: 1px solid var(--glass-border);
-        
-        /* 内部样式 */
-        background: rgba(0,0,0,0.03); /* 极淡的背景 */
-        padding-left: 20px;
-        padding-right: 50px; /* 给按钮留位置 */
+        height: 50px;
+        border-radius: 999px;
+        border: 1px solid var(--liquid-search-border);
+        background: var(--liquid-search-bg);
+        padding-left: 18px;
+        padding-right: 54px;
         font-size: 15px;
         color: var(--text-main);
         outline: none;
-        transition: all 0.2s;
-    }
-    
-    /* 聚焦时 */
-    .mobile-only-search input:focus {
-        background: var(--bg-color);
-        border-color: var(--accent-color);
-        box-shadow: 0 4px 15px rgba(0, 113, 227, 0.15);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.56),
+            inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+        transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
     }
 
-    /* 搜索按钮美化 */
+    .mobile-only-search input:focus {
+        border-color: rgba(var(--accent-color-rgb), 0.38);
+        box-shadow: 0 0 0 3px rgba(var(--accent-color-rgb), 0.1);
+    }
+
     .mobile-only-search button {
         position: absolute;
-        right: 6px; 
+        right: 6px;
         top: 6px;
-        height: 34px; 
-        width: 34px;
+        height: 38px;
+        width: 38px;
         border: none;
-        background: var(--accent-color); /* 主题色背景 */
+        background: linear-gradient(180deg, rgba(var(--accent-color-rgb), 0.92), rgba(var(--accent-color-rgb), 0.74));
         color: white;
-        border-radius: 50%; /* 圆形按钮 */
+        border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        box-shadow: none;
     }
-    
+
     .mobile-only-search button i {
         font-size: 16px;
     }
-    
-    /* 深色模式适配 */
+
     [data-bs-theme="dark"] .mobile-only-search input {
-        background: rgba(255,255,255,0.08);
+        color: #fff;
     }
 }
 

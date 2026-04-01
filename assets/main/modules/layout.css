@@ -1,30 +1,15 @@
-/* =========================================
-   Layout.css - 视觉修正 & 物理左移版 (动态变量版)
-   ========================================= */
+/* Layout */
 
-/* =========================================
-   CSS 变量定义：方便统一调整
-   ========================================= */
+/* Layout variables */
 :root {
-    /* 容器宽度相关 */
-    --container-width: 1440px;
-    --container-max-width-toc: 1800px;
-    
-    /* 三栏布局宽度 */
+    --container-width: 1360px;
+    --container-max-width-toc: 1700px;
     --toc-column-width: 320px;
     --sidebar-right-width: 300px;
-    
-    /* 边距 */
     --container-padding: 20px;
-    --container-padding-right-toc: 100px;  /* 三栏布局时右边距 */
-    
-    /* 代码块相关（动态计算） */
+    --container-padding-right-toc: 100px;
     --article-max-width: calc(var(--container-width) - var(--sidebar-right-width) - 30px - var(--container-padding) * 2);
-    /* 计算逻辑：容器宽度 - 右侧栏 - gap - 左右边距 */
-    
-    /* 三栏布局时的文章宽度 */
     --article-max-width-toc: calc(var(--container-max-width-toc) - var(--toc-column-width) - var(--sidebar-right-width) - 60px - var(--container-padding) - var(--container-padding-right-toc));
-    /* 计算逻辑：容器宽度 - 左栏 - 右栏 - 两个gap - 左边距 - 右边距 */
 }
 
 .app-container {
@@ -32,36 +17,29 @@
     margin: 0 auto;
     padding: var(--container-padding);
     display: grid;
-    
-    /* 默认电脑端布局 */
     grid-template-columns: 1fr var(--sidebar-right-width);
     gap: 30px;
     align-items: start;
     transition: all 0.3s ease;
 }
 
-/* 默认隐藏目录栏 */
+.app-container > * {
+    min-width: 0;
+}
+
 .toc-grid-item {
     display: none;
 }
 
-/* =========================================
-   ★ 超宽屏三栏布局 (1400px 以上)
-   ========================================= */
+/* Wide layout with TOC */
 @media (min-width: 1400px) {
-    
     .app-container.has-toc {
-        /* Grid 策略调整：使用变量 */
         grid-template-columns: var(--toc-column-width) 1fr var(--sidebar-right-width);
-        
         max-width: var(--container-max-width-toc); 
-        
-        /* ★ 核心修正：物理左移 */
         padding-left: var(--container-padding);
         padding-right: var(--container-padding-right-toc); 
     }
-    
-    /* 目录栏容器 */
+
     .app-container.has-toc .toc-grid-item {
         display: block; 
         position: -webkit-sticky;
@@ -69,14 +47,10 @@
         top: 100px;      
         margin-top: 40px; 
         z-index: 10;
-        
-        /* 避让左侧胶囊 */
         padding-left: 80px; 
-        
         max-height: calc(100vh - 140px);
     }
-    
-    /* 目录内部面板 */
+
     .toc-container {
         background: rgba(20, 21, 22, 0.6);
         backdrop-filter: blur(12px);
@@ -91,7 +65,6 @@
     
     .toc-container::-webkit-scrollbar { display: none; }
     
-    /* 链接样式 */
     .toc-list a {
         display: block;
         color: #999;
@@ -110,7 +83,6 @@
         background: rgba(255, 255, 255, 0.05);
     }
     
-    /* 激活状态 */
     .toc-list a.active {
         color: #fff;
         font-weight: bold;
@@ -120,9 +92,7 @@
     }
 }
 
-/* =========================================
-   响应式布局
-   ========================================= */
+/* Responsive layout */
 @media (max-width: 1399px) {
     .toc-grid-item { display: none !important; }
 }

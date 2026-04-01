@@ -25,9 +25,9 @@ a:visited,
 a:hover, 
 a:active, 
 a:focus {
-    text-decoration: none !important; /* 强制去掉下划线 */
-    border-bottom: none !important;   /* 强制去掉底部边框 */
-    color: inherit;                   /* 颜色跟随父元素，防止出现奇怪的蓝色/紫色 */
+    text-decoration: none !important;
+    border-bottom: none !important;
+    color: inherit;
     transition: color 0.2s ease, background-color 0.2s ease;
 }
 

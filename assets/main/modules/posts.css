@@ -9,6 +9,9 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
     
     /* 确保列表卡片也有毛玻璃背景 */
     background: var(--glass-bg);
@@ -95,11 +98,14 @@
     border-radius: var(--radius-l); 
     
     /* 核心修复 2：内边距 (让文字离边缘远一点) */
-    padding: 40px; 
+    padding: 44px 48px; 
     
     margin-bottom: 30px;
     position: relative;
-    overflow: hidden; /* 防止内容溢出圆角 */
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
 }
 
 /* 手机端内边距稍微改小，节省空间 */
@@ -113,11 +119,11 @@
 .post-title-box {
     margin-bottom: 30px;
     padding-bottom: 20px;
-    border-bottom: 1px dashed var(--glass-border); /* 标题和正文之间的虚线 */
+    border-bottom: 1px dashed var(--glass-border);
 }
 
 .post-title-box h1 {
-    font-size: 32px; /* 详情页标题大一点 */
+    font-size: 32px;
     font-weight: 700;
     margin-bottom: 15px;
     line-height: 1.4;
@@ -153,7 +159,7 @@
     opacity: 0.8;
 }
 
-/* 文章底部标签区 */
+/* Post footer */
 .post-footer {
     margin-top: 40px;
     padding-top: 20px;
@@ -161,25 +167,20 @@
     color: var(--text-secondary);
     font-size: 14px;
 }
-/* =========================================
-   3. 评论区样式 (Modern Comments)
-   ========================================= */
 
-/* 1. 评论区大卡片 */
+/* Comments */
 .comments-section {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     box-shadow: var(--glass-shadow);
-    
-    /* 核心修复：圆角和大内边距 */
     border-radius: var(--radius-l);
-    padding: 40px;
+    padding: 40px 44px;
     margin-top: 30px;
+    width: 100%;
 }
 
-/* 标题样式 */
 .section-title {
     font-size: 20px;
     font-weight: 700;
@@ -188,13 +189,13 @@
     align-items: center;
     gap: 8px;
 }
+
 .section-title .count {
     font-size: 14px;
     color: var(--text-secondary);
     font-weight: 400;
 }
 
-/* 2. 表单布局优化 */
 .comment-form {
     display: flex;
     flex-direction: column;
@@ -203,57 +204,46 @@
 
 .form-row {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr; /* 三列布局 */
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 15px;
 }
 
-/* 手机端变单列 */
-@media (max-width: 768px) {
-    .comments-section { padding: 20px; }
-    .form-row { grid-template-columns: 1fr; }
-}
-
-/* 3. 现代化输入框 (告别古老风格) */
 .glass-input {
     width: 100%;
-    background: rgba(0, 0, 0, 0.04); /* 浅灰背景 */
-    border: 1px solid transparent;    /* 无边框 */
-    border-radius: 12px;              /* 圆角矩形 */
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid transparent;
+    border-radius: 12px;
     padding: 12px 16px;
     font-size: 14px;
     color: var(--text-main);
     transition: all 0.2s;
     font-family: inherit;
-    appearance: none;                 /* 去除浏览器默认样式 */
+    appearance: none;
     outline: none;
 }
 
-/* 4. 评论文本域 (做大做强) */
 .textarea-large {
-    min-height: 160px; /* 增加高度 */
-    resize: vertical;  /* 允许用户上下拉动 */
+    min-height: 160px;
+    resize: vertical;
     line-height: 1.6;
 }
 
-/* 聚焦状态 */
 .glass-input:focus {
     background: var(--bg-color);
-    border-color: var(--accent-color); /* 聚焦变蓝 */
+    border-color: var(--accent-color);
     box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
 }
 
-/* 5. 验证码容器 */
 .turnstile-box {
     margin: 5px 0;
 }
 
-/* 6. 提交按钮 */
 .btn-glass {
     background: var(--accent-color);
     color: white;
     border: none;
     padding: 10px 32px;
-    border-radius: 20px; /* 胶囊按钮 */
+    border-radius: 20px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -263,177 +253,301 @@
 .btn-glass:hover {
     opacity: 0.9;
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 113, 227, 0.3);
+    box-shadow: 0 5px 15px rgba(var(--accent-color-rgb), 0.3);
 }
 
-/* 深色模式适配 */
 [data-bs-theme="dark"] .glass-input {
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
 }
-/* =========================================
-   4. 评论列表美化 & 验证码适配
-   ========================================= */
 
-/* 1. 评论卡片样式 */
-.comment-card {
-    /* 继承毛玻璃，但稍微调低一点透明度，区分层级 */
-    background: rgba(255, 255, 255, 0.4); 
-    border-radius: var(--radius-m); /* 12px 圆角 */
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    transition: all 0.2s;
-}
-
-/* 评论头像圆角 */
-.comment-avatar img {
-    border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.5);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-/* 2. 评论缩进 (层次感) */
+/* Comment thread */
+.comment-list,
+.comment-list ol,
+.comment-list ul,
 .comment-children {
-    margin-top: 15px;
-    margin-left: 20px; /* 左侧缩进 */
-    border-left: 2px solid rgba(0,0,0,0.05); /* 左侧加一条淡淡的线，引导视线 */
-    padding-left: 15px;
+    list-style: none !important;
+    margin: 0;
+    padding: 0;
 }
 
-/* 3. 解决重合问题的辅助线 */
-.comment-separator {
-    margin-top: 40px;
-    border-top: 1px dashed var(--glass-border);
-}
-/* 修复提交按钮周围的间距 */
-.form-footer {
-    margin-top: 15px;    /* 离上面的验证码/输入框远一点 */
-    margin-bottom: 40px; /* 核心修复：离下面的评论列表远一点 */
+.comment-list > li,
+.comment-children > li {
+    list-style: none !important;
+    margin-top: 20px;
 }
 
-/* 手机端稍微紧凑一点 */
-@media (max-width: 768px) {
-    .form-footer {
-        margin-bottom: 25px;
-    }
+.comment-list > li:first-child,
+.comment-children > li:first-child {
+    margin-top: 0;
 }
-/* =========================================
-   5. 评论区布局专项修复 (暴力修正版)
-   ========================================= */
 
-/* 1. 解除所有可能导致“截断”的父级限制 */
-.comment-list, 
-.comment-body, 
+.comment-list,
+.comment-body,
 .comment-content,
 .comment-card,
 .comment-meta,
-.d-flex { /* 加上这个 bootstrap 的 flex 容器 */
-    overflow: visible !important; /* 核心：禁止隐藏溢出的内容 */
-    contain: none !important;     /* 防止浏览器做激进的渲染优化 */
+.d-flex {
+    overflow: visible !important;
+    contain: none !important;
+    min-width: 0;
 }
 
-/* 2. 评论卡片布局基础 */
+.comment-body,
 .comment-card {
-    padding: 24px !important;
-    position: relative; /* 必须保留，作为定位基准 */
+    position: relative;
+    padding: 28px 30px !important;
+    background: rgba(255, 255, 255, 0.52);
+    border: 1px solid rgba(255, 255, 255, 0.58);
+    border-radius: 20px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
-/* 3. 强制头部信息一行显示 */
-.comment-meta, 
+.comment-body:hover,
+.comment-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 22px 44px rgba(15, 23, 42, 0.1);
+    border-color: rgba(var(--accent-color-rgb), 0.22);
+}
+
 .comment-author {
-    display: inline-block;
-    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 14px;
+    min-height: 52px;
+    padding-right: 128px;
+    color: var(--text-main);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.comment-author img,
+.comment-avatar img {
+    width: 52px;
+    height: 52px;
+    flex: 0 0 52px;
+    float: none;
+    margin: 0;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.82);
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
 }
 
 .comment-meta {
-    margin-left: 10px;
-    font-size: 12px;
+    margin: 10px 0 0 66px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
     color: var(--text-secondary);
-    opacity: 0.7;
-    margin-top: 0 !important;
+    font-size: 13px;
+    line-height: 1.5;
+    opacity: 0.9;
 }
 
-.comment-author img {
-    float: left;
-    margin-right: 15px;
-    width: 40px; 
-    height: 40px;
-    border-radius: 50%; /* 确保头像圆角 */
+.comment-meta a {
+    color: inherit;
 }
 
-/* 4. 回复按钮 (重写：不设固定高度，靠 padding 撑开) */
 .comment-reply {
     position: absolute;
-    top: 24px;
-    right: 24px;
-    z-index: 999; /* 层级拉满，防止被任何内容盖住 */
-    height: auto !important; /* 禁止继承父级高度 */
-    width: auto !important;
+    top: 28px;
+    right: 30px;
+    z-index: 2;
 }
 
 .comment-reply a {
-    /* 使用 flex 保证内部文字垂直居中 */
-    display: flex !important;             
+    display: inline-flex !important;
     align-items: center;
     justify-content: center;
-    
-    /* ❌ 删掉固定高度 height: 28px */
-    /* ✅ 改用 padding 撑开：上下 4px，左右 12px */
-    padding: 4px 12px !important;         
-    
-    background: transparent;
-    border: 1px solid var(--accent-color) !important; /* 强制边框显示 */
+    min-height: 38px;
+    padding: 0 16px !important;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(var(--accent-color-rgb), 0.24) !important;
     color: var(--accent-color);
-    border-radius: 100px;      /* 纯圆角 */
-    font-size: 12px;
-    text-decoration: none;
-    
-    /* 强制盒子模型，把边框算在尺寸内 */
-    box-sizing: border-box !important; 
-    line-height: 1.5 !important; /* 给一点行高呼吸空间 */
-    
+    border-radius: 999px;
+    box-sizing: border-box !important;
+    box-shadow: 0 8px 18px rgba(var(--accent-color-rgb), 0.12);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
     transition: all 0.2s ease;
 }
 
-/* 鼠标悬停 */
 .comment-reply a:hover {
     background: var(--accent-color);
     color: #fff;
-    box-shadow: 0 4px 12px rgba(var(--accent-color-rgb), 0.3);
+    box-shadow: 0 12px 24px rgba(var(--accent-color-rgb), 0.2);
     transform: translateY(-1px);
 }
 
-/* 5. 评论内容 (避让头像) */
 .comment-content {
-    margin-top: 8px;
-    padding-left: 55px; 
-    position: relative; 
-    z-index: 1; /* 确保内容层级低于按钮 */
+    margin-top: 16px;
+    padding-left: 66px;
+    position: relative;
+    z-index: 1;
+    color: var(--text-main);
+    font-size: 15px;
+    line-height: 1.72;
 }
 
-/* 手机端适配 */
-@media (max-width: 768px) {
-    .comment-card { padding: 15px !important; }
-    .comment-reply { top: 15px; right: 15px; }
-    .comment-content { padding-left: 0; }
+.comment-content p {
+    margin: 0 0 0.8em;
 }
-/* 4. Turnstile 验证码夜间模式适配 (黑科技) */
-/* Cloudflare 验证码是 iframe，CSS 很难直接改内部颜色。
-   我们用滤镜反转颜色：白变黑，黑变白。
-*/
+
+.comment-content p:last-child {
+    margin-bottom: 0;
+}
+
+.comment-content ul,
+.comment-content ol {
+    list-style: none !important;
+    padding-left: 0 !important;
+    margin: 0.8em 0 0;
+}
+
+.comment-content li {
+    margin-top: 0.35em;
+    line-height: 1.6;
+}
+
+.comment-content li::marker {
+    content: "";
+}
+
+.comment-content blockquote {
+    margin: 1em 0;
+    padding: 0.9em 1em;
+    background: rgba(128, 128, 128, 0.06);
+    border-left: 3px solid rgba(var(--accent-color-rgb), 0.45);
+    border-radius: 10px;
+}
+
+.comment-children {
+    position: relative;
+    margin-top: 18px;
+    margin-left: 34px;
+    padding-left: 28px;
+}
+
+.comment-children::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 12px;
+    bottom: 12px;
+    width: 2px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(var(--accent-color-rgb), 0.22), rgba(var(--accent-color-rgb), 0.05));
+}
+
+.comment-separator {
+    margin-top: 36px;
+    border-top: 1px dashed var(--glass-border);
+}
+
+.form-footer {
+    margin-top: 15px;
+    margin-bottom: 40px;
+}
+
 [data-bs-theme="dark"] .turnstile-box {
-    filter: invert(1) hue-rotate(180deg); 
-    /* hue-rotate 是为了防止把绿色的对勾变成紫色，尝试还原颜色 */
+    filter: invert(1) hue-rotate(180deg);
     opacity: 0.8;
 }
 
-/* 深色模式下评论卡片微调 */
+[data-bs-theme="dark"] .comment-body,
 [data-bs-theme="dark"] .comment-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.32);
 }
 
-[data-bs-theme="dark"] .comment-children {
-    border-left-color: rgba(255,255,255,0.1);
+[data-bs-theme="dark"] .comment-author img,
+[data-bs-theme="dark"] .comment-avatar img {
+    border-color: rgba(255, 255, 255, 0.22);
+}
+
+[data-bs-theme="dark"] .comment-content blockquote {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+[data-bs-theme="dark"] .comment-children::before {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.06));
+}
+
+[data-bs-theme="dark"] .comment-reply a {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(var(--accent-color-rgb), 0.32) !important;
+    box-shadow: none;
+}
+
+@media (max-width: 768px) {
+    .comments-section {
+        padding: 20px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .form-footer {
+        margin-bottom: 25px;
+    }
+
+    .comment-body,
+    .comment-card {
+        padding: 20px 18px !important;
+        border-radius: 16px;
+    }
+
+    .comment-author {
+        min-height: 44px;
+        padding-right: 0;
+        gap: 10px 12px;
+        font-size: 16px;
+    }
+
+    .comment-author img,
+    .comment-avatar img {
+        width: 44px;
+        height: 44px;
+        flex-basis: 44px;
+    }
+
+    .comment-meta {
+        margin-left: 56px;
+        margin-top: 8px;
+        font-size: 12px;
+    }
+
+    .comment-content {
+        margin-top: 12px;
+        padding-left: 56px;
+        font-size: 14px;
+        line-height: 1.68;
+    }
+
+    .comment-children {
+        margin-left: 14px;
+        padding-left: 16px;
+    }
+
+    .comment-reply {
+        position: static;
+        margin-top: 14px;
+        padding-left: 56px;
+    }
+
+    .comment-reply a {
+        min-height: 34px;
+        padding: 0 14px !important;
+        font-size: 12px;
+    }
 }
 /* =========================================
    6. 文章表格美化 (高对比度修正版)
@@ -500,11 +614,11 @@
 
 /* 5. 斑马纹 & 悬停效果 */
 .article-content tr:nth-child(even) {
-    background: rgba(0, 0, 0, 0.02); /* 用纯黑透明度，比白色兼容性好 */
+    background: rgba(0, 0, 0, 0.02);
 }
 
 .article-content tr:hover td {
-    background: rgba(var(--accent-color-rgb), 0.05); /* 悬停变为淡淡的主题色 */
+    background: rgba(var(--accent-color-rgb), 0.05);
     transition: background 0.2s;
 }
 
@@ -523,48 +637,19 @@
 }
 @media (max-width: 768px) {
     .post-detail-card {
-        padding: 15px; /* 进一步缩小内边距 */
-        border-radius: 12px; /* 圆角也稍微改小一点，视觉更协调 */
+        padding: 15px;
+        border-radius: 12px;
     }
     
     /* 修复文章标题太大换行难看的问题 */
     .post-title-box h1 {
-        font-size: 22px; /* 原来是 32px，手机上太大了 */
-    }
-}
-/* 添加在 comments.css 底部 */
-
-@media (max-width: 768px) {
-    /* 1. 减少子评论的缩进 */
-    .comment-children {
-        margin-left: 10px; /* 从 20px 改为 10px */
-        padding-left: 10px;
-    }
-
-    /* 2. 强制评论头像变小，腾出空间 */
-    .comment-author img {
-        width: 32px; 
-        height: 32px;
-        margin-right: 10px;
-    }
-    
-    /* 3. 调整评论内容左边距 */
-    .comment-content {
-        padding-left: 42px; /* 原来是 55px，根据头像大小调整 */
-    }
-    
-    /* 4. 回复按钮改为相对定位，避免遮挡文字 */
-    .comment-reply {
-        position: static; /* 取消绝对定位 */
-        display: inline-block;
-        margin-top: 5px;
-        float: right;
+        font-size: 22px;
     }
 }
 /* 8. 深色模式适配 (高对比度) */
 [data-bs-theme="dark"] .article-content table {
     background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.2); /* 深色模式边框也要明显 */
+    border-color: rgba(255, 255, 255, 0.2);
 }
 [data-bs-theme="dark"] .article-content th {
     background: rgba(var(--accent-color-rgb), 0.3);
@@ -573,7 +658,7 @@
 }
 [data-bs-theme="dark"] .article-content td {
     color: #ddd;
-    border-bottom-color: rgba(255, 255, 255, 0.15); /* 深色模式下的行分割线 */
+    border-bottom-color: rgba(255, 255, 255, 0.15);
 }
 [data-bs-theme="dark"] .article-content tr:nth-child(even) {
     background: rgba(255, 255, 255, 0.03);

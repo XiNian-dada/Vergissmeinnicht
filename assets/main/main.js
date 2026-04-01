@@ -94,6 +94,370 @@ function initWeatherLogic() {
     }
 }
 
+function initLiquidNav() {
+    if (window.cleanupLiquidNav) {
+        window.cleanupLiquidNav();
+        window.cleanupLiquidNav = null;
+    }
+
+    const nav = document.querySelector('.desktop-nav');
+    if (!nav) return;
+
+    if (window.innerWidth <= 768) {
+        nav.classList.remove('nav-liquid-ready');
+        const mobileIndicator = nav.querySelector('.nav-liquid-indicator');
+        if (mobileIndicator) mobileIndicator.remove();
+        return;
+    }
+
+    const links = Array.from(nav.querySelectorAll('.nav-link'));
+    if (!links.length) return;
+    const header = document.querySelector('.glass-header');
+
+    nav.classList.add('nav-liquid-ready');
+
+    let indicator = nav.querySelector('.nav-liquid-indicator');
+    if (!indicator) {
+        indicator = document.createElement('div');
+        indicator.className = 'nav-liquid-indicator';
+        nav.appendChild(indicator);
+    }
+
+    window.navLiquidFilters = window.navLiquidFilters || {};
+
+    const ensureFilterResources = (filterId) => {
+        if (window.navLiquidFilters[filterId]) {
+            return window.navLiquidFilters[filterId];
+        }
+
+        let svgRoot = document.getElementById('nav-liquid-filter-root');
+        let defs;
+
+        if (!svgRoot) {
+            svgRoot = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svgRoot.setAttribute('id', 'nav-liquid-filter-root');
+            svgRoot.setAttribute('width', '0');
+            svgRoot.setAttribute('height', '0');
+            svgRoot.setAttribute('aria-hidden', 'true');
+            svgRoot.style.position = 'absolute';
+            svgRoot.style.width = '0';
+            svgRoot.style.height = '0';
+            svgRoot.style.pointerEvents = 'none';
+            defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            svgRoot.appendChild(defs);
+            document.body.appendChild(svgRoot);
+        } else {
+            defs = svgRoot.querySelector('defs');
+        }
+
+        const filter = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+        filter.setAttribute('id', filterId);
+        filter.setAttribute('filterUnits', 'userSpaceOnUse');
+        filter.setAttribute('color-interpolation-filters', 'sRGB');
+
+        const feImage = document.createElementNS('http://www.w3.org/2000/svg', 'feImage');
+        feImage.setAttribute('id', filterId + '-map');
+        feImage.setAttribute('preserveAspectRatio', 'none');
+
+        const feDisplacementMap = document.createElementNS('http://www.w3.org/2000/svg', 'feDisplacementMap');
+        feDisplacementMap.setAttribute('id', filterId + '-disp');
+        feDisplacementMap.setAttribute('in', 'SourceGraphic');
+        feDisplacementMap.setAttribute('in2', filterId + '-map');
+        feDisplacementMap.setAttribute('xChannelSelector', 'R');
+        feDisplacementMap.setAttribute('yChannelSelector', 'G');
+
+        filter.appendChild(feImage);
+        filter.appendChild(feDisplacementMap);
+        defs.appendChild(filter);
+
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+
+        const resources = { filterId, filter, feImage, feDisplacementMap, canvas, context };
+        window.navLiquidFilters[filterId] = resources;
+        return resources;
+    };
+
+    const smoothStep = (edge0, edge1, value) => {
+        const t = Math.max(0, Math.min(1, (value - edge0) / (edge1 - edge0)));
+        return t * t * (3 - 2 * t);
+    };
+
+    const vectorLength = (x, y) => Math.sqrt(x * x + y * y);
+
+    const roundedRectSDF = (x, y, width, height, radius) => {
+        const qx = Math.abs(x) - width + radius;
+        const qy = Math.abs(y) - height + radius;
+        return Math.min(Math.max(qx, qy), 0) + vectorLength(Math.max(qx, 0), Math.max(qy, 0)) - radius;
+    };
+
+    const updateLiquidFilter = (resources, width, height, options) => {
+        const settings = options || {};
+        const mapWidth = Math.max(1, Math.round(width));
+        const mapHeight = Math.max(1, Math.round(height));
+        const radius = settings.radius || mapHeight / 2;
+        const edgeBand = settings.edgeBand || Math.max(5, Math.min(10, mapHeight * 0.18));
+        const amplitude = settings.amplitude || Math.max(4, Math.min(8, mapHeight * 0.14));
+        const yScale = settings.yScale || 0.7;
+
+        resources.canvas.width = mapWidth;
+        resources.canvas.height = mapHeight;
+
+        resources.filter.setAttribute('x', '0');
+        resources.filter.setAttribute('y', '0');
+        resources.filter.setAttribute('width', String(mapWidth));
+        resources.filter.setAttribute('height', String(mapHeight));
+        resources.feImage.setAttribute('width', String(mapWidth));
+        resources.feImage.setAttribute('height', String(mapHeight));
+
+        const imageData = resources.context.createImageData(mapWidth, mapHeight);
+        const data = imageData.data;
+        const scale = amplitude * 2;
+
+        for (let y = 0; y < mapHeight; y++) {
+            for (let x = 0; x < mapWidth; x++) {
+                const dx = x - mapWidth / 2;
+                const dy = y - mapHeight / 2;
+                const sdf = roundedRectSDF(dx, dy, mapWidth / 2 - 1, mapHeight / 2 - 1, radius - 1);
+                const distance = Math.abs(sdf);
+                const edgeStrength = sdf <= 0 ? 1 - smoothStep(0, edgeBand, distance) : 0;
+                const len = vectorLength(dx, dy) || 1;
+                const nx = dx / len;
+                const ny = dy / len;
+                const offsetX = nx * edgeStrength * amplitude;
+                const offsetY = ny * edgeStrength * amplitude * yScale;
+                const index = (y * mapWidth + x) * 4;
+
+                data[index] = Math.round((0.5 + offsetX / scale) * 255);
+                data[index + 1] = Math.round((0.5 + offsetY / scale) * 255);
+                data[index + 2] = 128;
+                data[index + 3] = 255;
+            }
+        }
+
+        resources.context.putImageData(imageData, 0, 0);
+        const dataUrl = resources.canvas.toDataURL();
+        resources.feImage.setAttribute('href', dataUrl);
+        resources.feImage.setAttributeNS('http://www.w3.org/1999/xlink', 'href', dataUrl);
+        resources.feDisplacementMap.setAttribute('scale', String(scale));
+    };
+
+    const indicatorFilter = ensureFilterResources('nav-liquid-indicator-filter');
+    const shellFilter = ensureFilterResources('nav-liquid-shell-filter');
+
+    const normalizeHref = (href) => {
+        try {
+            const url = new URL(href, window.location.origin);
+            const path = url.pathname.replace(/\/+$/, '') || '/';
+            return path + url.search + url.hash;
+        } catch (error) {
+            return href || '';
+        }
+    };
+
+    const currentPath = normalizeHref(window.location.href);
+    const findMatchingLink = (value) => {
+        if (!value) return null;
+        return links.find((link) => normalizeHref(link.href) === value) || null;
+    };
+
+    const getActiveLink = () => {
+        const activeFromClass = links.find((link) => link.classList.contains('active'));
+        if (activeFromClass) return activeFromClass;
+
+        const activeFromPath = findMatchingLink(currentPath);
+        if (activeFromPath) {
+            activeFromPath.classList.add('active');
+            return activeFromPath;
+        }
+
+        links[0].classList.add('active');
+        return links[0];
+    };
+
+    let activeLink = getActiveLink();
+    let animationFrame = null;
+    let syncFrame = null;
+
+    const updateShellEffect = () => {
+        if (!header) return;
+
+        const rect = header.getBoundingClientRect();
+        updateLiquidFilter(shellFilter, rect.width, rect.height, {
+            edgeBand: Math.max(10, Math.min(18, rect.height * 0.16)),
+            amplitude: Math.max(4, Math.min(7, rect.height * 0.08)),
+            yScale: 0.55,
+            radius: Math.max(20, rect.height / 2 - 2)
+        });
+
+        const shellFilterValue = `url(#${shellFilter.filterId}) blur(1.2px) saturate(1.12) brightness(1.06) contrast(1.03)`;
+        header.style.backdropFilter = shellFilterValue;
+        header.style.webkitBackdropFilter = shellFilterValue;
+    };
+
+    const updateIndicator = (target, immediate) => {
+        if (!target || window.innerWidth <= 768) {
+            indicator.style.opacity = '0';
+            return;
+        }
+
+        const navRect = nav.getBoundingClientRect();
+        const targetRect = target.getBoundingClientRect();
+        const navStyles = window.getComputedStyle(nav);
+        const paddingLeft = parseFloat(navStyles.paddingLeft) || 0;
+        const paddingRight = parseFloat(navStyles.paddingRight) || 0;
+        const availableLeft = targetRect.left - navRect.left - paddingLeft;
+        const availableRight = navRect.right - targetRect.right - paddingRight;
+        const extraLeft = Math.max(0, Math.min(6, availableLeft - 1));
+        const extraRight = Math.max(0, Math.min(6, availableRight - 1));
+        const extraY = 3;
+        const width = targetRect.width + extraLeft + extraRight;
+        const height = target.offsetHeight + extraY * 2;
+        const x = targetRect.left - navRect.left + nav.scrollLeft - extraLeft;
+        const y = targetRect.top - navRect.top + nav.scrollTop - extraY;
+
+        updateLiquidFilter(indicatorFilter, width, height, {
+            edgeBand: Math.max(5, Math.min(10, height * 0.2)),
+            amplitude: Math.max(4, Math.min(8, height * 0.14)),
+            yScale: 0.68,
+            radius: Math.max(18, height / 2 - 1)
+        });
+        const filterValue = `url(#${indicatorFilter.filterId}) blur(1.15px) saturate(1.14) brightness(1.08) contrast(1.03)`;
+        indicator.style.backdropFilter = filterValue;
+        indicator.style.webkitBackdropFilter = filterValue;
+
+        if (immediate) {
+            const oldTransition = indicator.style.transition;
+            indicator.style.transition = 'none';
+            indicator.style.width = width + 'px';
+            indicator.style.height = height + 'px';
+            indicator.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+            indicator.style.opacity = '1';
+            indicator.offsetHeight;
+            indicator.style.transition = oldTransition;
+            return;
+        }
+
+        indicator.style.width = width + 'px';
+        indicator.style.height = height + 'px';
+        indicator.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        indicator.style.opacity = '1';
+    };
+
+    const scheduleSync = (immediate) => {
+        if (syncFrame) {
+            window.cancelAnimationFrame(syncFrame);
+        }
+
+        syncFrame = window.requestAnimationFrame(() => {
+            updateIndicator(activeLink, !!immediate);
+            updateShellEffect();
+            syncFrame = null;
+        });
+    };
+
+    const activateLink = (link, options) => {
+        const settings = options || {};
+        activeLink = link;
+        links.forEach((item) => item.classList.toggle('active', item === link));
+        scheduleSync(!!settings.immediate);
+
+        if (settings.persist !== false) {
+            sessionStorage.setItem('liquid-nav-last-href', normalizeHref(link.href));
+        }
+    };
+
+    const previousHref = sessionStorage.getItem('liquid-nav-last-href');
+    const previousLink = findMatchingLink(previousHref);
+
+    if (previousLink && previousLink !== activeLink && window.innerWidth > 768) {
+        activateLink(previousLink, { immediate: true, persist: false });
+        animationFrame = window.requestAnimationFrame(() => {
+            animationFrame = window.requestAnimationFrame(() => {
+                activateLink(activeLink, { immediate: false, persist: false });
+                sessionStorage.setItem('liquid-nav-last-href', normalizeHref(activeLink.href));
+            });
+        });
+    } else {
+        activateLink(activeLink, { immediate: true, persist: false });
+        sessionStorage.setItem('liquid-nav-last-href', normalizeHref(activeLink.href));
+    }
+
+    const clickHandlers = [];
+    links.forEach((link) => {
+        const handleClick = () => {
+            activateLink(link, { immediate: false, persist: true });
+        };
+        link.addEventListener('click', handleClick);
+        clickHandlers.push({ link, handleClick });
+    });
+
+    const handleResize = () => {
+        if (window.innerWidth <= 768) {
+            nav.classList.remove('nav-liquid-ready');
+            indicator.style.opacity = '0';
+            if (header) {
+                header.style.removeProperty('backdrop-filter');
+                header.style.removeProperty('-webkit-backdrop-filter');
+            }
+            return;
+        }
+
+        nav.classList.add('nav-liquid-ready');
+        scheduleSync(true);
+    };
+
+    const resizeObserver = new ResizeObserver(() => {
+        handleResize();
+    });
+
+    resizeObserver.observe(nav);
+    links.forEach((link) => resizeObserver.observe(link));
+    if (header) resizeObserver.observe(header);
+
+    const viewport = window.visualViewport;
+    const handleViewportChange = () => {
+        handleResize();
+    };
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('pageshow', handleResize);
+    if (viewport) {
+        viewport.addEventListener('resize', handleViewportChange);
+        viewport.addEventListener('scroll', handleViewportChange);
+    }
+
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => {
+            handleResize();
+        });
+    }
+
+    window.cleanupLiquidNav = function() {
+        if (animationFrame) {
+            window.cancelAnimationFrame(animationFrame);
+            animationFrame = null;
+        }
+
+        if (syncFrame) {
+            window.cancelAnimationFrame(syncFrame);
+            syncFrame = null;
+        }
+
+        clickHandlers.forEach(({ link, handleClick }) => {
+            link.removeEventListener('click', handleClick);
+        });
+
+        resizeObserver.disconnect();
+        window.removeEventListener('resize', handleResize);
+        window.removeEventListener('pageshow', handleResize);
+        if (viewport) {
+            viewport.removeEventListener('resize', handleViewportChange);
+            viewport.removeEventListener('scroll', handleViewportChange);
+        }
+    };
+}
+
 // =========================================
 // 主重载函数 (供 PJAX 和 onload 调用)
 // =========================================
@@ -109,13 +473,16 @@ window.reloadThemeComponents = function() {
     // 3. 初始化移动端菜单 (修正版)
     initMobileMenu();
 
-    // 4. 初始化侧边栏滚动隐藏 (新增)
+    // 4. 初始化顶部液态导航
+    initLiquidNav();
+
+    // 5. 初始化侧边栏滚动隐藏 (新增)
     window.initScrollDock();
     
-    // 5. [新增] 初始化目录功能 (加在这里！)
+    // 6. [新增] 初始化目录功能 (加在这里！)
     initTOC();
 
-    // 5. 检查天气插件状态
+    // 7. 检查天气插件状态
     checkWeatherWidget();
 
     // ★★★ 核心修复：这里之前漏掉了！必须调用它才能让按钮生效 ★★★
