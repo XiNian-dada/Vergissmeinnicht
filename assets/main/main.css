@@ -60,7 +60,7 @@
     --liquid-search-border: rgba(255, 255, 255, 0.16);
 }
 /* =========================================
-   Module: Reset (全局重置 - 暴力去下划线版)
+   Module: Reset (鍏ㄥ眬閲嶇疆 - 鏆村姏鍘讳笅鍒掔嚎鐗�)
    ========================================= */
 * {
     box-sizing: border-box;
@@ -79,7 +79,7 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* === 核弹级修复：针对所有状态移除下划线 === */
+/* === 鏍稿脊绾т慨澶嶏細閽堝鎵€鏈夌姸鎬佺Щ闄や笅鍒掔嚎 === */
 a, 
 a:link, 
 a:visited, 
@@ -92,7 +92,7 @@ a:focus {
     transition: color 0.2s ease, background-color 0.2s ease;
 }
 
-/* 只有悬停时改变颜色，绝不加下划线 */
+/* 鍙湁鎮仠鏃舵敼鍙橀鑹诧紝缁濅笉鍔犱笅鍒掔嚎 */
 a:hover {
     color: var(--accent-color);
     text-decoration: none !important;
@@ -364,7 +364,7 @@ html[data-bs-theme="dark"] .typo code {
 }
 
 /* =========================================
-   4. 组件：毛玻璃通用类 (The Glass Effect)
+   4. 缁勪欢锛氭瘺鐜荤拑閫氱敤绫� (The Glass Effect)
    ========================================= */
 .glass-panel, .glass-card, .glass-header {
     background: var(--glass-bg);
@@ -375,14 +375,14 @@ html[data-bs-theme="dark"] .typo code {
     transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
 }
 
-/* 卡片悬停浮动效果 */
+/* 鍗＄墖鎮仠娴姩鏁堟灉 */
 .glass-card:hover, .glass-panel:hover {
     transform: translateY(-4px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
     border-color: var(--accent-color);
 }
 /* =========================================
-   11. 实用工具类
+   11. 瀹炵敤宸ュ叿绫�
    ========================================= */
 .d-none { display: none !important; }
 .fw-bold { font-weight: 700; }
@@ -406,37 +406,52 @@ html[data-bs-theme="dark"] .typo code {
         inset 0 1px 0 rgba(255, 255, 255, 0.52);
 }
 
+.nav-liquid-shell {
+    position: absolute;
+    inset: 0;
+    padding: 10px;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.92;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+}
+
 .glass-header::before,
 .glass-header::after {
     content: "";
     position: absolute;
     pointer-events: none;
-    z-index: 0;
+    z-index: 1;
 }
 
 .glass-header::before {
-    inset: -1px;
-    padding: 1.5px;
+    inset: 0;
+    padding: 1px;
     border-radius: inherit;
     background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(255, 255, 255, 0.14)),
-        radial-gradient(96px 64px at 10% 12%, var(--liquid-header-tint-left), rgba(255, 255, 255, 0) 72%),
-        radial-gradient(128px 72px at 92% 14%, var(--liquid-header-tint-right), rgba(255, 255, 255, 0) 76%);
+        linear-gradient(180deg, rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.06)),
+        radial-gradient(72px 48px at 14% 14%, var(--liquid-header-tint-left), rgba(255, 255, 255, 0) 76%),
+        radial-gradient(92px 54px at 86% 14%, var(--liquid-header-tint-right), rgba(255, 255, 255, 0) 80%);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask-composite: exclude;
-    opacity: 0.96;
+    opacity: 0.72;
 }
 
 .glass-header::after {
     top: 2px;
-    left: 24px;
-    right: 24px;
-    height: 48%;
+    left: 52px;
+    right: 52px;
+    height: 38%;
     border-radius: 999px 999px 28px 28px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0.1) 42%, rgba(255, 255, 255, 0) 100%);
-    opacity: 0.72;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.04) 44%, rgba(255, 255, 255, 0) 100%);
+    opacity: 0.34;
 }
 
 .header-inner {
@@ -447,7 +462,7 @@ html[data-bs-theme="dark"] .typo code {
     gap: 14px;
     padding: 12px 18px 12px 20px;
     position: relative;
-    z-index: 1;
+    z-index: 2;
 }
 
 .header-left {
@@ -637,12 +652,12 @@ html[data-bs-theme="dark"] .typo code {
     inset: 0;
     padding: 1px;
     border-radius: 999px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.08));
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.05));
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask-composite: exclude;
-    opacity: 0.86;
+    opacity: 0.72;
     pointer-events: none;
 }
 
@@ -728,7 +743,16 @@ html[data-bs-theme="dark"] .typo code {
 }
 
 [data-bs-theme="dark"] .glass-header::after {
-    opacity: 0.34;
+    opacity: 0.2;
+}
+
+[data-bs-theme="dark"] .glass-header::before {
+    opacity: 0.62;
+}
+
+[data-bs-theme="dark"] .nav-liquid-shell {
+    opacity: 0.84;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.012));
 }
 
 [data-bs-theme="dark"] .desktop-nav {
@@ -739,6 +763,19 @@ html[data-bs-theme="dark"] .typo code {
 
 [data-bs-theme="dark"] .nav-link {
     color: rgba(245, 245, 247, 0.84);
+}
+
+[data-bs-theme="dark"] .nav-link::before {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.05));
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow:
+        0 8px 18px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.16),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.03);
+}
+
+[data-bs-theme="dark"] .nav-link::after {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.06) 42%, rgba(255, 255, 255, 0.01) 100%);
 }
 
 [data-bs-theme="dark"] .nav-link:hover,
@@ -773,6 +810,36 @@ html[data-bs-theme="dark"] .typo code {
     color: rgba(209, 213, 219, 0.88);
 }
 
+@media (min-width: 1440px) {
+    .glass-header {
+        top: 16px;
+    }
+
+    .glass-header::after {
+        height: 34%;
+        left: 58px;
+        right: 58px;
+    }
+
+    .header-inner {
+        min-height: 70px;
+        padding: 10px 18px 10px 20px;
+    }
+
+    .desktop-nav {
+        padding: 7px 10px;
+    }
+
+    .nav-link {
+        min-height: 46px;
+        padding: 0 17px;
+    }
+
+    .search-input {
+        height: 48px;
+    }
+}
+
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .glass-header {
         background: rgba(255, 255, 255, 0.94);
@@ -783,12 +850,18 @@ html[data-bs-theme="dark"] .typo code {
     }
 }
 /* =========================================
-   Mobile Navigation Fix (手机端抽屉重构 - 修复Bug + 美化)
+   Mobile Navigation Fix (鎵嬫満绔娊灞夐噸鏋� - 淇Bug + 缇庡寲)
    ========================================= */
 @media (max-width: 768px) {
     .glass-header {
         top: 12px;
         border-radius: 24px;
+        overflow: visible;
+        z-index: 1005;
+    }
+
+    .nav-liquid-shell {
+        display: none;
     }
 
     .header-inner {
@@ -837,42 +910,79 @@ html[data-bs-theme="dark"] .typo code {
     }
 
     .desktop-nav {
-        position: fixed;
-        top: 0;
+        position: absolute;
+        top: calc(100% + 12px);
         left: 0;
-        transform: translateX(-100%);
+        right: 0;
+        transform: translateY(-14px) scale(0.985);
+        transform-origin: top center;
         margin: 0 !important;
-        width: min(82vw, 320px);
-        max-width: 320px;
-        height: 100vh;
-        background: var(--liquid-header-surface);
-        border-radius: 0 32px 32px 0;
-        backdrop-filter: blur(30px) saturate(200%);
-        -webkit-backdrop-filter: blur(30px) saturate(200%);
-        border-right: 1px solid var(--liquid-header-border);
+        width: auto;
+        max-width: none;
+        height: auto;
+        max-height: min(72vh, calc(100dvh - 108px));
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.72) 100%);
+        border-radius: 28px;
+        backdrop-filter: blur(40px) saturate(180%) brightness(1.04);
+        -webkit-backdrop-filter: blur(40px) saturate(180%) brightness(1.04);
+        border: 1px solid rgba(255, 255, 255, 0.48);
         box-shadow:
-            10px 0 26px rgba(15, 23, 42, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            0 24px 52px rgba(15, 23, 42, 0.16),
+            inset 0 1px 0 rgba(255, 255, 255, 0.46);
         display: flex !important;
         flex-direction: column;
         align-items: stretch;
         justify-content: flex-start;
         gap: 8px;
-        padding: 96px 22px 32px;
-        transition: transform 0.35s cubic-bezier(0.33, 1, 0.68, 1);
-        z-index: 999;
+        padding: 18px 16px 18px;
+        transition:
+            transform 0.32s cubic-bezier(0.33, 1, 0.68, 1),
+            opacity 0.22s ease,
+            visibility 0.22s ease;
+        z-index: 1004;
         overflow-y: auto;
         overflow-x: hidden;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        isolation: isolate;
+    }
+
+    .desktop-nav::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 38%, rgba(255, 255, 255, 0.02) 100%),
+            radial-gradient(120px 90px at 14% 10%, rgba(255, 220, 182, 0.16), rgba(255, 255, 255, 0) 76%),
+            radial-gradient(120px 90px at 88% 12%, rgba(176, 218, 255, 0.16), rgba(255, 255, 255, 0) 78%);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .desktop-nav > * {
+        position: relative;
+        z-index: 1;
     }
 
     [data-bs-theme="dark"] .desktop-nav {
+        background: linear-gradient(180deg, rgba(17, 22, 32, 0.84) 0%, rgba(13, 18, 27, 0.76) 100%);
+        border-color: rgba(255, 255, 255, 0.12);
         box-shadow:
-            10px 0 26px rgba(0, 0, 0, 0.26),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            0 24px 52px rgba(0, 0, 0, 0.42),
+            inset 0 1px 0 rgba(255, 255, 255, 0.14);
+    }
+
+    [data-bs-theme="dark"] .desktop-nav::before {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.018) 38%, rgba(255, 255, 255, 0.008) 100%);
     }
 
     .desktop-nav.active {
-        transform: translateX(0);
+        transform: translateY(0) scale(1);
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
     }
 
     .nav-link {
@@ -882,6 +992,33 @@ html[data-bs-theme="dark"] .typo code {
         justify-content: flex-start;
         padding: 0 18px;
         white-space: normal !important;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+    }
+
+    [data-bs-theme="dark"] .glass-header::before {
+        opacity: 0.34;
+    }
+
+    [data-bs-theme="dark"] .glass-header::after {
+        opacity: 0.08;
+    }
+
+    [data-bs-theme="dark"] .nav-link::before {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.045));
+        border-color: rgba(255, 255, 255, 0.14);
+        box-shadow:
+            0 8px 18px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.12),
+            inset 0 -1px 0 rgba(255, 255, 255, 0.02);
+    }
+
+    [data-bs-theme="dark"] .nav-link::after {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.035) 42%, rgba(255, 255, 255, 0.01) 100%);
+    }
+
+    [data-bs-theme="dark"] .nav-link.active::before,
+    [data-bs-theme="dark"] .nav-link.active::after {
+        opacity: 0.92;
     }
 
     .nav-liquid-indicator {
@@ -906,8 +1043,8 @@ html[data-bs-theme="dark"] .typo code {
         width: 100%;
         height: 50px;
         border-radius: 999px;
-        border: 1px solid var(--liquid-search-border);
-        background: var(--liquid-search-bg);
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.1));
         padding-left: 18px;
         padding-right: 54px;
         font-size: 15px;
@@ -916,6 +1053,8 @@ html[data-bs-theme="dark"] .typo code {
         box-shadow:
             inset 0 1px 0 rgba(255, 255, 255, 0.56),
             inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(18px) saturate(140%);
+        -webkit-backdrop-filter: blur(18px) saturate(140%);
         transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
     }
 
@@ -946,17 +1085,38 @@ html[data-bs-theme="dark"] .typo code {
     }
 
     [data-bs-theme="dark"] .mobile-only-search input {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+        border-color: rgba(255, 255, 255, 0.14);
         color: #fff;
+    }
+
+    body.mobile-nav-open {
+        overflow: hidden;
+    }
+
+    body.mobile-nav-open::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(7, 10, 18, 0.18);
+        backdrop-filter: blur(12px) saturate(125%);
+        -webkit-backdrop-filter: blur(12px) saturate(125%);
+        z-index: 1001;
+        pointer-events: none;
+    }
+
+    [data-bs-theme="dark"] body.mobile-nav-open::before {
+        background: rgba(2, 6, 14, 0.28);
     }
 }
 
-/* 电脑端隐藏那个额外的搜索框 */
+/* 鐢佃剳绔殣钘忛偅涓澶栫殑鎼滅储妗� */
 @media (min-width: 769px) {
     .mobile-only-search { display: none; }
 }
 
 /* =========================================
-   9. Footer (页脚)
+   9. Footer (椤佃剼)
    ========================================= */
 .glass-footer {
     margin-top: 60px;
@@ -986,42 +1146,42 @@ html[data-bs-theme="dark"] .typo code {
 }
 
 /* =========================================
-   6. 左侧 Dock 栏 (悬浮胶囊版)
+   6. 宸︿晶 Dock 鏍� (鎮诞鑳跺泭鐗�)
    ========================================= */
 
-/* 仅在电脑端应用悬浮样式 */
+/* 浠呭湪鐢佃剳绔簲鐢ㄦ偓娴牱寮� */
 @media (min-width: 993px) {
     .sidebar-dock {
-        /* 1. 定位：改为固定定位，脱离文档流 */
+        /* 1. 瀹氫綅锛氭敼涓哄浐瀹氬畾浣嶏紝鑴辩鏂囨。娴� */
         position: fixed;
         left: 30px;
         bottom: 30px;
         top: auto;
         z-index: 1010;
         
-        /* 2. 外观：胶囊形状 */
+        /* 2. 澶栬锛氳兌鍥婂舰鐘� */
         width: 56px;
         padding: 15px 0;
         border-radius: 28px;
         
-        /* 3. 布局：内部元素垂直排列 */
+        /* 3. 甯冨眬锛氬唴閮ㄥ厓绱犲瀭鐩存帓鍒� */
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 12px;
         
-        /* 4. 毛玻璃效果保持不变 */
+        /* 4. 姣涚幓鐠冩晥鏋滀繚鎸佷笉鍙� */
         background: var(--glass-bg);
         backdrop-filter: var(--glass-blur);
         -webkit-backdrop-filter: var(--glass-blur);
         border: 1px solid var(--glass-border);
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
         
-        /* 增加一个小动画，加载时滑入 */
+        /* 澧炲姞涓€涓皬鍔ㄧ敾锛屽姞杞芥椂婊戝叆 */
         animation: floatIn 0.5s ease-out;
     }
     
-    /* 胶囊内的图标微调 */
+    /* 鑳跺泭鍐呯殑鍥炬爣寰皟 */
     .dock-item {
         width: 40px;
         height: 40px;
@@ -1046,13 +1206,13 @@ html[data-bs-theme="dark"] .typo code {
     }
 }
 
-/* 入场动画定义 */
+/* 鍏ュ満鍔ㄧ敾瀹氫箟 */
 @keyframes floatIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
 /* =========================================
-   8. 右侧栏 (Right Sidebar)
+   8. 鍙充晶鏍� (Right Sidebar)
    ========================================= */
 .sidebar-right {
     position: relative;
@@ -1126,7 +1286,7 @@ html[data-bs-theme="dark"] .typo code {
     line-height: 1.45;
 }
 
-/* 标签云胶囊样式 */
+/* 鏍囩浜戣兌鍥婃牱寮� */
 .tags-cloud {
     display: flex;
     flex-wrap: wrap;
@@ -1147,29 +1307,29 @@ html[data-bs-theme="dark"] .typo code {
     color: white;
 }
 /* =========================================
-   Mobile Sidebar (竖向胶囊 + 自动伸缩)
+   Mobile Sidebar (绔栧悜鑳跺泭 + 鑷姩浼哥缉)
    ========================================= */
 @media (max-width: 992px) {
     .sidebar-dock {
-        /* 1. 强制固定在左下角 */
+        /* 1. 寮哄埗鍥哄畾鍦ㄥ乏涓嬭 */
         position: fixed !important;
         left: 15px !important;
         bottom: 30px !important;
         z-index: 1010;
         
-        /* 2. 尺寸锁定：完美的竖向胶囊 */
+        /* 2. 灏哄閿佸畾锛氬畬缇庣殑绔栧悜鑳跺泭 */
         width: 48px !important;
         height: auto !important;
         padding: 12px 0 !important;
         
-        /* 3. 布局核心：强制垂直单列 */
+        /* 3. 甯冨眬鏍稿績锛氬己鍒跺瀭鐩村崟鍒� */
         display: flex !important;
         flex-direction: column !important;
         flex-wrap: nowrap !important;
         align-items: center !important;
         gap: 12px !important;
         
-        /* 4. 外观美化 */
+        /* 4. 澶栬缇庡寲 */
         background: var(--glass-bg);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
@@ -1177,21 +1337,21 @@ html[data-bs-theme="dark"] .typo code {
         border-radius: 50px !important;
         box-shadow: 0 5px 20px rgba(0,0,0,0.08);
         
-        /* 5. 交互动画关键配置 */
-        /* 使用 transform 进行位移，性能最好，不会卡顿 */
+        /* 5. 浜や簰鍔ㄧ敾鍏抽敭閰嶇疆 */
+        /* 浣跨敤 transform 杩涜浣嶇Щ锛屾€ц兘鏈€濂斤紝涓嶄細鍗￠】 */
         transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1), opacity 0.3s ease;
         transform: translateX(0);
         opacity: 1;
     }
 
-    /* === 核心：当页面滚动时，JS 会添加这个类 === */
+    /* === 鏍稿績锛氬綋椤甸潰婊氬姩鏃讹紝JS 浼氭坊鍔犺繖涓被 === */
     .sidebar-dock.dock-hidden {
         transform: translateX(-150%);
         opacity: 0;
         pointer-events: none;
     }
 
-    /* 内部图标样式锁定 */
+    /* 鍐呴儴鍥炬爣鏍峰紡閿佸畾 */
     .dock-item {
         width: 36px !important;
         height: 36px !important;
@@ -1203,13 +1363,13 @@ html[data-bs-theme="dark"] .typo code {
         flex-shrink: 0 !important;
     }
 
-    /* 再次确保文字和搜索框隐藏 */
+    /* 鍐嶆纭繚鏂囧瓧鍜屾悳绱㈡闅愯棌 */
     .dock-item span, .mobile-search-box {
         display: none !important; 
     }
 }
 
-/* 按钮图标样式 */
+/* 鎸夐挳鍥炬爣鏍峰紡 */
 .icon-btn {
     background: none;
     border: none;
@@ -1224,7 +1384,7 @@ html[data-bs-theme="dark"] .typo code {
     background: rgba(0,0,0,0.05);
     color: var(--accent-color);
 }
-/* 个人资料卡片 */
+/* 涓汉璧勬枡鍗＄墖 */
 .profile-card {
     display: flex;
     flex-direction: column;
@@ -1282,35 +1442,35 @@ html[data-bs-theme="dark"] .typo code {
     transform: translateY(-3px);
 }
 /* =========================================
-   侧边栏间距调整
+   渚ц竟鏍忛棿璺濊皟鏁�
    ========================================= */
 
-/* 2. 给动态内容里的每一个栏目（热门文章、标签、评论等）增加底部间距 */
+/* 2. 缁欏姩鎬佸唴瀹归噷鐨勬瘡涓€涓爮鐩紙鐑棬鏂囩珷銆佹爣绛俱€佽瘎璁虹瓑锛夊鍔犲簳閮ㄩ棿璺� */
 #sidebar-dynamic-content > * {
     margin-bottom: 24px !important;
 }
 
-/* 3. (可选) 去掉最后一个栏目的底部间距，让侧边栏底部对齐更完美 */
+/* 3. (鍙€�) 鍘绘帀鏈€鍚庝竴涓爮鐩殑搴曢儴闂磋窛锛岃渚ц竟鏍忓簳閮ㄥ榻愭洿瀹岀編 */
 #sidebar-dynamic-content > *:last-child {
     margin-bottom: 0 !important;
 }
 /* =========================================
-   第三方插件夜间模式适配 (精准靶向版)
+   绗笁鏂规彃浠跺闂存ā寮忛€傞厤 (绮惧噯闈跺悜鐗�)
    ========================================= */
 
-/* 强制覆盖天气插件的所有文字颜色 */
+/* 寮哄埗瑕嗙洊澶╂皵鎻掍欢鐨勬墍鏈夋枃瀛楅鑹� */
 [data-bs-theme="dark"] .weather-section * {
     color: rgba(255, 255, 255, 0.9) !important;
     border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
-/* 尝试修复可能存在的 SVG 图标颜色 */
+/* 灏濊瘯淇鍙兘瀛樺湪鐨� SVG 鍥炬爣棰滆壊 */
 [data-bs-theme="dark"] .weather-section svg path {
     fill: currentColor;
 }
 
-/* 2. 精准打击：只修改“附加信息栏”(.ww_additional) 里的图标 */
-/* 我们不碰上面的主图标，只动下面这一排 */
+/* 2. 绮惧噯鎵撳嚮锛氬彧淇敼鈥滈檮鍔犱俊鎭爮鈥�(.ww_additional) 閲岀殑鍥炬爣 */
+/* 鎴戜滑涓嶇涓婇潰鐨勪富鍥炬爣锛屽彧鍔ㄤ笅闈㈣繖涓€鎺� */
 [data-bs-theme="dark"] .weather-section .ww_additional svg path,
 [data-bs-theme="dark"] .weather-section .ww_additional svg circle,
 [data-bs-theme="dark"] .weather-section .ww_additional svg line {
@@ -1318,7 +1478,7 @@ html[data-bs-theme="dark"] .typo code {
     stroke: #ffffff !important;
 }
 /* =========================================
-   1. 首页文章列表卡片 (Post List Cards)
+   1. 棣栭〉鏂囩珷鍒楄〃鍗＄墖 (Post List Cards)
    ========================================= */
 .glass-card {
     border-radius: var(--radius-l);
@@ -1332,7 +1492,7 @@ html[data-bs-theme="dark"] .typo code {
     max-width: 100%;
     min-width: 0;
     
-    /* 确保列表卡片也有毛玻璃背景 */
+    /* 纭繚鍒楄〃鍗＄墖涔熸湁姣涚幓鐠冭儗鏅� */
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     backdrop-filter: var(--glass-blur);
@@ -1347,7 +1507,7 @@ html[data-bs-theme="dark"] .typo code {
     border-color: var(--accent-color);
 }
 
-/* 隐形链接覆盖层 */
+/* 闅愬舰閾炬帴瑕嗙洊灞� */
 .card-link-mask {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -1382,7 +1542,7 @@ html[data-bs-theme="dark"] .typo code {
     overflow: hidden;
 }
 
-/* 置顶文章特殊样式 */
+/* 缃《鏂囩珷鐗规畩鏍峰紡 */
 .featured-card {
     background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(var(--accent-color), 0.1) 100%);
     border: 1px solid var(--accent-color);
@@ -1401,22 +1561,22 @@ html[data-bs-theme="dark"] .typo code {
 }
 
 /* =========================================
-   2. 文章详情页卡片 (Post Detail) - 新增修改
-   这里修复了“它是方的”和“没有空隙”的问题
+   2. 鏂囩珷璇︽儏椤靛崱鐗� (Post Detail) - 鏂板淇敼
+   杩欓噷淇浜嗏€滃畠鏄柟鐨勨€濆拰鈥滄病鏈夌┖闅欌€濈殑闂
    ========================================= */
 
 .post-detail-card {
-    /* 核心外观：继承毛玻璃变量 */
+    /* 鏍稿績澶栬锛氱户鎵挎瘺鐜荤拑鍙橀噺 */
     background: var(--glass-bg);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
     
-    /* 核心修复 1：圆角 */
+    /* 鏍稿績淇 1锛氬渾瑙� */
     border-radius: var(--radius-l); 
     
-    /* 核心修复 2：内边距 (让文字离边缘远一点) */
+    /* 鏍稿績淇 2锛氬唴杈硅窛 (璁╂枃瀛楃杈圭紭杩滀竴鐐�) */
     padding: 44px 48px; 
     
     margin-bottom: 30px;
@@ -1427,14 +1587,14 @@ html[data-bs-theme="dark"] .typo code {
     min-width: 0;
 }
 
-/* 手机端内边距稍微改小，节省空间 */
+/* 鎵嬫満绔唴杈硅窛绋嶅井鏀瑰皬锛岃妭鐪佺┖闂� */
 @media (max-width: 768px) {
     .post-detail-card {
         padding: 20px;
     }
 }
 
-/* 详情页的标题区域美化 */
+/* 璇︽儏椤电殑鏍囬鍖哄煙缇庡寲 */
 .post-title-box {
     margin-bottom: 30px;
     padding-bottom: 20px;
@@ -1454,7 +1614,7 @@ html[data-bs-theme="dark"] .typo code {
     color: inherit;
 }
 
-/* 详情页的元数据 (作者、时间等) */
+/* 璇︽儏椤电殑鍏冩暟鎹� (浣滆€呫€佹椂闂寸瓑) */
 .post-meta-data {
     font-size: 14px;
     color: var(--text-secondary);
@@ -1869,10 +2029,10 @@ html[data-bs-theme="dark"] .typo code {
     }
 }
 /* =========================================
-   6. 文章表格美化 (高对比度修正版)
+   6. 鏂囩珷琛ㄦ牸缇庡寲 (楂樺姣斿害淇鐗�)
    ========================================= */
 
-/* 1. 表格容器与外观 */
+/* 1. 琛ㄦ牸瀹瑰櫒涓庡瑙� */
 .article-content table {
     width: 100%;
     max-width: 100%;
@@ -1880,46 +2040,46 @@ html[data-bs-theme="dark"] .typo code {
     border-collapse: separate; 
     border-spacing: 0;         
     
-    /* 背景稍微加白，提升文字对比度 */
+    /* 鑳屾櫙绋嶅井鍔犵櫧锛屾彁鍗囨枃瀛楀姣斿害 */
     background: rgba(255, 255, 255, 0.5);
     
-    /* 🔴 核心修改：加深外边框颜色 */
+    /* 馃敶 鏍稿績淇敼锛氬姞娣卞杈规棰滆壊 */
     border: 1px solid rgba(0, 0, 0, 0.15); 
     
     border-radius: 12px;       
     overflow: hidden;          
     font-size: 14px;
     
-    /* 加重阴影，让表格更有立体感 */
+    /* 鍔犻噸闃村奖锛岃琛ㄦ牸鏇存湁绔嬩綋鎰� */
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
 }
 
-/* 2. 表头 (Header) */
+/* 2. 琛ㄥご (Header) */
 .article-content th {
-    /* 表头背景颜色加深 */
+    /* 琛ㄥご鑳屾櫙棰滆壊鍔犳繁 */
     background: rgba(var(--accent-color-rgb), 0.15);
     color: var(--accent-color);
     font-weight: 700;
     text-align: left;
     padding: 16px;
     
-    /* 🔴 核心修改：表头下方的分割线加深 */
+    /* 馃敶 鏍稿績淇敼锛氳〃澶翠笅鏂圭殑鍒嗗壊绾垮姞娣� */
     border-bottom: 2px solid rgba(var(--accent-color-rgb), 0.2); 
 }
 
-/* 3. 单元格 (Cells) */
+/* 3. 鍗曞厓鏍� (Cells) */
 .article-content td {
     padding: 14px 16px;
     color: var(--text-main);
     
-    /* 🔴 核心修改：行与行之间的分割线加深 (从 0.05 -> 0.12) */
+    /* 馃敶 鏍稿績淇敼锛氳涓庤涔嬮棿鐨勫垎鍓茬嚎鍔犳繁 (浠� 0.05 -> 0.12) */
     border-bottom: 1px solid rgba(0, 0, 0, 0.12); 
     
     line-height: 1.6;
 }
 
-/* 4. 竖向分割线 (新增：如果你希望列之间也有线条，请保留这一段) */
-/* 默认我不加竖线是为了保持干净，如果你想要，把下面注释解开即可 */
+/* 4. 绔栧悜鍒嗗壊绾� (鏂板锛氬鏋滀綘甯屾湜鍒椾箣闂翠篃鏈夌嚎鏉★紝璇蜂繚鐣欒繖涓€娈�) */
+/* 榛樿鎴戜笉鍔犵珫绾挎槸涓轰簡淇濇寔骞插噣锛屽鏋滀綘鎯宠锛屾妸涓嬮潰娉ㄩ噴瑙ｅ紑鍗冲彲 */
 /*
 .article-content td, 
 .article-content th {
@@ -1931,7 +2091,7 @@ html[data-bs-theme="dark"] .typo code {
 }
 */
 
-/* 5. 斑马纹 & 悬停效果 */
+/* 5. 鏂戦┈绾� & 鎮仠鏁堟灉 */
 .article-content tr:nth-child(even) {
     background: rgba(0, 0, 0, 0.02);
 }
@@ -1941,12 +2101,12 @@ html[data-bs-theme="dark"] .typo code {
     transition: background 0.2s;
 }
 
-/* 6. 去掉最后一行的底边框 */
+/* 6. 鍘绘帀鏈€鍚庝竴琛岀殑搴曡竟妗� */
 .article-content tr:last-child td {
     border-bottom: none;
 }
 
-/* 7. 手机端适配 */
+/* 7. 鎵嬫満绔€傞厤 */
 @media (max-width: 768px) {
     .article-content table {
         display: block;
@@ -1960,12 +2120,12 @@ html[data-bs-theme="dark"] .typo code {
         border-radius: 12px;
     }
     
-    /* 修复文章标题太大换行难看的问题 */
+    /* 淇鏂囩珷鏍囬澶ぇ鎹㈣闅剧湅鐨勯棶棰� */
     .post-title-box h1 {
         font-size: 22px;
     }
 }
-/* 8. 深色模式适配 (高对比度) */
+/* 8. 娣辫壊妯″紡閫傞厤 (楂樺姣斿害) */
 [data-bs-theme="dark"] .article-content table {
     background: rgba(255, 255, 255, 0.05);
     border-color: rgba(255, 255, 255, 0.2);
@@ -1986,10 +2146,10 @@ html[data-bs-theme="dark"] .typo code {
     background: rgba(255, 255, 255, 0.1);
 }
 /* =========================================
-   Module: Pagination (最终修复版)
+   Module: Pagination (鏈€缁堜慨澶嶇増)
    ========================================= */
 
-/* 1. 容器：同时兼容 .pagination 和 .page-navigator */
+/* 1. 瀹瑰櫒锛氬悓鏃跺吋瀹� .pagination 鍜� .page-navigator */
 .page-navigator,
 .pagination {
     display: flex !important;
@@ -2003,7 +2163,7 @@ html[data-bs-theme="dark"] .typo code {
     width: 100%;
 }
 
-/* 2. 列表项重置 */
+/* 2. 鍒楄〃椤归噸缃� */
 .page-navigator li,
 .pagination li {
     display: block !important;
@@ -2012,13 +2172,13 @@ html[data-bs-theme="dark"] .typo code {
     flex: 0 0 auto;
 }
 
-/* 3. 按钮样式：玻璃卡片风格 */
-/* 针对所有链接 (a) 和当前页 (span/active) */
+/* 3. 鎸夐挳鏍峰紡锛氱幓鐠冨崱鐗囬鏍� */
+/* 閽堝鎵€鏈夐摼鎺� (a) 鍜屽綋鍓嶉〉 (span/active) */
 .page-navigator li a,
 .page-navigator li span,
 .pagination li a,
 .pagination li span,
-.pagination .page-item .page-link {  /* 兼容 Bootstrap 结构 */
+.pagination .page-item .page-link {  /* 鍏煎 Bootstrap 缁撴瀯 */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2026,7 +2186,7 @@ html[data-bs-theme="dark"] .typo code {
     height: 40px;
     padding: 0 12px;
     
-    /* === 核心：玻璃卡片效果 === */
+    /* === 鏍稿績锛氱幓鐠冨崱鐗囨晥鏋� === */
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     backdrop-filter: var(--glass-blur);
@@ -2040,12 +2200,12 @@ html[data-bs-theme="dark"] .typo code {
     text-decoration: none !important;
     transition: all 0.2s ease;
     
-    /* 覆盖 Bootstrap 默认样式 */
+    /* 瑕嗙洊 Bootstrap 榛樿鏍峰紡 */
     margin-left: 0 !important;
     float: none !important;
 }
 
-/* 4. 悬停状态 */
+/* 4. 鎮仠鐘舵€� */
 .page-navigator li a:hover,
 .pagination li a:hover,
 .pagination .page-item .page-link:hover {
@@ -2057,10 +2217,10 @@ html[data-bs-theme="dark"] .typo code {
     z-index: 2;
 }
 
-/* 5. 当前页状态 (Active) */
+/* 5. 褰撳墠椤电姸鎬� (Active) */
 .page-navigator li.current a,
 .page-navigator li.current span,
-.pagination li.active a,             /* Bootstrap 常用的 active 类 */
+.pagination li.active a,             /* Bootstrap 甯哥敤鐨� active 绫� */
 .pagination li.active span,
 .pagination .page-item.active .page-link {
     background: var(--accent-color) !important;
@@ -2069,16 +2229,16 @@ html[data-bs-theme="dark"] .typo code {
     box-shadow: 0 4px 10px rgba(0, 113, 227, 0.3);
 }
 
-/* 6. 禁用深色模式下的背景干扰 */
+/* 6. 绂佺敤娣辫壊妯″紡涓嬬殑鑳屾櫙骞叉壈 */
 [data-bs-theme="dark"] .page-navigator li a,
 [data-bs-theme="dark"] .pagination li a {
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
 }/* =========================================
-   Codeblock.css - Mac 风格代码块 (动态变量版)
+   Codeblock.css - Mac 椋庢牸浠ｇ爜鍧� (鍔ㄦ€佸彉閲忕増)
    ========================================= */
 
-/* 1. 代码块的主容器 (Mac 窗口) */
+/* 1. 浠ｇ爜鍧楃殑涓诲鍣� (Mac 绐楀彛) */
 .mac-window {
     position: relative;
     background: #282c34;
@@ -2093,7 +2253,7 @@ html[data-bs-theme="dark"] .typo code {
     overflow: hidden;
 }
 
-/* 2. 顶部栏 (Header) */
+/* 2. 椤堕儴鏍� (Header) */
 .mac-header {
     display: flex;
     align-items: center;
@@ -2103,14 +2263,14 @@ html[data-bs-theme="dark"] .typo code {
     border-bottom: 1px solid rgba(0,0,0,0.3);
 }
 
-/* 3. 红黄绿按钮 */
+/* 3. 绾㈤粍缁挎寜閽� */
 .mac-dots { display: flex; gap: 8px; }
 .mac-dot { width: 12px; height: 12px; border-radius: 50%; }
 .mac-dot.red { background: #ff5f56; }
 .mac-dot.yellow { background: #ffbd2e; }
 .mac-dot.green { background: #27c93f; }
 
-/* 4. 语言标签 */
+/* 4. 璇█鏍囩 */
 .mac-lang {
     font-size: 13px;
     color: #abb2bf;
@@ -2123,7 +2283,7 @@ html[data-bs-theme="dark"] .typo code {
     user-select: none;
 }
 
-/* 5. 复制按钮 */
+/* 5. 澶嶅埗鎸夐挳 */
 .mac-copy-btn {
     background: rgba(255, 255, 255, 0.1);
     border: none;
@@ -2138,10 +2298,10 @@ html[data-bs-theme="dark"] .typo code {
 .mac-copy-btn.copied { background: #27c93f; color: #fff; }
 
 /* =========================================
-   6. 核心修复：Prism 代码区域样式覆盖
+   6. 鏍稿績淇锛歅rism 浠ｇ爜鍖哄煙鏍峰紡瑕嗙洊
    ========================================= */
 
-/* 强制覆盖 pre 的默认样式 */
+/* 寮哄埗瑕嗙洊 pre 鐨勯粯璁ゆ牱寮� */
 .mac-window pre[class*="language-"],
 .mac-window pre {
     margin: 0 !important;
@@ -2155,7 +2315,7 @@ html[data-bs-theme="dark"] .typo code {
     overflow-x: auto !important;
 }
 
-/* 强制覆盖 code 的样式 */
+/* 寮哄埗瑕嗙洊 code 鐨勬牱寮� */
 .mac-window code[class*="language-"],
 .mac-window code {
     display: block !important;
@@ -2174,7 +2334,7 @@ html[data-bs-theme="dark"] .typo code {
     max-width: 100% !important;
 }
 
-/* 7. 滚动条美化 */
+/* 7. 婊氬姩鏉＄編鍖� */
 .mac-window code::-webkit-scrollbar { height: 8px; }
 .mac-window code::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.2);
@@ -2183,17 +2343,17 @@ html[data-bs-theme="dark"] .typo code {
 .mac-window code::-webkit-scrollbar-track { background: transparent; }
 
 /* =========================================
-   8. 响应式设计：基于 CSS 变量动态计算宽度
+   8. 鍝嶅簲寮忚璁★細鍩轰簬 CSS 鍙橀噺鍔ㄦ€佽绠楀搴�
    ========================================= */
 
-/* 中等屏幕：稍微优化 */
+/* 涓瓑灞忓箷锛氱◢寰紭鍖� */
 @media (min-width: 768px) and (max-width: 991px) {
     .mac-window code {
         font-size: 13px !important;
     }
 }
 
-/* 小屏：全面优化 */
+/* 灏忓睆锛氬叏闈紭鍖� */
 @media (max-width: 767px) {
     .mac-window {
         margin: 16px 0;
@@ -2219,7 +2379,7 @@ html[data-bs-theme="dark"] .typo code {
     }
 }
 /* =========================================
-   Lightbox (灯箱) 样式 - v2.0
+   Lightbox (鐏) 鏍峰紡 - v2.0
    ========================================= */
 .lightbox-overlay {
     position: fixed;
@@ -2243,7 +2403,7 @@ html[data-bs-theme="dark"] .typo code {
     visibility: visible;
 }
 
-/* 图片容器 */
+/* 鍥剧墖瀹瑰櫒 */
 .lightbox-stage {
     position: relative;
     width: 100%;
@@ -2268,7 +2428,7 @@ html[data-bs-theme="dark"] .typo code {
     will-change: transform;
 }
 
-/* 顶部工具栏 (计数器 + 关闭) */
+/* 椤堕儴宸ュ叿鏍� (璁℃暟鍣� + 鍏抽棴) */
 .lightbox-toolbar {
     position: absolute;
     top: 0;
@@ -2309,7 +2469,7 @@ html[data-bs-theme="dark"] .typo code {
     opacity: 1;
 }
 
-/* 左右导航按钮 */
+/* 宸﹀彸瀵艰埅鎸夐挳 */
 .lightbox-nav {
     position: absolute;
     top: 50%;
@@ -2328,7 +2488,7 @@ html[data-bs-theme="dark"] .typo code {
     align-items: center;
     transition: background 0.3s;
 }
-/* 拖拽时的特殊状态：移除过渡，强制实时跟手 */
+/* 鎷栨嫿鏃剁殑鐗规畩鐘舵€侊細绉婚櫎杩囨浮锛屽己鍒跺疄鏃惰窡鎵� */
 .lightbox-image.dragging {
     transition: none !important; 
     cursor: grabbing;
@@ -2340,30 +2500,30 @@ html[data-bs-theme="dark"] .typo code {
 .lightbox-prev { left: 30px; }
 .lightbox-next { right: 30px; }
 
-/* 移动端适配 */
+/* 绉诲姩绔€傞厤 */
 @media (max-width: 768px) {
-    .lightbox-nav { display: none; } /* 手机端通常不需要箭头，或者可以改小 */
+    .lightbox-nav { display: none; } /* 鎵嬫満绔€氬父涓嶉渶瑕佺澶达紝鎴栬€呭彲浠ユ敼灏� */
     .lightbox-toolbar { padding: 0 15px; }
 }/* =========================================
-   Weather System (高性能天气系统) - v4.0 Fix
+   Weather System (楂樻€ц兘澶╂皵绯荤粺) - v4.0 Fix
    ========================================= */
 
-/* 1. 天气画布容器 */
+/* 1. 澶╂皵鐢诲竷瀹瑰櫒 */
 #weather-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* 必须比背景高一点点，但比内容低 */
-    /* 假设 .app-background 是 -2，内容是 1，这里设为 -1 */
+    /* 蹇呴』姣旇儗鏅珮涓€鐐圭偣锛屼絾姣斿唴瀹逛綆 */
+    /* 鍋囪 .app-background 鏄� -2锛屽唴瀹规槸 1锛岃繖閲岃涓� -1 */
     z-index: -1; 
     pointer-events: none;
     overflow: hidden;
 }
 
-/* 修改前: background-color: rgba(0, 0, 0, 0.3); -> 死灰 */
-/* 修改后: 加入一点海蓝色调，模拟大气感 */
+/* 淇敼鍓�: background-color: rgba(0, 0, 0, 0.3); -> 姝荤伆 */
+/* 淇敼鍚�: 鍔犲叆涓€鐐规捣钃濊壊璋冿紝妯℃嫙澶ф皵鎰� */
 
 #weather-container::after {
     content: "";
@@ -2372,21 +2532,21 @@ html[data-bs-theme="dark"] .typo code {
     left: 0;
     width: 100%;
     height: 100%;
-    /* 核心修改：使用偏蓝的冷灰色，而不是纯黑 */
+    /* 鏍稿績淇敼锛氫娇鐢ㄥ亸钃濈殑鍐风伆鑹诧紝鑰屼笉鏄函榛� */
     background-color: rgba(60, 70, 80, 0.2); 
-    /* 或者试试带点青色的暴风雨感: background-color: rgba(43, 62, 80, 0.25); */
+    /* 鎴栬€呰瘯璇曞甫鐐归潚鑹茬殑鏆撮闆ㄦ劅: background-color: rgba(43, 62, 80, 0.25); */
     opacity: 0;
     transition: opacity 1.5s ease;
     pointer-events: none;
     z-index: 0;
 }
 
-/* 只有在白天模式 + 阴天类名时，显示遮罩 */
+/* 鍙湁鍦ㄧ櫧澶╂ā寮� + 闃村ぉ绫诲悕鏃讹紝鏄剧ず閬僵 */
 html[data-bs-theme="light"].weather-overcast #weather-container::after {
     opacity: 1;
 }
 
-/* 3. Canvas 用于雨雪 */
+/* 3. Canvas 鐢ㄤ簬闆ㄩ洩 */
 #weather-canvas {
     position: relative;
     z-index: 1;
@@ -2401,7 +2561,7 @@ html[data-bs-theme="light"].weather-overcast #weather-container::after {
     opacity: 1;
 }
 
-/* 4. 晴天光斑特效 */
+/* 4. 鏅村ぉ鍏夋枒鐗规晥 */
 .sun-spot {
     position: absolute;
     border-radius: 50%;
@@ -2412,7 +2572,7 @@ html[data-bs-theme="light"].weather-overcast #weather-container::after {
     z-index: 0;
 }
 
-/* --- 白天模式 (暖色调 - 橙黄) --- */
+/* --- 鐧藉ぉ妯″紡 (鏆栬壊璋� - 姗欓粍) --- */
 html[data-bs-theme="light"] .sun-spot.spot-1 {
     top: -10%; left: -10%;
     width: 60vw; height: 60vw;
@@ -2436,7 +2596,7 @@ html[data-bs-theme="light"] .sun-spot.spot-3 {
     animation-duration: 18s;
 }
 
-/* --- 黑夜模式 (冷色调 - 蓝紫) --- */
+/* --- 榛戝妯″紡 (鍐疯壊璋� - 钃濈传) --- */
 html[data-bs-theme="dark"] .sun-spot.spot-1 {
     top: -20%; left: -10%;
     width: 70vw; height: 70vw;
@@ -2463,61 +2623,61 @@ html[data-bs-theme="dark"] .sun-spot.spot-3 {
     50% { transform: scale(1.1) translate(20px, -20px); opacity: 0.8; }
 }
 /* =========================================
-   UI 视觉优化：修复白天模式卡片不清、发灰的问题
+   UI 瑙嗚浼樺寲锛氫慨澶嶇櫧澶╂ā寮忓崱鐗囦笉娓呫€佸彂鐏扮殑闂
    ========================================= */
 
-/* 1. 针对白天模式 (light) 下的所有玻璃卡片 */
+/* 1. 閽堝鐧藉ぉ妯″紡 (light) 涓嬬殑鎵€鏈夌幓鐠冨崱鐗� */
 html[data-bs-theme="light"] .glass-card,
 html[data-bs-theme="light"] .glass-panel,
 html[data-bs-theme="light"] .glass-footer {
-    /* 增加不透明度：让卡片更白一点，防止背景的灰色透过来太多 */
+    /* 澧炲姞涓嶉€忔槑搴︼細璁╁崱鐗囨洿鐧戒竴鐐癸紝闃叉鑳屾櫙鐨勭伆鑹查€忚繃鏉ュお澶� */
     background: rgba(255, 255, 255, 0.85) !important;
     
-    /* 增加毛玻璃模糊度，让背后的杂色更柔和 */
+    /* 澧炲姞姣涚幓鐠冩ā绯婂害锛岃鑳屽悗鐨勬潅鑹叉洿鏌斿拰 */
     backdrop-filter: blur(12px) saturate(180%);
     -webkit-backdrop-filter: blur(12px) saturate(180%);
     
-    /* 添加细微的边框，增强轮廓感 */
+    /* 娣诲姞缁嗗井鐨勮竟妗嗭紝澧炲己杞粨鎰� */
     border: 1px solid rgba(255, 255, 255, 0.9);
     
-    /* ★关键：添加柔和的投影，让卡片和背景分离开 ★ */
+    /* 鈽呭叧閿細娣诲姞鏌斿拰鐨勬姇褰憋紝璁╁崱鐗囧拰鑳屾櫙鍒嗙寮€ 鈽� */
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
-/* 2. 特别处理：当进入“阴雨天模式”时，白天模式的卡片要稍微变暗以平衡视觉 */
+/* 2. 鐗瑰埆澶勭悊锛氬綋杩涘叆鈥滈槾闆ㄥぉ妯″紡鈥濇椂锛岀櫧澶╂ā寮忕殑鍗＄墖瑕佺◢寰彉鏆椾互骞宠　瑙嗚 */
 html[data-bs-theme="light"].weather-overcast .glass-card,
 html[data-bs-theme="light"].weather-overcast .glass-panel,
 html[data-bs-theme="light"].weather-overcast .glass-footer {
-    /* 核心修改：
-       原先是 0.95 (极亮)，现在改为 0.75。
-       原理：降低白色的不透明度，让底下那层“蓝灰色遮罩”透上来，
-       卡片就会自然带上一点灰调，看起来就像被阴天笼罩了一样。
+    /* 鏍稿績淇敼锛�
+       鍘熷厛鏄� 0.95 (鏋佷寒)锛岀幇鍦ㄦ敼涓� 0.75銆�
+       鍘熺悊锛氶檷浣庣櫧鑹茬殑涓嶉€忔槑搴︼紝璁╁簳涓嬮偅灞傗€滆摑鐏拌壊閬僵鈥濋€忎笂鏉ワ紝
+       鍗＄墖灏变細鑷劧甯︿笂涓€鐐圭伆璋冿紝鐪嬭捣鏉ュ氨鍍忚闃村ぉ绗肩僵浜嗕竴鏍枫€�
     */
     background: rgba(255, 255, 255, 0.6) !important;
     
-    /* 边框也调淡一点，避免出现明显的白边 */
+    /* 杈规涔熻皟娣′竴鐐癸紝閬垮厤鍑虹幇鏄庢樉鐨勭櫧杈� */
     border: 1px solid rgba(255, 255, 255, 0.6);
     
-    /* 稍微加深阴影，保证卡片虽然变暗了，但依然有层次感 */
+    /* 绋嶅井鍔犳繁闃村奖锛屼繚璇佸崱鐗囪櫧鐒跺彉鏆椾簡锛屼絾渚濈劧鏈夊眰娆℃劅 */
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
 
-/* 额外优化：阴雨天模式下，文字颜色稍微加深，确保在半透明卡片上依然清晰 */
+/* 棰濆浼樺寲锛氶槾闆ㄥぉ妯″紡涓嬶紝鏂囧瓧棰滆壊绋嶅井鍔犳繁锛岀‘淇濆湪鍗婇€忔槑鍗＄墖涓婁緷鐒舵竻鏅� */
 html[data-bs-theme="light"].weather-overcast body {
     color: #2c3e50;
 }
 
-/* 3. 导航栏和侧边栏文字颜色加深，防止对比度不足 */
+/* 3. 瀵艰埅鏍忓拰渚ц竟鏍忔枃瀛楅鑹插姞娣憋紝闃叉瀵规瘮搴︿笉瓒� */
 html[data-bs-theme="light"] .nav-link,
 html[data-bs-theme="light"] .dock-item {
     color: #333;
     font-weight: 500;
 }
 /* =========================================
-   悬浮目录 (TOC) 样式 - 主题自适应版
+   鎮诞鐩綍 (TOC) 鏍峰紡 - 涓婚鑷€傚簲鐗�
    ========================================= */
 
-/* 1. 外层包裹 (定位控制) */
+/* 1. 澶栧眰鍖呰９ (瀹氫綅鎺у埗) */
 .toc-wrapper {
     display: none; 
     position: fixed;
@@ -2526,14 +2686,14 @@ html[data-bs-theme="light"] .dock-item {
     z-index: 9999;
 }
 
-/* 2. 容器外观 (默认 - 浅色模式) */
+/* 2. 瀹瑰櫒澶栬 (榛樿 - 娴呰壊妯″紡) */
 .toc-container {
-    /* 浅色背景毛玻璃 */
+    /* 娴呰壊鑳屾櫙姣涚幓鐠� */
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     
-    /* 浅色边框和阴影 */
+    /* 娴呰壊杈规鍜岄槾褰� */
     border: 1px solid rgba(0, 0, 0, 0.08);
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
     
@@ -2544,7 +2704,7 @@ html[data-bs-theme="light"] .dock-item {
     transition: all 0.3s ease;
 }
 
-/* 标题样式 (浅色模式) */
+/* 鏍囬鏍峰紡 (娴呰壊妯″紡) */
 .toc-container .section-title {
     margin: 0 0 10px 0;
     font-size: 16px;
@@ -2554,7 +2714,7 @@ html[data-bs-theme="light"] .dock-item {
     padding-bottom: 10px;
 }
 
-/* 列表基础样式 */
+/* 鍒楄〃鍩虹鏍峰紡 */
 .toc-list ul { list-style: none; padding: 0; margin: 0; }
 .toc-list li { margin-bottom: 2px; }
 
@@ -2568,25 +2728,25 @@ html[data-bs-theme="light"] .dock-item {
     border-left: 2px solid transparent;
 }
 
-/* 悬停效果 (浅色模式) */
+/* 鎮仠鏁堟灉 (娴呰壊妯″紡) */
 .toc-list a:hover {
     background: rgba(0, 0, 0, 0.05);
     color: var(--accent-color);
 }
 
-/* 层级颜色 (浅色模式 - 文字由深到浅) */
+/* 灞傜骇棰滆壊 (娴呰壊妯″紡 - 鏂囧瓧鐢辨繁鍒版祬) */
 .toc-list a.toc-level-1 { font-size: 14px; font-weight: bold; color: #333; padding-left: 10px; }
 .toc-list a.toc-level-2 { font-size: 13px; color: #555; padding-left: 20px; }
 .toc-list a.toc-level-3 { font-size: 12px; color: #888; padding-left: 32px; }
 .toc-list a.toc-level-4 { font-size: 12px; color: #aaa; padding-left: 42px; }
 
 /* =========================================
-   3. 深色模式适配 (Dark Mode Override)
-   当 body 有 data-bs-theme="dark" 时生效
+   3. 娣辫壊妯″紡閫傞厤 (Dark Mode Override)
+   褰� body 鏈� data-bs-theme="dark" 鏃剁敓鏁�
    ========================================= */
 
 [data-bs-theme="dark"] .toc-container {
-    /* 深色背景毛玻璃 */
+    /* 娣辫壊鑳屾櫙姣涚幓鐠� */
     background: rgba(20, 21, 22, 0.85);
     border-color: rgba(255, 255, 255, 0.08);
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
@@ -2602,15 +2762,15 @@ html[data-bs-theme="light"] .dock-item {
     color: #fff;
 }
 
-/* 层级颜色反转 (深色模式 - 文字由白到灰) */
+/* 灞傜骇棰滆壊鍙嶈浆 (娣辫壊妯″紡 - 鏂囧瓧鐢辩櫧鍒扮伆) */
 [data-bs-theme="dark"] .toc-list a.toc-level-1 { color: #fff; }
 [data-bs-theme="dark"] .toc-list a.toc-level-2 { color: #ccc; }
 [data-bs-theme="dark"] .toc-list a.toc-level-3 { color: #999; }
 [data-bs-theme="dark"] .toc-list a.toc-level-4 { color: #777; }/* =====================================================
-   通用信息框样式 (修复版)
+   閫氱敤淇℃伅妗嗘牱寮� (淇鐗�)
    ===================================================== */
 
-/* 1. 基础容器与布局 (两个插件共用) */
+/* 1. 鍩虹瀹瑰櫒涓庡竷灞€ (涓や釜鎻掍欢鍏辩敤) */
 .lastupdate-box,
 .reading-time-box {
     display: flex;
@@ -2626,21 +2786,21 @@ html[data-bs-theme="light"] .dock-item {
     position: relative;
     overflow: hidden;
     
-    /* 🔴 核心修复：浅色模式默认强制深色文字 */
+    /* 馃敶 鏍稿績淇锛氭祬鑹叉ā寮忛粯璁ゅ己鍒舵繁鑹叉枃瀛� */
     color: #333; 
-    /* 默认浅色背景 (淡紫色调) */
+    /* 榛樿娴呰壊鑳屾櫙 (娣＄传鑹茶皟) */
     background: rgba(139, 92, 246, 0.06); 
     border: 1px solid rgba(139, 92, 246, 0.15);
 }
 
-/* 鼠标悬停效果 */
+/* 榧犳爣鎮仠鏁堟灉 */
 .lastupdate-box:hover,
 .reading-time-box:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* 图标样式 */
+/* 鍥炬爣鏍峰紡 */
 .lastupdate-icon,
 .reading-time-icon {
     font-size: 20px;
@@ -2654,7 +2814,7 @@ html[data-bs-theme="light"] .dock-item {
     transform: scale(1.1) rotate(5deg);
 }
 
-/* 文本区域 */
+/* 鏂囨湰鍖哄煙 */
 .lastupdate-text,
 .reading-time-text {
     display: flex;
@@ -2664,7 +2824,7 @@ html[data-bs-theme="light"] .dock-item {
     flex: 1;
 }
 
-/* 强调文字 (分钟数/等级) */
+/* 寮鸿皟鏂囧瓧 (鍒嗛挓鏁�/绛夌骇) */
 .lastupdate-level,
 .reading-time-minutes {
     font-weight: 700;
@@ -2687,7 +2847,7 @@ html[data-bs-theme="light"] .dock-item {
     opacity: 0.85;
 }
 
-/* 右侧详细信息 (Tag 样式) */
+/* 鍙充晶璇︾粏淇℃伅 (Tag 鏍峰紡) */
 .lastupdate-details,
 .reading-time-details {
     margin-left: auto;
@@ -2707,12 +2867,12 @@ html[data-bs-theme="light"] .dock-item {
     white-space: nowrap;
     transition: all 0.3s ease;
     
-    /* 🔴 浅色模式 Tag 背景 */
+    /* 馃敶 娴呰壊妯″紡 Tag 鑳屾櫙 */
     background: rgba(0, 0, 0, 0.06); 
     color: #555;
 }
 
-/* 鼠标悬停 Tag 变深 */
+/* 榧犳爣鎮仠 Tag 鍙樻繁 */
 .lastupdate-box:hover .lastupdate-date,
 .reading-time-box:hover .reading-time-words,
 .reading-time-box:hover .reading-time-images,
@@ -2722,7 +2882,7 @@ html[data-bs-theme="light"] .dock-item {
     transform: translateY(-1px);
 }
 
-/* 光效动画 */
+/* 鍏夋晥鍔ㄧ敾 */
 .lastupdate-auto::before,
 .reading-time-auto::before {
     content: '';
@@ -2738,10 +2898,10 @@ html[data-bs-theme="light"] .dock-item {
 }
 
 /* =====================================================
-   2. 更新时间特定颜色 (等级区分) - 浅色模式
+   2. 鏇存柊鏃堕棿鐗瑰畾棰滆壊 (绛夌骇鍖哄垎) - 娴呰壊妯″紡
    ===================================================== */
 
-/* 较新 (Green) */
+/* 杈冩柊 (Green) */
 .lastupdate-level-new {
     background: rgba(16, 185, 129, 0.08) !important;
     border-color: rgba(16, 185, 129, 0.3) !important;
@@ -2749,7 +2909,7 @@ html[data-bs-theme="light"] .dock-item {
 .lastupdate-level-new .lastupdate-icon { color: #059669 !important; }
 .lastupdate-level-new .lastupdate-level { color: #047857 !important; }
 
-/* 中等 (Orange) */
+/* 涓瓑 (Orange) */
 .lastupdate-level-medium {
     background: rgba(245, 158, 11, 0.08) !important;
     border-color: rgba(245, 158, 11, 0.3) !important;
@@ -2757,7 +2917,7 @@ html[data-bs-theme="light"] .dock-item {
 .lastupdate-level-medium .lastupdate-icon { color: #d97706 !important; }
 .lastupdate-level-medium .lastupdate-level { color: #b45309 !important; }
 
-/* 过时 (Red) */
+/* 杩囨椂 (Red) */
 .lastupdate-level-old {
     background: rgba(239, 68, 68, 0.08) !important;
     border-color: rgba(239, 68, 68, 0.3) !important;
@@ -2765,7 +2925,7 @@ html[data-bs-theme="light"] .dock-item {
 .lastupdate-level-old .lastupdate-icon { color: #dc2626 !important; }
 .lastupdate-level-old .lastupdate-level { color: #b91c1c !important; }
 
-/* 脉冲动画 */
+/* 鑴夊啿鍔ㄧ敾 */
 @keyframes pulse-soft {
     0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
     50% { box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1); }
@@ -2773,7 +2933,7 @@ html[data-bs-theme="light"] .dock-item {
 .lastupdate-level-old:hover { animation: pulse-soft 2s infinite; }
 
 /* =====================================================
-   3. 移动端适配
+   3. 绉诲姩绔€傞厤
    ===================================================== */
 @media (max-width: 768px) {
     .lastupdate-box, .reading-time-box {
@@ -2789,30 +2949,30 @@ html[data-bs-theme="light"] .dock-item {
 }
 
 /* =====================================================
-   4. 深色模式适配 (Dark Mode) - 核心修复
-   适配 data-bs-theme="dark"
+   4. 娣辫壊妯″紡閫傞厤 (Dark Mode) - 鏍稿績淇
+   閫傞厤 data-bs-theme="dark"
    ===================================================== */
 
 [data-bs-theme="dark"] .lastupdate-box,
 [data-bs-theme="dark"] .reading-time-box {
-    /* 🔴 深色模式：深色背景 + 亮色文字 */
+    /* 馃敶 娣辫壊妯″紡锛氭繁鑹茶儗鏅� + 浜壊鏂囧瓧 */
     background: rgba(255, 255, 255, 0.05) !important;
     border-color: rgba(255, 255, 255, 0.1) !important;
     color: #e0e0e0 !important;
 }
 
-/* 图标变亮 */
+/* 鍥炬爣鍙樹寒 */
 [data-bs-theme="dark"] .lastupdate-icon,
 [data-bs-theme="dark"] .reading-time-icon {
     color: #a78bfa !important;
 }
 
-/* 分割线变亮 */
+/* 鍒嗗壊绾垮彉浜� */
 [data-bs-theme="dark"] .lastupdate-separator {
     color: rgba(255, 255, 255, 0.5);
 }
 
-/* Tag 标签变亮 */
+/* Tag 鏍囩鍙樹寒 */
 [data-bs-theme="dark"] .lastupdate-date,
 [data-bs-theme="dark"] .reading-time-words,
 [data-bs-theme="dark"] .reading-time-images,
@@ -2826,30 +2986,30 @@ html[data-bs-theme="light"] .dock-item {
     color: #fff !important;
 }
 
-/* 分钟数高亮 */
+/* 鍒嗛挓鏁伴珮浜� */
 [data-bs-theme="dark"] .reading-time-minutes {
     color: #c084fc !important;
 }
 
-/* 深色模式下的等级颜色微调 (让字更亮) */
-[data-bs-theme="dark"] .lastupdate-level-new .lastupdate-icon { color: #34d399 !important; } /* 浅绿 */
+/* 娣辫壊妯″紡涓嬬殑绛夌骇棰滆壊寰皟 (璁╁瓧鏇翠寒) */
+[data-bs-theme="dark"] .lastupdate-level-new .lastupdate-icon { color: #34d399 !important; } /* 娴呯豢 */
 [data-bs-theme="dark"] .lastupdate-level-new .lastupdate-level { color: #6ee7b7 !important; }
 
-[data-bs-theme="dark"] .lastupdate-level-medium .lastupdate-icon { color: #fbbf24 !important; } /* 浅橙 */
+[data-bs-theme="dark"] .lastupdate-level-medium .lastupdate-icon { color: #fbbf24 !important; } /* 娴呮 */
 [data-bs-theme="dark"] .lastupdate-level-medium .lastupdate-level { color: #fcd34d !important; }
 
-[data-bs-theme="dark"] .lastupdate-level-old .lastupdate-icon { color: #f87171 !important; } /* 浅红 */
+[data-bs-theme="dark"] .lastupdate-level-old .lastupdate-icon { color: #f87171 !important; } /* 娴呯孩 */
 [data-bs-theme="dark"] .lastupdate-level-old .lastupdate-level { color: #fca5a5 !important; }
 
-/* 移动端虚线变白 */
+/* 绉诲姩绔櫄绾垮彉鐧� */
 [data-bs-theme="dark"] .lastupdate-details {
     border-top-color: rgba(255, 255, 255, 0.1);
 }/**
- * One Dark Theme (适配 Mac 风格)
- * 替换掉原来的 Default 主题
+ * One Dark Theme (閫傞厤 Mac 椋庢牸)
+ * 鏇挎崲鎺夊師鏉ョ殑 Default 涓婚
  */
 
-/* 1. 基础文字颜色和字体 */
+/* 1. 鍩虹鏂囧瓧棰滆壊鍜屽瓧浣� */
 code[class*="language-"],
 pre[class*="language-"] {
     color: #abb2bf;
@@ -2870,11 +3030,11 @@ pre[class*="language-"] {
     -ms-hyphens: none;
     hyphens: none;
 
-    /* 关键：去掉默认主题的文字阴影，消除重影 */
+    /* 鍏抽敭锛氬幓鎺夐粯璁や富棰樼殑鏂囧瓧闃村奖锛屾秷闄ら噸褰� */
     text-shadow: none !important; 
 }
 
-/* 2. 关键：强制背景透明 (背景色由 .mac-window 控制) */
+/* 2. 鍏抽敭锛氬己鍒惰儗鏅€忔槑 (鑳屾櫙鑹茬敱 .mac-window 鎺у埗) */
 pre[class*="language-"],
 :not(pre) > code[class*="language-"] {
     background: transparent !important;
@@ -2883,9 +3043,9 @@ pre[class*="language-"],
     box-shadow: none !important;
 }
 
-/* 3. 语法高亮配色 (One Dark 风格) */
+/* 3. 璇硶楂樹寒閰嶈壊 (One Dark 椋庢牸) */
 
-/* 注释 */
+/* 娉ㄩ噴 */
 .token.comment,
 .token.prolog,
 .token.doctype,
@@ -2894,12 +3054,12 @@ pre[class*="language-"],
     font-style: italic;
 }
 
-/* 标点 */
+/* 鏍囩偣 */
 .token.punctuation {
     color: #abb2bf;
 }
 
-/* 属性、数字、常量 - 橙/黄 */
+/* 灞炴€с€佹暟瀛椼€佸父閲� - 姗�/榛� */
 .token.selector,
 .token.tag,
 .token.boolean,
@@ -2911,7 +3071,7 @@ pre[class*="language-"],
     color: #d19a66;
 }
 
-/* 字符串、正则 - 绿 */
+/* 瀛楃涓层€佹鍒� - 缁� */
 .token.string,
 .token.char,
 .token.attr-value,
@@ -2921,14 +3081,14 @@ pre[class*="language-"],
     color: #98c379;
 }
 
-/* 关键字、变量 - 紫 */
+/* 鍏抽敭瀛椼€佸彉閲� - 绱� */
 .token.keyword,
 .token.variable,
 .token.important {
     color: #c678dd;
 }
 
-/* 运算符 - 青 (并强制去掉背景) */
+/* 杩愮畻绗� - 闈� (骞跺己鍒跺幓鎺夎儗鏅�) */
 .token.operator,
 .token.entity,
 .token.url {
@@ -2936,42 +3096,42 @@ pre[class*="language-"],
     background: transparent !important;
 }
 
-/* 函数、类名 - 蓝 */
+/* 鍑芥暟銆佺被鍚� - 钃� */
 .token.function,
 .token.class-name {
     color: #61afef;
 }
 
-/* 粗体/斜体 */
+/* 绮椾綋/鏂滀綋 */
 .token.bold { font-weight: bold; }
 .token.italic { font-style: italic; }
 
-/* 4. 修复：防止某些插件加背景 */
+/* 4. 淇锛氶槻姝㈡煇浜涙彃浠跺姞鑳屾櫙 */
 .token {
     background: transparent !important;
-}/* 强制覆盖代码块内所有标题的样式，让它们看起来像普通代码 */
+}/* 寮哄埗瑕嗙洊浠ｇ爜鍧楀唴鎵€鏈夋爣棰樼殑鏍峰紡锛岃瀹冧滑鐪嬭捣鏉ュ儚鏅€氫唬鐮� */
 /* ==========================================================================
-   Code Block Heading Reset - 专治 Typecho 乱解析代码块里的标题
+   Code Block Heading Reset - 涓撴不 Typecho 涔辫В鏋愪唬鐮佸潡閲岀殑鏍囬
    ========================================================================== */
 
-/* 1. 核打击：将 pre 里的所有 H 标签彻底“格式化”为普通文本 */
+/* 1. 鏍告墦鍑伙細灏� pre 閲岀殑鎵€鏈� H 鏍囩褰诲簳鈥滄牸寮忓寲鈥濅负鏅€氭枃鏈� */
 .article-body pre h1,
 .article-body pre h2,
 .article-body pre h3,
 .article-body pre h4,
 .article-body pre h5,
 .article-body pre h6 {
-    /* 关键：取消块级特性，让它和前后文字排在同一行 */
+    /* 鍏抽敭锛氬彇娑堝潡绾х壒鎬э紝璁╁畠鍜屽墠鍚庢枃瀛楁帓鍦ㄥ悓涓€琛� */
     display: inline !important; 
     
-    /* 关键：继承代码块的字体大小、粗细、行高 */
+    /* 鍏抽敭锛氱户鎵夸唬鐮佸潡鐨勫瓧浣撳ぇ灏忋€佺矖缁嗐€佽楂� */
     font-size: 100% !important;
     font-weight: normal !important;
     line-height: inherit !important;
     font-family: inherit !important;
     color: inherit !important;
     
-    /* 清除所有间距和边框 */
+    /* 娓呴櫎鎵€鏈夐棿璺濆拰杈规 */
     margin: 0 !important;
     padding: 0 !important;
     border: none !important;
@@ -2980,38 +3140,38 @@ pre[class*="language-"],
     float: none !important;
 }
 
-/* 2. 视觉欺骗：在 JS 修复之前，先用 CSS 把 # 号补给眼睛看 */
-/* 这样页面加载的一瞬间，用户看到的就是完美的 # 注释，而不是标题 */
+/* 2. 瑙嗚娆洪獥锛氬湪 JS 淇涔嬪墠锛屽厛鐢� CSS 鎶� # 鍙疯ˉ缁欑溂鐫涚湅 */
+/* 杩欐牱椤甸潰鍔犺浇鐨勪竴鐬棿锛岀敤鎴风湅鍒扮殑灏辨槸瀹岀編鐨� # 娉ㄩ噴锛岃€屼笉鏄爣棰� */
 
-/* 针对 H1 (原 # ) */
+/* 閽堝 H1 (鍘� # ) */
 .article-body pre h1::before {
     content: "# ";
     font-weight: normal;
     opacity: 0.7;
 }
 
-/* 针对 H2 (原 ## ) */
+/* 閽堝 H2 (鍘� ## ) */
 .article-body pre h2::before {
     content: "## ";
     font-weight: normal;
     opacity: 0.7;
 }
 
-/* 针对 H3 (原 ### ) */
+/* 閽堝 H3 (鍘� ### ) */
 .article-body pre h3::before {
     content: "### ";
     font-weight: normal;
     opacity: 0.7;
 }
 
-/* 3. 防止某些主题对伪元素有特殊背景设置 */
+/* 3. 闃叉鏌愪簺涓婚瀵逛吉鍏冪礌鏈夌壒娈婅儗鏅缃� */
 .article-body pre h1::after,
 .article-body pre h2::after {
     content: none !important;
     display: none !important;
 }
 
-/* 针对文章正文里的标题，强制恢复间距 */
+/* 閽堝鏂囩珷姝ｆ枃閲岀殑鏍囬锛屽己鍒舵仮澶嶉棿璺� */
 .article-body h1,
 .article-body h2,
 .article-body h3 {
@@ -3024,7 +3184,7 @@ pre[class*="language-"],
     clear: both !important;
 }
 
-/* 专门治愈“标题粘连”：如果 H2 紧跟在 H1 后面，额外加距 */
+/* 涓撻棬娌绘剤鈥滄爣棰樼矘杩炩€濓細濡傛灉 H2 绱ц窡鍦� H1 鍚庨潰锛岄澶栧姞璺� */
 .article-body h1 + h2 {
     margin-top: 1em !important;
 }

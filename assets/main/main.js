@@ -101,18 +101,20 @@ function initLiquidNav() {
     }
 
     const nav = document.querySelector('.desktop-nav');
+    const header = document.querySelector('.glass-header');
     if (!nav) return;
 
     if (window.innerWidth <= 768) {
         nav.classList.remove('nav-liquid-ready');
         const mobileIndicator = nav.querySelector('.nav-liquid-indicator');
         if (mobileIndicator) mobileIndicator.remove();
+        const mobileShell = header ? header.querySelector('.nav-liquid-shell') : null;
+        if (mobileShell) mobileShell.remove();
         return;
     }
 
     const links = Array.from(nav.querySelectorAll('.nav-link'));
     if (!links.length) return;
-    const header = document.querySelector('.glass-header');
 
     nav.classList.add('nav-liquid-ready');
 
@@ -121,6 +123,18 @@ function initLiquidNav() {
         indicator = document.createElement('div');
         indicator.className = 'nav-liquid-indicator';
         nav.appendChild(indicator);
+    }
+
+    let shell = header ? header.querySelector('.nav-liquid-shell') : null;
+    if (header && !shell) {
+        shell = document.createElement('div');
+        shell.className = 'nav-liquid-shell';
+        const inner = header.querySelector('.header-inner');
+        if (inner) {
+            header.insertBefore(shell, inner);
+        } else {
+            header.appendChild(shell);
+        }
     }
 
     window.navLiquidFilters = window.navLiquidFilters || {};
@@ -280,19 +294,25 @@ function initLiquidNav() {
     let syncFrame = null;
 
     const updateShellEffect = () => {
-        if (!header) return;
+        if (!header || !shell || window.innerWidth <= 768) return;
 
+        const rootTheme = document.documentElement.getAttribute('data-bs-theme');
+        const bodyTheme = document.body.getAttribute('data-bs-theme');
+        const isDark = rootTheme === 'dark' || bodyTheme === 'dark';
         const rect = header.getBoundingClientRect();
+
         updateLiquidFilter(shellFilter, rect.width, rect.height, {
-            edgeBand: Math.max(10, Math.min(18, rect.height * 0.16)),
-            amplitude: Math.max(4, Math.min(7, rect.height * 0.08)),
-            yScale: 0.55,
-            radius: Math.max(20, rect.height / 2 - 2)
+            edgeBand: isDark ? Math.max(9, Math.min(15, rect.height * 0.18)) : Math.max(8, Math.min(13, rect.height * 0.16)),
+            amplitude: isDark ? Math.max(2.8, Math.min(4.2, rect.height * 0.05)) : Math.max(2.2, Math.min(3.4, rect.height * 0.042)),
+            yScale: isDark ? 0.62 : 0.56,
+            radius: Math.max(20, rect.height / 2 - 3)
         });
 
-        const shellFilterValue = `url(#${shellFilter.filterId}) blur(1.2px) saturate(1.12) brightness(1.06) contrast(1.03)`;
-        header.style.backdropFilter = shellFilterValue;
-        header.style.webkitBackdropFilter = shellFilterValue;
+        const filterValue = isDark
+            ? `url(#${shellFilter.filterId}) blur(7.5px) saturate(1.14) brightness(1.02) contrast(1.03)`
+            : `url(#${shellFilter.filterId}) blur(8.5px) saturate(1.18) brightness(1.03) contrast(1.02)`;
+        shell.style.backdropFilter = filterValue;
+        shell.style.webkitBackdropFilter = filterValue;
     };
 
     const updateIndicator = (target, immediate) => {
@@ -396,14 +416,24 @@ function initLiquidNav() {
         if (window.innerWidth <= 768) {
             nav.classList.remove('nav-liquid-ready');
             indicator.style.opacity = '0';
-            if (header) {
-                header.style.removeProperty('backdrop-filter');
-                header.style.removeProperty('-webkit-backdrop-filter');
+            if (shell) {
+                shell.remove();
+                shell = null;
             }
             return;
         }
 
         nav.classList.add('nav-liquid-ready');
+        if (header && !shell) {
+            shell = document.createElement('div');
+            shell.className = 'nav-liquid-shell';
+            const inner = header.querySelector('.header-inner');
+            if (inner) {
+                header.insertBefore(shell, inner);
+            } else {
+                header.appendChild(shell);
+            }
+        }
         scheduleSync(true);
     };
 
@@ -442,6 +472,11 @@ function initLiquidNav() {
         if (syncFrame) {
             window.cancelAnimationFrame(syncFrame);
             syncFrame = null;
+        }
+
+        if (shell) {
+            shell.remove();
+            shell = null;
         }
 
         clickHandlers.forEach(({ link, handleClick }) => {
@@ -976,44 +1011,64 @@ function initMobileMenu() {
     const mobileDrawer = document.querySelector('#mobile-drawer'); 
     const sidebarDock = document.querySelector('.sidebar-dock'); 
 
+    if (window.mobileMenuClickOutsideHandler) {
+        document.removeEventListener('click', window.mobileMenuClickOutsideHandler);
+        window.mobileMenuClickOutsideHandler = null;
+    }
+
+    if (window.mobileMenuResizeHandler) {
+        window.removeEventListener('resize', window.mobileMenuResizeHandler);
+        window.mobileMenuResizeHandler = null;
+    }
+
     if (menuTrigger && mobileDrawer) {
         const newTrigger = menuTrigger.cloneNode(true);
         menuTrigger.parentNode.replaceChild(newTrigger, menuTrigger);
+
+        const syncMenuState = () => {
+            const isOpen = mobileDrawer.classList.contains('active');
+            document.body.classList.toggle('mobile-nav-open', isOpen);
+
+            if (sidebarDock) {
+                sidebarDock.classList.toggle('dock-hidden', isOpen);
+            }
+
+            const icon = newTrigger.querySelector('i');
+            if (isOpen) {
+                if (icon) icon.classList.replace('ti-menu-2', 'ti-x');
+            } else {
+                if (icon) icon.classList.replace('ti-x', 'ti-menu-2');
+            }
+        };
 
         newTrigger.onclick = function(e) { 
             e.stopPropagation(); 
             mobileDrawer.classList.toggle('active');
             newTrigger.classList.toggle('active');
-            
-            // 菜单打开时，隐藏胶囊
-            if (mobileDrawer.classList.contains('active')) {
-                if(sidebarDock) sidebarDock.classList.add('dock-hidden');
-            } else {
-                if(sidebarDock) sidebarDock.classList.remove('dock-hidden');
-            }
+            syncMenuState();
+        };
 
-            const icon = newTrigger.querySelector('i');
-            if (mobileDrawer.classList.contains('active')) {
-                if(icon) icon.classList.replace('ti-menu-2', 'ti-x');
-            } else {
-                if(icon) icon.classList.replace('ti-x', 'ti-menu-2');
+        window.mobileMenuClickOutsideHandler = function(e) {
+            if (mobileDrawer.classList.contains('active') && !mobileDrawer.contains(e.target) && !newTrigger.contains(e.target)) {
+                mobileDrawer.classList.remove('active');
+                newTrigger.classList.remove('active');
+                syncMenuState();
             }
         };
-        
-        if (!window.menuClickOutsideBound) {
-            document.addEventListener('click', function(e) {
-                if (mobileDrawer.classList.contains('active') && !mobileDrawer.contains(e.target) && !newTrigger.contains(e.target)) {
-                    mobileDrawer.classList.remove('active');
-                    newTrigger.classList.remove('active');
-                    
-                    if(sidebarDock) sidebarDock.classList.remove('dock-hidden');
+        document.addEventListener('click', window.mobileMenuClickOutsideHandler);
 
-                    const icon = newTrigger.querySelector('i');
-                    if(icon) icon.classList.replace('ti-x', 'ti-menu-2');
-                }
-            });
-            window.menuClickOutsideBound = true;
-        }
+        window.mobileMenuResizeHandler = function() {
+            if (window.innerWidth > 768 && mobileDrawer.classList.contains('active')) {
+                mobileDrawer.classList.remove('active');
+                newTrigger.classList.remove('active');
+                syncMenuState();
+            }
+        };
+        window.addEventListener('resize', window.mobileMenuResizeHandler);
+
+        syncMenuState();
+    } else {
+        document.body.classList.remove('mobile-nav-open');
     }
 }
 
