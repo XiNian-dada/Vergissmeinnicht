@@ -29,9 +29,11 @@
                 <textarea rows="6" name="text" class="glass-input textarea-large" placeholder="发表你的看法..." required><?php $this->remember('text'); ?></textarea>
             </div>
 
+            <?php if (class_exists('Turnstile_Plugin')): ?>
             <div class="turnstile-box">
                 <?php Turnstile_Plugin::output(); ?>
             </div>
+            <?php endif; ?>
 
             <div class="form-footer">
                 <button type="submit" class="btn-glass primary">提交评论</button>
